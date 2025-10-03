@@ -1,0 +1,56 @@
+<header class="py-2.5 px-5 flex items-center bg-faint ">
+        <span class="text-lg font-bold">Connected Servers</span>
+        <btn mode="outlined" class="ms-auto" (click)="newservers()">
+                <icon name="addfill" /> New Server
+        </btn>
+</header>
+
+<div class="tabhead flex text-xs font-bold px-2.5">
+        <div class="w-1/2 px-3 py-3">Name</div>
+        <div class="w-1/2 px-3 py-3"> URL / IP Address</div>
+        <div class="w-16 px-3 py-3">Port</div>
+        <div class="w-14 px-3 py-3"></div>
+</div>
+<div class="body ">
+        <div class="flex rows group px-2.5 text-xs mb-2.5 " *ngFor="let x of servers"
+                [ngClass]="{'hover:bg-blue-deactivate': !x.isedit}">
+                <div class="w-1/2 px-3 " [ngClass]="{'py-3': !x.isedit}">
+                        <span *ngIf="!x.isedit">
+                                {{x.name}}
+                        </span>
+                        <div class="cols-span-4" *ngIf="x.isedit">
+                                <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                                        placeholder="Server Name" type="text" />
+                        </div>
+                </div>
+                <div class="w-1/2 px-3 py-3" [ngClass]="{'py-3': !x.isedit}">
+                        <span *ngIf="!x.isedit">
+                                {{x.url}}
+                        </span>
+                        <div class="cols-span-4" *ngIf="x.isedit">
+                                <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                                        placeholder="Url" type="text" />
+                        </div>
+                </div>
+                <div class="w-16   gap-3 " [ngClass]="{'px-3 py-3': !x.isedit,'px-0 py-0': x.isedit}">
+                        <span *ngIf="!x.isedit">
+                                {{x.port}}
+                        </span>
+                        <!-- <inpt *ngIf="x.isedit" [placeholder]="'case name/ case ID'" labelclas="!font-bold !text-sm"
+                                [isrequired]="true" placeholder="Enter Team Name" value="{{x.port}}" [showlabel]="false"
+                                class="block  w-full" inptclas="px-0.5 text-center">
+                        </inpt> -->
+                        <div class="cols-span-4" *ngIf="x.isedit">
+                                <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                                        placeholder="Port" type="text" />
+                        </div>
+                </div>
+                <div class="w-14 px-3 flex items-center justify-center gap-4 " [ngClass]="{'py-3': !x.isedit}">
+                        <icon name="edit" *ngIf="!x.isedit" (click)="x.isedit=true" matTooltip="Edit"
+                                class="text-sm cursor-pointer  opacity-0 group-hover:opacity-100" />
+                        <btn mode="outlined" *ngIf="x.isedit" [square]="true" (click)="x.isedit=false">
+                                <icon name="check" matTooltip="Edit" class="text-sm cursor-pointer ms-auto " />
+                        </btn>
+                </div>
+        </div>
+</div>

@@ -1,0 +1,10 @@
+<div class="p-5  flex items-center gap-3" [ngClass]="{'bg-sgreen': !data.type,'bg-sred': data.type=='E'}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" fill="none" viewBox="0 0 16 17">
+                <path fill="#fff" *ngIf="!data.type"
+                        d="M8 .5a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm3.44 6.088-3.656 4.8a.799.799 0 0 1-.983.233.8.8 0 0 1-.281-.225L4.568 8.908a.801.801 0 0 1 1.264-.984l1.304 1.664 3.024-4a.805.805 0 0 1 1.28.976v.024Z" />
+                <path fill="#fff" *ngIf="data.type=='E'"
+                        d="M6.695 1.27.185 13.109a1.489 1.489 0 0 0 1.304 2.207H14.51a1.489 1.489 0 0 0 1.305-2.207L9.304 1.271a1.489 1.489 0 0 0-2.609 0ZM8 5.14a.745.745 0 0 1 .745.745v3.97a.745.745 0 1 1-1.489 0v-3.97A.744.744 0 0 1 8 5.14Zm.745 6.949a.744.744 0 1 1-1.489 0 .744.744 0 0 1 1.489 0Z" />
+        </svg>
+        <span>{{ data.message }}</span>
+        <icon name="close" (click)="snackBarRef.dismissWithAction()" class="ms-auto cursor-pointer" />
+</div>

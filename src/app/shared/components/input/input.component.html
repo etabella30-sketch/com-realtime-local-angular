@@ -1,0 +1,26 @@
+<div class="relative w-full">
+        <ng-container *ngIf="showlabel">
+                <label class="text-xs font-semibold mb-2 block" [ngClass]="labelclas">
+                        <ng-content></ng-content>
+                        <span *ngIf="isrequired" class="text-red-500">*</span></label>
+        </ng-container>
+        <div class="relative w-full">
+                <ng-container *ngIf="icon">
+                        <icon class="absolute top-1/2 -translate-y-1/2" [name]="icon?.name"
+                                [ngClass]="{'left-4': icon?.dir=='L','right-4': icon?.dir=='R','text-sred':error,iconclas}" />
+                </ng-container>
+                <input #maininput class="px-3.5 py-2 rounded-base placeholder-shown:bg-white bg-faint"  [attr.maxlength]="maxlength" [readOnly]="readonly"
+                        [ngClass]="inputClasses" [class.pr-12]="icon?.dir=='R'||type=='password'"
+                        [class.pl-12]="icon?.dir=='L'" [disabled]="disabled" [placeholder]="placeholder"
+                        [type]="showhide ? 'text' :type" (input)="oninput($event)" [value]="value"
+                        (blur)="focusOuts('out')" (keyup.enter)="focusOuts('enter')"  />
+                <ng-container *ngIf="type=='password'">
+                        <icon [ngClass]="{'-right-7': isoutside,'right-4': !isoutside}"
+                                class="absolute opacity-100 top-1/2  -translate-y-1/2 cursor-pointer text-blue-600"
+                                (click)="showhide=!showhide" *ngIf="showhide" name="eye" />
+                        <icon [ngClass]="{'-right-7': isoutside,'right-4': !isoutside}"
+                                class="absolute opacity-60 top-1/2 -translate-y-1/2 cursor-pointer"
+                                (click)="showhide=!showhide" *ngIf="!showhide" name="eyeoff" />
+                </ng-container>
+        </div>
+</div>

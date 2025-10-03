@@ -1,0 +1,43 @@
+@if(path && filetype == 'pdf'){
+<pdf [path]="path" [docInfo]="docInfo" (onEvent)="pdfEvent($event)" [fullMode]="isFullmode" [nCaseid]="nCaseid"
+  [compareMode]="compareMode" [compareIndex]="compareIndex" [isLink]="isLink" [onViewerEvent]="changingValue"
+  [linkExplorerMode]="linkExplorerMode" [linkExplorerType]="linkExplorerType" [nRFSid]="nRFSid" [nRDocid]="nRDocid" [nRWebid]="nRWebid" [nPageno]="nPageno" />
+}
+@else if(path && (filetype == 'document' || filetype == 'image' || filetype == 'video' || filetype == 'xlsx' || filetype
+==
+'ppt' || filetype == 'pptx' || filetype == 'msg')){
+<doc-viewer (onEvent)="pdfEvent($event)" [path]="path" [filetype]="filetype" [isMyfile]="isMyfile" [nBundledetailid]="docInfo.nBundledetailid"></doc-viewer>
+}
+@else if(path){
+  <div class="flex h-full flex-col">
+    @if (docInfo.isRealtime) {
+    <div
+      class="pdf-toolbars flex items-center justify-between bg-white relative z-20 ng-tns-c2287261145-4 !bg-dark-blue px-0 h-[59px]">
+      <div
+        class="pdf-toolbars gap-x-2 flex items-center me-2 ng-tns-c2287261145-4 justify-end !w-1/2 !ml-auto h-full !pl-5 !bg-blue-on !mr-0 ">
+  
+        <div class="flex text-white ms-3 me-5 ng-tns-c2287261145-4 ng-star-inserted">
+          <icon name="close" mattooltip="Close Preview" (click)="closeRealtimePdf()" class="text-sm block "
+            type="comnicn"></icon>
+        </div>
+      </div>
+    </div>
+    }
+    <div class=" h-full" [ngClass]="{'w-1/2 ms-auto': docInfo.isRealtime}">
+      <div class="flex items-center justify-end gap-2 h-full p-5" style="background:#c4c4c4">
+        <div class="bg-white h-full w-full flex items-center justify-center flex-col">
+          <h6 class="text-sm font-semibold mb-2">To open this file in Native Format</h6>
+          <!-- <a class="titleN text-decoration-underline pointer" style="cursor: pointer !important;"
+        [href]="cloudurl + '/' + this.path" download>Download</a> -->
+          <a class="text-xs underline cursor-pointer" (click)="downloadURI(path,docInfo.cFilename)">Download</a>
+          <!-- <button class="button white bord ">
+        Download
+      </button> -->
+        </div>
+        <!-- <button *ngIf="isMyfile() && documenttype == 'D'" class="button orange " (click)="expandview()">Expand</button> -->
+      </div>
+    </div>
+  </div>
+}@else {
+<div></div>
+}

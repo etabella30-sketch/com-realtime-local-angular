@@ -1,0 +1,39 @@
+<div class="flex flex-col h-full overflow-hidden">
+        <div class="tabs  w-full relative bg-dark-blue">
+                <div class="bar bg-gray-200 h-2.5 z-10 w-full absolute"></div>
+                <div class="tabs px-10 flex items-center ">
+                        <div (click)="tab='R'" [ngClass]="{'border-blue-hover': tab == 'R','text-tab': tab != 'R'}"
+                                class="tab justify-center w-fit pe-4 flex py-5 border-solid border-t-8  relative z-20 items-center gap-2 cursor-pointer">
+                                <icon [ngClass]="{'text-blue-hover': tab == 'R','text-tab': tab != 'R'}" type="adminicn"
+                                        name="realtime" />
+                                <h6 class="text-sm font-bold "
+                                        [ngClass]="{'text-blue-hover': tab == 'R','text-tab': tab != 'R'}">Realtime</h6>
+                        </div>
+                        <div class="w-px h-4 my-auto bg-blue-hover top-1 relative"></div>
+                        <div (click)="tab='T'"
+                                class="tab justify-center w-fit px-4 flex py-5 border-solid border-t-8  relative z-20 items-center gap-2 cursor-pointer"
+                                [ngClass]="{'border-blue-hover': tab == 'T','text-tab': tab != 'T'}">
+                                <svg [ngClass]="{'text-blue-hover': tab == 'T','text-tab': tab != 'T'}"
+                                        xmlns="http://www.w3.org/2000/svg" width="20" height="17" fill="none"
+                                        viewBox="0 0 20 17">
+                                        <path fill="currentColor" d="m3 9 1-1h8v2H4L3 9Zm4 7v-1h8v1l-1 1H8l-1-1Z" />
+                                        <path fill="currentColor"
+                                                d="M0 16v-1h8l1 1H8v1H1l-1-1ZM15 5v2H8L7 6V5h8Zm-2 4V8h2v2h-2V9Zm3 7v-1h2l1 1h-1v1h-1l-1-1ZM5 5h1v1L5 7H4V6H3l1-1h1Z" />
+                                        <path fill="currentColor" stroke="currentColor" stroke-width=".3"
+                                                d="M3 1H1L0 3v8l1 1 2 1h13l2-1 1-1V3l-1-2H3Zm0 1h14v9H2V2h1Z" />
+                                </svg>
+                                <h6 class="text-sm font-bold "
+                                        [ngClass]="{'text-blue-hover': tab == 'T','text-tab': tab != 'T'}">Transcript
+                                </h6>
+                        </div>
+                </div>
+        </div>
+        <div class="bg-dark-blue px-10 pb-10 h-[calc(100%_-_67px)]">
+                <ng-container *ngIf="tab == 'R'; else transcript">
+                        <app-setupscreen [isAdmin]="userInfo?.isAdmin" />
+                </ng-container>
+                <ng-template #transcript>
+                        <app-transcript />
+                </ng-template>
+        </div>
+</div>

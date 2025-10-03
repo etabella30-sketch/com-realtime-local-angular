@@ -1,0 +1,33 @@
+<div [ngClass]="isSetupscreen ? 'px-2' : 'px-10'"
+  class="page min-w-[956px] relative overflow-visible pb-6 max-w-fit w-fit bg-white"
+  [ngStyle]="{'height': itemSize + 'px', 'min-height': itemSize + 'px'}" [attr.pg]="page?.page">
+  <input
+    class="pagetitle block bg-neutral-500 px-2.5 py-1.5 !text-xs text-white w-full mb-6 fontsize !select-none !pointer-events-none h-9 min-h-9 max-h-9"
+    [value]="'Page No. ' + page?.page" readonly />
+  <!-- <input [disabled]="true" class="pagetitle bg-neutral-500 px-2.5 py-1.5 text-white w-full mb-6 fontsize select-none pointer-events-none"
+  [value]="'Page No.' + page?.page" readonly
+  tabindex="-1"
+  onmousedown="return false;" /> -->
+  <!-- <div class="pagetitle bg-neutral-500 px-2.5 py-1.5 text-white w-full mb-6 fontsize select-none pointer-events-none">
+    Page No. <span>{{ page?.page }}</span>
+  </div> -->
+
+  <!-- <div class="pagetitle bg-neutral-500 px-2.5 py-1.5 text-white w-full mb-6 fontsize !select-none !pointer-events-none">
+    <div>
+      Page No. <span> {{page?.page}} </span>
+    </div>
+  </div> -->
+  @if (!isSetupscreen) {
+  <app-annotation-layer [selectedFont]="selectedFont" [timestamp]="showTimestamp?106:0" [pageno]="page?.page"
+    [annotations]="page?.annotations" [lines]="page?.data" [nEditid]="nEditid" (OnIconClick)="OnIconClick($event,'A')"
+    [currentIsseuDetailId]="currentIsseuDetailId" [mode]="mode"></app-annotation-layer>
+  }
+
+  <app-text-layer [isSetupscreen]="isSetupscreen" (OnIconClick)="OnIconClick($event,'H')" [selectedFont]="selectedFont"
+    [pageno]="page?.page" [lines]="page?.data" [hyperlinks]="page?.hyperlinks" [showTimestamp]="showTimestamp"
+    [highlightmode]="highlightmode" [onReceiveEvent]="sendEvents" [spaceBarOptions]="spaceBarOptions"
+    (mouseup)="onMouseUp()" [annotations]="page?.annotations" [nEditid]="nEditid" (onTabEvent)="OnTabEvent($event)"
+    [mode]="mode">
+  </app-text-layer>
+
+</div>

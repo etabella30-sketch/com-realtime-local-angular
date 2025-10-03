@@ -1,0 +1,292 @@
+<form [formGroup]="frm" class="flex py-5">
+
+    <section class="flex flex-col px-5 bg-white rounded-xl min-w-[450px] max-w-[450px]">
+        <h1 class="flex items-center  text-lg font-bold  mb-2">
+            Export
+        </h1>
+        <!-- buttonClasses -->
+        <div
+            class="p-5 w-full flex gap-6 bg-white shadow-[0_3px_10px_#94949440] rounded-base cursor-pointer items-center">
+            <img src="./assets/icons/doc-icons/pdf.svg" class="thumbnail size-8">
+            <h6 class="text-xs font-semibold  brak-word truncate w-[calc(100%_-_100px)]">{{current_session?.cName}}</h6>
+        </div>
+
+        <label for="notify" class="pt-5 flex flex-col gap-2.5">
+            <h6 class="text-xs mb-2 font-semibold">Includes:: </h6>
+            <div class="flex items-center gap-3 pb-2.5">
+                <mat-checkbox formControlName="bPagination" class="text-xs">Pagination</mat-checkbox>
+                <mat-checkbox formControlName="bTimestamp" class="text-xs">Time stamp</mat-checkbox>
+            </div>
+
+            <div>
+                <div class="flex items-center gap-3 bg-grey py-1 h-[65px] px-4">
+                    <mat-checkbox formControlName="bQmark" class="text-xs ">
+                        <span class="!text-white">Quick Mark</span>
+                    </mat-checkbox>
+
+                    <div [class.!hidden]="!frm.value.bQmark"
+                        class="flex h-12 items-center gap-x-2 [&>span]:cursor-pointer ms-auto">
+                        @for(x of icons;track $index){
+                        <span (click)="changeFont(x.type,'cQMsize')"
+                            class="flex rounded-base p-1.5 hover:text-blue-on flex-col items-center !max-w-[55px] !min-w-[55px]"
+                            [ngClass]="x.type==frm.value.cQMsize?'!text-blue-on !bg-blue-100 !border-blue-on border-2 hover:shadow-[inset_0px_0px_4px_0px_#9FCCFF] shadow-[inset_0px_0px_4px_0px_#9FCCFF]':'!bg-white' ">
+                            <icon class="text-xl flex mx-auto" [name]="'textF'" type="indicn"></icon>
+                            <span class="text-xs">{{x.name}}</span>
+                        </span>
+                        }
+                    </div>
+
+                </div>
+
+                <!-- <div [class.!hidden]="!frm.value.bQmark" class="mt-3">
+                    <mat-select #hasselect [panelClass]="SelectedQM.length ? '-mt-7 exportselect' : ''" formControlName="jHIssues"
+                        id="nPriority" class="w-full !border !rounded-base" multiple placeholder="Select Issues..."
+                        (selectionChange)="changeIssue('SelectedQM','jHIssues')">
+                        <mat-select-trigger>
+                            Select Issues...
+                        </mat-select-trigger>
+
+                        <mat-option value="0" class="nocheck" style="
+                            --mat-option-focus-state-layer-color:#ffffff00;
+                            --mat-option-hover-state-layer-color:#ffffff00;
+                            ">
+                            <div class="p-2 rounded-base hover:bg-reply"
+                                (click)="checkAll('jHIssues');hasselect.close()">
+                                All Issue
+                            </div>
+                        </mat-option>
+                        <hr class="mx-3 my-2">
+                        @for (x of gropuIssueList; track x) {
+                        <mat-optgroup class="issdropgrup">
+                            <div class="flex gap-2.5 text-xs font-semibold items-center cursor-pointer"
+                                (click)="x.isopen=!x.isopen"> {{x.cCategory}}
+                                <icon class="text-[8px]" name="chvy" class="-rotate-90" />
+                            </div>
+                            @for (y of x.sublist; track y) {
+                            <mat-option [ngClass]="{'!hidden': !x?.isopen}" [value]="y.nIid" class="ps-3 nocheck group"
+                                style="
+          --mat-option-focus-state-layer-color:#ffffff00;
+          --mat-option-hover-state-layer-color:#ffffff00;
+          ">
+                                <div
+                                    class="flex gap-2.5 rounded-base py-1 items-center ps-6 group-[&.mdc-list-item--selected]:text-white group-[&.mdc-list-item--selected]:bg-blue-on hover:bg-blue-deactivate">
+                                    <span class="relative size-4  flex items-center justify-center">
+                                        <icon name="addcircle"
+                                            class="opacity-0 group-hover:opacity-100 text-base abolute group-[&.mdc-list-item--selected]:hidden" />
+                                        <icon name="removecircle"
+                                            class="abolute hidden text-base group-[&.mdc-list-item--selected]:inline-block" />
+                                    </span>
+                                    <span class="h-3 w-1 rounded-2xl block"
+                                        [ngStyle]="{'background': '#'+y.cColor}"></span>
+                                    {{y.cIName}}
+                                </div>
+                            </mat-option>
+                            }
+                        </mat-optgroup>
+                        }
+                    </mat-select>
+                    <div class="flex bg-grey rounded-xl gap-2.5 p-2.5 max-w-[810px] flex-wrap mt-3"
+                        *ngIf="SelectedQM.length">
+                        <div class="text-sm font-medium flex items-center p-2 px-3 bg-white rounded-xl gap-3 "
+                            *ngFor="let x of SelectedQM;let fi = index">
+                            <span class="flex items-center gap-2 text-xs">
+                                <span class="rounded-base h-3.5 w-1 bg-red-400"
+                                    [ngStyle]="{'background': '#' + x.cColor}"></span>
+                                {{x.cIName}} ({{x.cCategory}})
+                                <span class="flex">
+                                    <icon class="text-lg" name="backspace" type="extra"
+                                        (click)="removels(x,'SelectedQM','jHIssues')" />
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+
+            <div>
+                <div class="flex items-center gap-3 bg-grey py-1 h-[65px] px-4">
+                    <mat-checkbox formControlName="bQfact" class="text-xs ">
+                        <span class="!text-white">Q Fact</span>
+                    </mat-checkbox>
+                    <div [class.!hidden]="!frm.value.bQfact"
+                        class="flex h-12 items-center gap-x-2 [&>span]:cursor-pointer ms-auto">
+                        @for(x of icons;track $index){
+                        <span (click)="changeFont(x.type,'cQFsize')"
+                            class="flex rounded-base p-1.5 hover:text-blue-on flex-col items-center !max-w-[55px] !min-w-[55px]"
+                            [ngClass]="x.type==frm.value.cQFsize?'!text-blue-on !bg-blue-100 !border-blue-on border-2 hover:shadow-[inset_0px_0px_4px_0px_#9FCCFF] shadow-[inset_0px_0px_4px_0px_#9FCCFF]':'!bg-white' ">
+                            <icon class="text-xl flex mx-auto" [name]="'textF'" type="indicn"></icon>
+                            <span class="text-xs">{{x.name}}</span>
+                        </span>
+                        }
+                    </div>
+                </div>
+
+                <div [class.!hidden]="!frm.value.bQfact" class="mt-3">
+                    <mat-form-field class="w-full">
+                        <mat-select #hasselect2 [panelClass]="SelectedQ.length ? '-mt-7 exportselect' : ''"
+                            formControlName="jIssues" id="nPriority" class="w-full !border !rounded-base" multiple
+                            placeholder="Select Issues..." (selectionChange)="changeIssue('SelectedQ','jIssues')">
+                            <mat-select-trigger>
+                                Select Issues...
+                            </mat-select-trigger>
+                            <!-- @for (x of issueList; track $index) {
+                            <mat-option [value]="x.nIid" class="nocheck">
+                                <span class="rounded-base h-3.5 w-1 bg-red-400"
+                                    [ngStyle]="{'background': '#' + x.cColor}"></span>
+                                {{x.cIName}} ({{x.cCategory}})
+                            </mat-option>
+                            } -->
+                            <!-- 
+                            <mat-optgroup *ngFor="let x of issuelist;let ind=index" class="issdropgrup">
+                                <div class="mat-lab-drop titleN d-flex align-items-center justify-content-between"
+                                    (click)="x.isopen=!x.isopen"> {{x.cCategory}} <ion-icon
+                                        src="assets/localicons/chevron-down.svg"></ion-icon>
+                                </div>
+                                <mat-option *ngFor="let y of x.sublist" [value]="y" [hidden]="!x.isopen" class="ps-3">
+                                    <ion-icon [ngStyle]="{'color': y.cClr}" class="ps-4 me-2" src="assets/img/bar.svg">
+                                    </ion-icon>
+                                    {{y.cIssue}}
+                                </mat-option>
+                            </mat-optgroup> -->
+                            <mat-option value="0" class="nocheck w-full [&>.mdc-list-item__primary-text]:w-full fullwidthoptoion" style="
+                            --mat-option-focus-state-layer-color:#ffffff00;
+                            --mat-option-hover-state-layer-color:#ffffff00;
+                            ">
+                                <div class="p-2 rounded-base hover:bg-reply w-full"
+                                    (click)="checkAll('jIssues');hasselect2.close()">
+                                    All Issue
+                                </div>
+                            </mat-option>
+                            <hr class="mx-3 my-2">
+                            @for (x of gropuIssueList; track x) {
+                            <mat-optgroup class="issdropgrup">
+                                <div class="flex gap-2.5 text-xs font-semibold items-center cursor-pointer"
+                                    (click)="x.isopen=!x.isopen"> {{x.cCategory}}
+                                    <icon class="text-[8px]" name="chvy" class="-rotate-90" />
+                                </div>
+                                @for (y of x.sublist; track y) {
+                                <mat-option [ngClass]="{'!hidden': !x?.isopen}" [value]="y.nIid"
+                                    class="ps-3 nocheck group" style="
+              --mat-option-focus-state-layer-color:#ffffff00;
+              --mat-option-hover-state-layer-color:#ffffff00;
+              ">
+                                    <div
+                                        class="flex gap-2.5 rounded-base py-1 items-center ps-6 group-[&.mdc-list-item--selected]:text-white group-[&.mdc-list-item--selected]:bg-blue-on hover:bg-blue-deactivate">
+                                        <span class="relative size-4  flex items-center justify-center">
+                                            <icon name="addcircle"
+                                                class="opacity-0 group-hover:opacity-100 text-base abolute group-[&.mdc-list-item--selected]:hidden" />
+                                            <icon name="removecircle"
+                                                class="abolute hidden text-base group-[&.mdc-list-item--selected]:inline-block" />
+                                        </span>
+                                        <span class="h-3 w-1 rounded-2xl block"
+                                            [ngStyle]="{'background': '#'+y.cColor}"></span>
+                                        {{y.cIName}}
+                                    </div>
+                                </mat-option>
+                                }
+                            </mat-optgroup>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div class="flex bg-grey rounded-xl gap-2.5 p-2.5 max-w-[810px] flex-wrap mt-3"
+                        *ngIf="SelectedQ.length">
+                        <div class="text-sm font-medium flex items-center p-2 px-3 bg-white rounded-xl gap-3 "
+                            *ngFor="let x of SelectedQ;let fi = index">
+                            <span class="flex items-center gap-2 text-xs">
+                                <span class="rounded-base h-3.5 w-1 bg-red-400"
+                                    [ngStyle]="{'background': '#' + x.cColor}"></span>
+                                {{x.cIName}}
+                                <!-- ({{x.cCategory}}) -->
+                                <span class="flex">
+                                    <icon class="text-lg" name="backspace" type="extra"
+                                        (click)="removels(x,'SelectedQ','jIssues')" />
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            @if (!isAdvanced) {
+            <btn mode="text" (click)="isAdvanced = !isAdvanced" class="text-end">
+                Advanced Setup
+            </btn>
+            }
+        </label>
+
+        @if (!isAdvanced) {
+        <div class="flex items-center gap-3 mt-6 w-full" (click)="submit()">
+            <btn mode="solid" class="w-full block" addcls="!w-full" [isloading]="isLoading">Export</btn>
+            <!-- <btn mode="white">View Export Status</btn> -->
+        </div>
+        }
+
+    </section>
+
+    @if (isAdvanced) {
+    <!-- <hr class="min-w-px bg-gray-400 h-full"> -->
+
+    <section class="flex flex-col px-5 bg-white border-l min-w-[450px] max-w-[450px] pt-9">
+        <div class="flex items-center gap-3 bg-grey py-1 h-[65px] px-4">
+            <div class="flex items-center gap-2 ms-auto">
+                <btn mode="outlined"
+                    addcls="rounded-full !py-1 !pe-1 font-semibold   !ps-2 !bg-blue-deactivate hover:!bg-blue-deactivate !text-blue-on"
+                    (click)="isAdvanced = !isAdvanced">
+                    Advance Setup
+                    <span class="bg-blue-on size-5 text-white rounded-full grid place-items-center rotate-180">
+                        <icon class="text-xxs" name="chvx" type="comnicn"></icon>
+                    </span>
+                </btn>
+            </div>
+        </div>
+
+        <label for="notify" class="py-2 flex items-center gap-3 !pt-3">
+            <mat-checkbox class="text-xs" formControlName="bCoverpg">Cover Page</mat-checkbox>
+        </label>
+
+
+        <label for="notify" class="py-2 flex items-center gap-3 !pb-3">
+            <h6 class="text-xs font-semibold">Pages: </h6>
+            <mat-radio-group formControlName="cPages" class="flex items-center gap-3">
+                <mat-radio-button value="A" class="text-xs">All</mat-radio-button>
+                <mat-radio-button value="R" class="text-xs"><span class="whitespace-nowrap"> Page
+                        Range</span></mat-radio-button>
+            </mat-radio-group>
+            @if (frm.value.cPages == 'R') {
+            <input type="text" formControlName="cPagerange" class="w-20" [placeholder]="'1-10,12'">
+            }
+        </label>
+
+        <div class="flex items-center gap-3 bg-grey py-1 h-[65px] px-4">
+            <div class="flex items-center gap-2 o">
+                <span class="text-xs text-white">Page Setup</span>
+            </div>
+        </div>
+
+        <label for="notify" class="py-2 flex items-center gap-3 !pt-3">
+            <h6 class="text-xs font-semibold">Orientation: </h6>
+            <mat-radio-group class="flex items-center gap-3" formControlName="cOrientation">
+                <mat-radio-button value="A" class="text-xs">Auto</mat-radio-button>
+                <mat-radio-button value="P" class="text-xs">All Portrait</mat-radio-button>
+            </mat-radio-group>
+        </label>
+
+        <label for="notify" class="py-2 flex items-center gap-3 !pb-3">
+            <h6 class="text-xs font-semibold">Scale: </h6>
+            <mat-checkbox formControlName="bFitpg" class="text-xs"><span class="whitespace-nowrap">Fit to
+                    Page</span></mat-checkbox>
+            <mat-select formControlName="cPgsize" class="w-full !border !rounded-base" placeholder="Select issue">
+                <mat-option value="A4">A4</mat-option>
+                <mat-option value="A3">A3</mat-option>
+                <mat-option value="A2">A2</mat-option>
+            </mat-select>
+        </label>
+
+        <div (click)="submit()" class="flex items-center gap-3 mt-auto">
+            <btn mode="solid" [isloading]="isLoading" class="w-full block" addcls="!w-full">Export</btn>
+        </div>
+    </section>
+    }
+</form>

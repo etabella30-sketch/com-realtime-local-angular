@@ -1,0 +1,17 @@
+.maincontainer {
+  --font: 'Open Sans';
+  --highlightcolor: #ffe600;
+  --scale: 1;
+  --contheight: 100%;
+}
+
+
+.calcwth {
+  --content-width: calc(100vw - 160px);
+  --remaning-width: calc(100% - var(--content-width) - 160px);
+  // --remaining-px: calc(100% - var(--content-width));
+  // --remaining-percent: calc(var(--remaining-px) / 100%);
+  // --width-percent: calc(100% - var(--remaining-percent) * 100%);
+  width: calc(100% - var(--remaning-width));
+  height: var(--contheight);
+}

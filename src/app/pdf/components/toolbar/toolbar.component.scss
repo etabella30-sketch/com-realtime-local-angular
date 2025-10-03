@@ -1,0 +1,20 @@
+input {
+  font-size: 12px;
+  width: 43px;
+  padding: 0 5px;
+  height: 22px;
+  border-radius: 5px;
+  border: 1px solid #c2c2c2;
+  &:focus {
+    outline: none;
+  }
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  opacity: 1;
+}
+

@@ -1,0 +1,92 @@
+<div class="flex flex-col h-full">
+    <header class="px-8 h-[100px] flex">
+            <div class="flex items-center gap-2">
+                    <img src="assets/colorlogo.svg">
+                    <span class="text-3xl font-semibold">Realtime Session Setup
+                    </span>
+            </div>
+            <div class="flex items-center gap-2 ms-auto">
+                    <span>welcome back, {{userdetail?.cFname}}</span>
+                    <profile [icon]="false" [detail]="userdetail" size="sm" >
+                    </profile>
+                    
+                   
+            </div>
+    </header>
+
+    <div class="h-full overflow-auto" #parent>
+            <div class="bg-dark-blue p-10">
+                    <h6 class="text-lg font-semibold text-white">Active Cases </h6>
+                    <div class="flex ">
+                            <div *ngIf="reached!='S'"
+                                    class="fadestart relative -ml-10 left-10 z-20 h-[378px] w-28 bg-gradient-to-r from-dark-blue to-transparent">
+                            </div>
+                            <ng-scrollbar (reachedEnd)="onReachEnd()" (reachedBottom)="onScroll('E')"
+                                    (reachedStart)="onScroll('S')" (scroll)="onScroll2('',$event)">
+                                    <div class="flex items-center relative  gap-6 overflow-auto py-5">
+                                            <!-- <div class="fadestart h-full fixed left-0 z-10 w-28 bg-gradient-to-r from-dark-blue to-transparent"
+                            *ngIf="reached=='S'"></div>
+                    <div class="fadestart h-full fixed right-0 z-10 w-28 bg-gradient-to-r from-dark-blue to-transparent"
+                            *ngIf="reached=='S'"></div> -->
+                                            <!-- <div class="fadeend" *ngIf="reached=='E'"></div> -->
+                                            @defer (when caselist) {
+                                            @for(x of caselist; track x.nCaseid) {
+                                            <casecard [detail]="x" [ticketCount]="x.ticketCount" [ticketOpen]="nTicketCaseId == x.nCaseid" [nSesid]="x.nSesid"
+                                                    (caseChange)="viewTicket($event,x)" />
+                                            }
+                                            }
+
+                                            @if(loding){
+                                            <div class="flex gap-6">
+                                                    @for (team of caselist.length ? [1,2] : [1,2,3,4,5,6]; track
+                                                    team) {
+                                                    <div
+                                                            class="p-5 group rounded-base border relative border-white w-80 flex-col h-[357px]  bg-white  text-grey flex justify-center-center">
+                                                            <sklton height="26px" width="200px" bg="base"
+                                                                    class="mb-2">
+                                                            </sklton>
+                                                            <sklton height="10px" width="100px" bg="base"></sklton>
+                                                            <div
+                                                                    class=" flex flex-col gap-2.5 h-full overflow-auto mt-5">
+                                                                    @for (team of [1,2,3]; track team) {
+                                                                    <div>
+                                                                            <!-- <span class="text-sm  font-semibold mb-2.5 block">{{team.cTeamname}}</span> -->
+                                                                            <sklton bg="base" class="mb-3"
+                                                                                    height="10px" width="100px">
+                                                                            </sklton>
+                                                                            <div
+                                                                                    class="flex gap-2.5 flex-wrap mt-3">
+                                                                                    @for (user of [1,2,4]; track
+                                                                                    user) {
+                                                                                    <sklton bg="base" height="35px"
+                                                                                            width="35px"
+                                                                                            [isavatar]="true">
+                                                                                    </sklton>
+                                                                                    }
+                                                                            </div>
+                                                                    </div>}
+                                                            </div>
+                                                            <div class="flex gap-2">
+                                                                    <sklton height="30px" width="100px" bg="base">
+                                                                    </sklton>
+                                                                    <sklton height="30px" width="30px" bg="base"
+                                                                            class="ms-auto">
+                                                                    </sklton>
+                                                                    <sklton height="30px" width="30px" bg="base">
+                                                                    </sklton>
+                                                                    <sklton height="30px" width="30px" bg="base">
+                                                                    </sklton>
+                                                            </div>
+                                                    </div>}
+                                            </div>
+                                            }
+                                    </div>
+                            </ng-scrollbar>
+                            <div *ngIf="reached!='E'&&caselist.length>4"
+                                    class="fadestart relative -mr-10 -left-10 z-20 h-[378px] w-28 bg-gradient-to-l from-dark-blue to-transparent">
+                            </div>
+                    </div>
+            </div>
+           
+    </div>
+</div>

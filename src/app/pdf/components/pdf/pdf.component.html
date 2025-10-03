@@ -1,0 +1,293 @@
+<div class="h-full w-full bg-[#e8e8eb] flex flex-col" [ngClass]="{'!bg-transparent': compareMode}">
+    @if(!loading && !pdfFailed )
+    {
+
+
+    <div [class.hidden]="compareMode">
+        @defer(when !loading && !pdfFailed){
+        <pdftool class="pdftoolbar" [ngClass]="{'fixed top-14 w-full z-10': compareMode}" [pageRotation]="pageRotation"
+            [handTool]="handTool" [zoom]="zoom" [totalSearch]="totalSearch" [currentSearch]="currentSearch"
+            [isSearching]="isSearching" [pageViewMode]="pageViewMode" [docInfo]="docInfo" [isLink]="isLink"
+            [currentPage]="currentPage" [pagesCount]="pagesCount" [highlightMode]="highlightMode"
+            (toolEvents)="onToolEvents($event)" [annotToolMode]="annotToolMode" [fullMode]="fullMode"
+            [compareMode]="compareMode" [pdfLoaded]="pdfLoaded" [isnavigate]="modeltype=='N'" [isProperties]="modeltype=='VP'||modeltype=='AP'" [isIssue]="modeltype=='IL'"
+            [linkExplorerMode]="linkExplorerMode" [pagginationRenge]="pagginationRenge" 
+            [isConverttopagelevel]="isConverttopagelevel" [onPdfEvent]="onPdfEvent" [isHavehighlights]="isHavehighlights" />
+        <!-- [isDisabledNavigate]="globannots.length && globalAnnots.length ? false:true" -->
+        }
+        @placeholder {
+        <div class="px-2.5 py-1 h-14 flex items-center gap-2.5 bg-white">
+            <sklton width="155px" height="34px"></sklton>
+            <sklton width="56px" height="34px"></sklton>
+            <sklton width="201px" height="34px"></sklton>
+            <sklton width="100px" height="34px"></sklton>
+            <sklton width="34px" height="34px"></sklton>
+            <sklton width="34px" height="34px"></sklton>
+            <sklton width="34px" height="34px"></sklton>
+        </div>
+        }
+    </div>
+    <!-- @if(linkExplorerMode){
+    @defer(when linkExplorerMode){
+    <link-explorer [docInfo]="docInfo" [linkExplorerMode]="linkExplorerMode" [linkExplorerType]="linkExplorerType"
+        (onEvent)="OnEventLinkExplorer($event)" />
+    }@placeholder {
+    <div></div>
+    }
+    } -->
+
+
+    <div class="relative h-full"
+        [ngClass]="{'svgOverlay':_rectEnabled || _panEnabled,'border-4 border-blue-on':nFSid,'ms-auto': docInfo?.isRealtime,'w-1/2':docInfo?.isRealtime,'w-[calc(100%_-_440px)]':modeltype&&modeltype != 'LS'&&!compareMode}">
+        <!-- [spread]="spreadMode" -->
+        @if (compareMode) {
+        }
+        @if(nFSid){
+        <div class="">
+            <div class="py-1.5 absolute px-4 font-semibold right-0 rounded-bl-base z-10 bg-blue-on text-white w-fit text-xs flex items-center gap-2"
+                (click)="closeEdit()">
+                <span>Edit Mode</span>
+                <icon name="close" type="comnicn" class="text-xxs" />
+            </div>
+        </div>
+        }
+
+        @if(!pdfLoaded){
+
+          <div
+          class="min-h-full w-[842px] bg-white grid place-items-center transition-all origin-center mx-auto max-w-[90%] absolute top-0 left-1/2 -translate-x-1/2 z-20">
+          <svg width="120" height="120" viewBox="0 0 100 100">
+              <text alignment-baseline="baseline" x="70" y="70" text-anchor="middle">
+                  <tspan x="50" y="57" dy="-0.18em" font-size="20" font-weight="normal" fill="#444444">
+                      {{loadingProgress}}
+                  </tspan>
+                  <tspan font-size="10" font-weight="normal" fill="#444444">%</tspan><!---->
+                  <tspan x="50" y="57" dy="0.82em" font-size="10" font-weight="normal" fill="#A9A9A9">progress</tspan>
+              </text>
+              <circle cx="50" cy="50" r="45" stroke="#e6e6e6" stroke-width="5" fill="none" />
+              <circle style="transform: rotate(270deg);transform-origin: center;stroke-linecap: round;"
+                  [attr.stroke-dashoffset]="282.743 - (loadingProgress / 100) * 282.743" class="progress-circle"
+                  cx="50" cy="50" r="45" stroke="#ff3d00" stroke-width="5" fill="none" stroke-dasharray="282.743" />
+          </svg>
+      </div>
+        }
+
+        @else if(loading){
+        <div
+            class="min-h-full w-[842px] bg-white grid place-items-center transition-all origin-center mx-auto max-w-[90%] absolute top-0 left-1/2 -translate-x-1/2 z-20">
+        </div>
+        }
+
+        <!-- [showToolbar]="true" [textLayer]="textLayer"   [pageViewMode]="pageViewMode"  [relativeCoordsOptions]="1" -->
+
+        <!-- {{pageViewMode}} -->
+
+        <!-- [disableAutoFetch]="true" [disableStream]="true" -->
+            <!-- {{pdfSrc}} -->
+        <ngx-extended-pdf-viewer #pdfViewer [src]="pdfSrc" [showToolbar]="false" [activeSidebarView]="1" [(zoom)]="zoom"
+            [rotation]="pageRotation" [pageViewMode]="pageViewMode" [sidebarVisible]="sideBar"
+            [relativeCoordsOptions]="1" [handTool]="handTool" [showBorders]="false" [(page)]="currentPage"
+            (pageChange)="onPageChange($event)" (pageRendered)="onPageRendered($event)"
+            (pdfLoaded)="onPdfLoaded($event)" (mousedown)="OnMouseDown($event)" (mouseup)="OnMouseUp($event)"
+            (mousemove)="onMouseMove($event)" (zoomChanged)="onZoomChanged($event)"
+            (updateFindMatchesCount)="onFind($event)" (progress)="onProgress($event)"
+            (currentZoomFactor)="OncurrentZoomFactor($event)" (pdfLoadingStarts)="onPdfLoadingStart($event)"
+            (pdfLoadingFailed)="onPdfLoadingFailed($event)" (click)="DocumentClick($event)"
+            (dblclick)="openInIndividual()" (pagesLoaded)="OnPageLoad($event)" (mouseover)="OnMouseOver($event)">
+        </ngx-extended-pdf-viewer>
+        <!-- <ngx-extended-pdf-viewer #pdfViewer [src]="pdfSrc" [showToolbar]="false" [activeSidebarView]="1"
+            (pagesLoaded)="OnPageLoad($event)"     [textLayer]="false"  [(zoom)]="zoom" [rotation]="pageRotation"
+            [pageViewMode]="pageViewMode" [sidebarVisible]="sideBar" [relativeCoordsOptions]="1" [handTool]="handTool"
+            [showBorders]="false" [(page)]="currentPage" (pageChange)="onPageChange($event)"
+            (pageRendered)="onPageRendered($event)" (pdfLoaded)="onPdfLoaded($event)" (mousedown)="OnMouseDown($event)"
+            (mouseup)="OnMouseUp($event)" (mousemove)="onMouseMove($event)" (zoomChanged)="onZoomChanged($event)"
+            (updateFindMatchesCount)="onFind($event)" (progress)="onProgress($event)"
+            (currentZoomFactor)="OncurrentZoomFactor($event)" (pdfLoadingStarts)="onPdfLoadingStart($event)"
+            (pdfLoadingFailed)="onPdfLoadingFailed($event)" (click)="DocumentClick($event)"
+            (dblclick)="openInIndividual()">
+        </ngx-extended-pdf-viewer> -->
+
+    </div>
+
+
+
+    @if(!pdfLoaded){
+    @if(docInfo?.isRealtime){
+    <div class="flex text-white ms-3">
+        <icon name="close" class="text-lg block " type="comnicn" />
+    </div>
+    }
+    }
+
+
+
+
+    }
+    @else if(pdfFailed){
+
+    @if(docInfo?.isRealtime){
+    <!-- pdfFailed // variable for failed -->
+    <div class="flex items-center justify-end bg-dark-blue h-[78px] px-10 text-white">
+        <icon name="close" (click)="closeRealtimePdf()" class="text-sm block " type="comnicn" />
+    </div>
+    }
+    <div class="h-full  bg-white grid place-items-center transition-all  ms-auto w-full "  [ngClass]="{'!w-1/2 ms-auto': docInfo?.isRealtime}">
+        <!-- <div class="h-full w-[842px] max-w-[90%]  bg-white grid place-items-center transition-all  mx-auto"> -->
+        <div class="flex items-center justify-center flex-col ms-auto w-full min-w-[420px]">
+            <img width="25px" class="mb-2.5" src="../../../../assets/icons/failed.svg">
+            <h6 class="text-sred text-base font-semibold opacity-50 mb-0.5">Failed to load the pdf</h6>
+            <h6 class="text-sred  opacity-50 text-xs">please close this pdf & load again</h6>
+        </div>
+    </div>
+    }
+
+
+
+
+<!-- 
+    @if(highlightBox && !modeltype){
+    @defer(when highlightBox){
+    <toolbox class="absolute !z-[99] " [highlightMode]="highlightMode" [annotToolMode]="annotToolMode"
+        [tempAnnots]="tempAnnots" [isChecked]="isChecked" [isLink]="isLink" [highlightIndex]="highlightIndex"
+        [style]="{'left':(highlightBoxOptions.x + 'px'),'top':(highlightBoxOptions.y + 'px')}"
+        (OnEvent)="OnToolBoxEvent($event)" [nFSid]="nFSid" />
+    }@placeholder {
+    <div></div>
+    }
+    } -->
+
+
+
+
+    <!-- @if(hyperlinkBox && !modeltype){
+    @defer(when hyperlinkBox){ -->
+    <!-- <div [hidden]="!hyperlinkBox">
+        <hyperlink-box class="absolute !z-[99] min-w-[300px]"
+            [style]="{'left':(hyperlinkBoxOptions.x + 'px'),'top':(hyperlinkBoxOptions.y + 'px')}"
+            [hyperlinkOption]="hyperlinkOption" (onHyperlinkEvent)="OnHyperLinkFile($event)" />
+    </div> -->
+    <!-- }@placeholder {
+    <div></div>
+    }
+    } -->
+
+    <!-- top: 100px; -->
+    <!-- height: calc(100% - 160px); -->
+
+    @if(fullMode){
+    <div class="leftbar flex items-center  h-[calc(100%_-_160px)] top-[100px] w-12 fixed left-0 group ">
+        <div
+            class="flex flex-col items-center justify-center gap-10 w-full h-48 -translate-x-48 transition-all duration-700 group-hover:translate-x-0 bg-grey rounded-e-base">
+            <icon (click)="changeDocument()" matTooltipPosition="right" matTooltip="Swap" name="replace" type="extra"
+                class="text-white" />
+            <svg matTooltip="Thumbnail" class="cursor-pointer" (click)="changeSideBar()" matTooltipPosition="right"
+                xmlns="http://www.w3.org/2000/svg" width="15" height="16" fill="none" viewBox="0 0 15 16">
+                <rect width="5" height="5" x="1" y="2" stroke="#fff" stroke-width="1.5" rx="1" />
+                <rect width="5" height="5" x="9" y="2" stroke="#fff" stroke-width="1.5" rx="1" />
+                <rect width="5" height="5" x="1" y="10" stroke="#fff" stroke-width="1.5" rx="1" />
+                <rect width="5" height="5" x="9" y="10" stroke="#fff" stroke-width="1.5" rx="1" />
+            </svg>
+        </div>
+    </div>
+    }
+
+
+    <!-- @defer(on idle){
+    @if(modeltype){
+    @if (modeltype == 'D'||modeltype == 'F'||modeltype == 'W'||modeltype == 'QF') {
+    <div class="absolute top-14 left-0 bg-black/50 w-full h-full "></div>
+    }
+    <right-panel class="absolute top-14 right-0 w-[440px] " [userList]="userList"
+        [ngClass]="{ 'shadow-[-6px_-3px_10px_0px_#e8e8eb7a]':!linkExplorerMode, 'bg-white h-[calc(100%_-_56px)]': modeltype != 'LS' ,'!h-[calc(100%_-_108px)] !top-[108px]':linkExplorerMode,'!top-0 !h-full':compareMode||!fullMode,'z-20 w-full':!fullMode}"
+        [tempAnnots]="tempAnnots" [selectedlinktype]="selectedlinktype" [annotGlobMode]="annotGlobMode"
+        [linkIds]="linkIds" [globannots]="globannots" [modeltype]="modeltype" [docInfo]="docInfo" [nCaseid]="nCaseid"
+        [fullMode]="fullMode" (OnEvent)="OnEventOfLinks($event)" />
+    }
+    } -->
+
+    @if(!modeltype && pdfLoaded){
+    <div
+        class="absolute right-2 top-32 bg-white rounded-s-md  flex flex-col justify-center shadow-[-4px_0px_11px_#0000000f]">
+        @for(x of globalAnnots;track x.type){
+        <div (click)="openDetail(x)"
+            class="h-fit flex first:rounded-b-none first:rounded-tr-none  last:rounded-t-none last:rounded-br-none flex-col px-2 rounded-md first:border-t-0 gap-2 py-3 border-t cursor-pointer hover:shadow-[0_0_6px_#06f]">
+            <!-- x.type F/D/W-->
+            <icon [name]="x.type=='F' ? 'fact' : (x.type=='D' ? 'doclink' : 'weblink')" type="indicn" />
+            <!-- @if (selectedIssues?.length) { -->
+            <span class="flex items-center size-4 text-xxs rounded-full bg-tab text-white justify-center">
+                {{x.id?.length}}</span>
+            <!-- } -->
+        </div>
+        }
+    </div>
+    }
+
+
+
+    @if(factsheetalert){
+    <div class="fixed bottom-0 h-full bg-black/90 flex items-center justify-center w-full">
+        <div class="bg-white p-10  rounded-base w-[623px]">
+            <div class="[&>img]:w-5">
+                <img src="../../../../assets/icons/tip.svg">
+            </div>
+            <h6 class="text-lg font-semibold my-2.5 leading-snug text-sgreen">Changes made have not been saved, fact
+                sheet has not been updated.</h6>
+            <div class="flex gap-3 mt-6 items-center">
+                <btn (click)="factsheetalert=false">Back to factsheet</btn>
+            </div>
+        </div>
+    </div>
+    }
+
+    @if(annotaioninstruction){
+    <div class="fixed bottom-0 h-full bg-black/90 flex items-center justify-center w-full">
+        <div class="bg-white p-10 rounded-base w-[523px]">
+            <div class="[&>img]:w-5">
+                <img src="../../../../assets/icons/tip.svg">
+            </div>
+            <h6 class="text-lg font-semibold my-2.5 leading-snug text-sgreen">In edit mode, you can:</h6>
+            <div>
+                <ul class="list-disc ps-5">
+                    <li class="text-xs">Delete</li>
+                    <li class="text-xs">Drag to alter</li>
+                    <li class="text-xs [&>img]:inline">Create new highlight by selecting multiple parts of the file,
+                        click the <img src="assets/icons/add-circle.svg" width="12" /> button to update your factsheet.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex gap-3 mt-6 items-center">
+                <btn (click)="annotaioninstruction=false">Got it, thanks</btn>
+                <mat-checkbox>Don't show this again</mat-checkbox>
+            </div>
+        </div>
+    </div>
+    }
+
+    @if(isSlab){
+    <div class="fixed bottom-0 h-24 bg-black/90 flex items-center justify-center w-full">
+        @if(slabMode=='CD'){
+        <div class="flex items-center gap-5 ">
+            <span class="text-sm text-white font-semibold">Confirm edit ? </span>
+            <btn class="text-xs" (click)="confirmDelete()">Yes</btn>
+            <btn class="text-xs" mode="darkwhite" (click)="undoDelete()">undo</btn>
+            <icon (click)="undoDelete()" name="close" class="text-xs text-white" />
+        </div>
+        }
+        @else if(slabMode == 'U'){
+        <div class="flex items-center gap-5 ">
+            <div class="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-brand rounded-full dark:text-brand"
+                role="status" aria-label="loading">
+            </div>
+            <span class="text-sm text-white font-semibold">Updated Factsheet </span>
+        </div>
+        } @else if(slabMode == 'UC'){
+        <div class="flex items-center gap-5 ">
+            <span class="size-6 bg-white flex items-center justify-center rounded-full">
+                <icon name="check" class="text-sgreen text-sm block" type="comnicn" />
+            </span>
+            <span class="text-sm text-white font-semibold">Factsheet Updated </span>
+        </div>
+        }
+    </div>
+    }

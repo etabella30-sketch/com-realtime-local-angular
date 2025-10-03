@@ -1,0 +1,15 @@
+.pdftoolbar {
+        transform: translateY(var(--button-offset));
+        will-change: transform;
+}
+
+.pdfwrapper {
+        padding-left: calc(4px * var(--isactive-pdf));
+        padding-right: calc(4px * var(--isactive-pdf));
+        padding-bottom: calc(4px * var(--isactive-pdf));
+
+        .borders {
+                opacity: var(--isactive-pdf);
+                pointer-events: none;
+        }
+}

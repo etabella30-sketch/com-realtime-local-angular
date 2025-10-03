@@ -1,0 +1,9 @@
+<button type="button"
+        class="px-3 py-2 inline-flex items-center justify-center gap-x-2 text-xs  rounded-base whitespace-nowrap relative"
+        [ngClass]="buttonClasses + (square?' min-h-8.5 min-w-8.5 max-h-8.5 max-w-8.5 !px-0':'')" [disabled]="disabled">
+
+        <span class="flex items-center gap-2" [ngClass]="{'opacity-0': isloading}">
+                <ng-content></ng-content>
+        </span>
+        <span *ngIf="isloading" class="loader absolute"></span>
+</button>

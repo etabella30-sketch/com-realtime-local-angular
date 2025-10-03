@@ -1,0 +1,52 @@
+<header class="py-2.5 px-5 flex items-center bg-faint ">
+        <span class="text-lg font-bold">Assign Servers</span>
+        <btn mode="outlined" class="ms-auto" (click)="newservers()">
+                <icon name="addfill" /> New Server
+        </btn>
+</header>
+
+<div class="tabhead flex text-xs font-bold px-2.5">
+        <div class="w-1/3 px-3 py-3">Name</div>
+        <div class="w-2/5 px-3 py-3"> URL / IP Address</div>
+        <div class="w-20 px-3 py-3">Port</div>
+        <div class="w-1/3 px-3 py-3"></div>
+</div>
+<div class="body ">
+        <div class="flex rows group px-2.5 text-xs mb-2.5 hover:bg-blue-deactivate" *ngFor="let x of servers"
+                [ngClass]="{'py-3': data=='N'}">
+                <div class="w-1/3 px-3 flex items-center">
+                        <span>
+                                {{x.cName}}
+                        </span>
+                </div>
+                <div class="w-2/5 px-3 flex items-center">
+                        <span>
+                                {{x.cUrl}}
+                        </span>
+
+                </div>
+                <div class="w-20 px-3 gap-3 flex items-center">
+                        <span>
+                                {{x.nPort}}
+                        </span>
+                </div>
+                <div class="w-1/3 px-3 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100"  *ngIf="permission=='N'">
+                        <btn (click)="assignServer(x)" class="block  ms-auto">
+                                Assign server
+                        </btn>
+                </div>
+                
+                <!-- <div class="w-1/3 px-3 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100" *ngIf="permission=='N'">
+                        <btn *ngIf="data!='N'" (click)="assign(x)" class="block  ms-auto">
+                                Next choose participant
+                        </btn>
+                </div>
+                
+               -->
+               <div class="w-1/3 px-3 flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100" *ngIf="permission=='E'">
+                <btn *ngIf="data!='N'" (click)="chooseServer(x)" class="block  ms-auto">
+                        Choose server
+                </btn>
+        </div> 
+        </div>
+</div>

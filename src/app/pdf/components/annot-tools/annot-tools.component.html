@@ -1,0 +1,10 @@
+<div class="px-5 py-1 bg-blue-deactivate flex h-12 items-center gap-x-7 [&>span]:cursor-pointer ">
+        @for(x of icons;track $index){
+                <span (click)="changeType(x.type)"  [matTooltip]="x.toolTip"
+                aria-label="Button that displays a tooltip when focused or hovered over" class="flex rounded-base p-1.5 hover:text-blue-on"
+                        [ngClass]="x.type==annotToolMode?'hover:bg-white !text-blue-on !bg-blue-hover !border-blue-on hover:shadow-[inset_0px_0px_4px_0px_#9FCCFF] shadow-[inset_0px_0px_4px_0px_#9FCCFF]':'hover:bg-white active:bg-white ' ">
+                        <icon [name]="x.name" class="text-2xl" [type]="x.type=='F' ? 'real_icn' : 'toolicn'" />
+                </span>
+        }
+        <icon class="ms-auto text-xs" name="close" (click)="onAnnotClose()"  />
+</div>

@@ -1,0 +1,105 @@
+<!-- @if (isLoading) {
+@for (x of [1,2,3,4,5,6,7]; track $index) {
+<div class="flex gap-2.5 group items-center px-2.5 py-1.5 bg-gray-100 rounded-xl  mt-2.5 animate-pulse">
+        <span class="size-4 bg-gray-300 rounded-sm"></span>
+        <span class="w-1 h-4 rounded-sm bg-gray-300"></span>
+        <span class="w-28 h-3 rounded-sm bg-gray-300"></span>
+</div>
+}
+} -->
+<div class="flex flex-col h-full">
+        <header class="flex flex-col justify-center px-5 py-[21px] w-full bg-white shadow-[0px_6px_4px_#0000000d]">
+                <div class="flex gap-2.5 items-center  max-md:flex-wrap">
+                        <icon class="text-base" name="chvy" (click)="back()" />
+                        <div class="flex  gap-1 items-center my-auto text-xs font-extrabold leading-4 ">
+                                <span class="rounded-base h-3.5 w-1 bg-red-400"
+                                        [ngStyle]="{'background': '#'+issue?.cColor}"></span>
+                                <div class="justify-center whitespace-nowrap">{{issue?.cIName}}
+                                        <span>({{issue?.cCategory}})</span>
+                                </div>
+                                <!-- (modelType == 'E' && cPermission=='E') || -->
+                        </div>
+                </div>
+        </header>
+        <!-- <div class="flex gap-2.5 py-6 px-6">
+                <div class="w-1/2 gap-2.5 flex items-center text-blue-on rounded-full px-3 py-1 cursor-pointer"
+                        [ngClass]="{'!bg-gradient-to-b from-blue-on to-blue-on/50 border !border-white !text-white': listMode=='A' ,' border border-blue-on':listMode!='A' ,'opacity-15 pointer-events-none':!issue?.sublist.length}"
+                        (click)="listMode = 'A'">
+                        <icon name="Qfact" type="extra" class="text-xl" />
+                        <span class="text-base font-bold">Q Fact</span>
+                        <span [ngClass]="{'bg-white !text-blue-on': listMode=='A'}"
+                                class="text-xs bg-blue-on rounded-base ms-auto h-5 min-w-5 w-fit text-white flex items-center justify-center px-1">{{issue?.nTotalID
+                                ? issue?.nTotalID : 0}}
+                        </span>
+                </div>
+                <div class="w-1/2  flex items-center text-blue-on rounded-full px-3 py-1 gap-2.5 cursor-pointer"
+                        [ngClass]="{'!bg-gradient-to-b from-blue-on to-blue-on/50 border !border-white !text-white': listMode=='H',' border border-blue-on':listMode!='H','opacity-15 pointer-events-none':!issue?.hyperlinks.length}"
+                        (click)="issue?.hyperlinks.length ? listMode = 'H' : ''">
+                        <icon name="highlighter" type="real_icn" class="text-xl" />
+                        <span class="text-base font-bold">Quick Mark</span>
+                        <span [ngClass]="{'bg-white !text-blue-on':  listMode=='H'}"
+                                class="text-xs bg-blue-on rounded-base ms-auto h-5 min-w-5 w-fit text-white flex items-center justify-center px-1">{{issue?.hyperlinks?.length
+                                || 0}}
+                        </span>
+                </div>
+        </div> -->
+        <div class="h-fit max-h-full overflow-auto px-6 mb-2.5">
+                @if(listMode=='A'){
+                @for (y of issue?.sublist; track $index) {
+                <div class="p-2.5 bg-white mt-2.5 rounded-base cursor-pointer px-6"
+                        [ngClass]="y.isCheck ? '!bg-blue-50 border border-blue-hover' : ''"
+                        (click)="selectIssueDetail(issue,y)">
+                        <h6 class="text-xs truncate2">
+                                {{y.cONote}}
+                        </h6>
+                        <span class="underline text-xs cursor-pointer hover:text-blue-on" (click)="OnPage(y)">jump to
+                                {{y.cPageno}}
+                        </span>
+                </div>
+                }
+                }
+                @else {
+                @for (y of issue?.hyperlinks; track $index) {
+                <div class="p-2.5 bg-white mt-2.5 rounded-base cursor-pointer px-6"
+                        [ngClass]="y.isCheck ? '!bg-blue-50 border border-blue-hover' : ''"
+                        (click)="selectHIssueDetail(issue,y)">
+                        @if(y.highlights && y.highlights?.length){
+                        @for(n of y.highlights; track $index){
+                        <h6 class="text-xs truncate2">
+                                {{n.cNote}}
+                        </h6>
+                        }
+                        }
+                        <span class="underline text-xs cursor-pointer hover:text-blue-on" (click)="OnPage(y)">
+                                jump to {{y.cPageno}} from line {{y.fromline}}-{{y.toline}}
+                        </span>
+                </div>
+                }
+                }
+        </div>
+
+        @if(listMode=='A'){
+        <div class="bg-reply py-2.5 pt-2.5 px-6">
+                <hr class="mb-5 border-gray-300">
+                <div class="flex items-center mb-2.5">
+                        <span class="text-xs">
+                                Note:
+                        </span>
+                        <div class="flex gap-2.5 items-center me-2.5 ms-auto">
+                                <span *ngIf="curruntdetail?.cRelevance"
+                                        class="flex items-center gap-2.5 text-xxs bg-white font-bold px-2 py-1 rounded-base ms-auto">{{curruntdetail?.cRelevance}}
+                                </span>
+                                <img *ngIf="curruntdetail?.nImpactid" [src]="'assets/icons/impact/'+curruntdetail?.nImpactid+'.png'">
+                        </div>
+                </div>
+                <div *ngIf="curruntdetail?.cNote"
+                        class="max-h-40 min-h-15 overflow-auto p-2  !bg-blue-50 border border-blue-hover text-xs rounded-base">
+                        {{curruntdetail?.cNote}}
+                </div>
+                <!-- <div class="flex gap-2.5 justify-end mt-1 pw-1">
+        <span class="underline text-xs cursor-pointer hover:text-blue-on"
+                (click)="editIssueDetail(x)">Edit</span>
+</div> -->
+        </div>}
+        
+</div>

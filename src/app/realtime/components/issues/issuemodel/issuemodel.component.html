@@ -1,0 +1,207 @@
+<!-- -->
+<div class="flex flex-col h-full bg-reply" [ngClass]="{'!bg-faint': isToolbar}">
+
+    <!-- {{modelType}} {{cPermission}} -->
+    @if (!issuedetail && !isToolbar) {
+    <header class="flex flex-col justify-center px-5 py-2.5 w-full bg-blue-600  ">
+        <div class="flex gap-2.5 items-center  max-md:flex-wrap">
+            @if (modelType=='V') {
+            <icon class="text-white" name="issue" type="myfileicn" />
+            <h2 class="flex-1 self-stretch my-auto text-lg font-bold tracking-tight text-white">
+                Issues
+            </h2>
+            }@else if (ishilight) {
+            <icon class="text-white text-xl" name="Qmark" type="extra" />
+            <h2 class="flex-1 self-stretch my-auto text-lg font-bold tracking-tight text-white">
+                Quick Mark Setup
+            </h2>
+            }
+            @else {
+            <icon class="text-white text-xl" name="Qfact" type="extra" />
+            <h2 class="flex-1 self-stretch my-auto text-lg font-bold tracking-tight text-white">
+                {{(modelType=='E' && cPermission=='E') ? 'Edit':''}} Q Fact {{(modelType=='E' && cPermission!='E') ?
+                'Detail': (modelType=='E' && cPermission=='E')?'': 'Setup'}}
+            </h2>
+            }
+
+            @if ((modelType!='E' && modelType!='V') || cPermission=='E') {
+
+
+
+            <btn [square]="true" mode="outlined" [matMenuTriggerFor]="end"
+                addcls="!bg-transparent text-white hover:!bg-white" matTooltip="Delete">
+                <icon class="text-base" name="removefill" />
+            </btn>
+
+            <mat-menu #end="matMenu" class="!bg-black p-5  rounded-base" xPosition="before">
+                <div>
+                    <h6 class="mb-6 min-w-64 text-white text-xs">Confirm remove ?</h6>
+                    <div class="flex gap-2">
+                        <btn (click)="deleteAnnotation()">Delete</btn>
+                        <btn mode="dark">cancel</btn>
+                    </div>
+                </div>
+            </mat-menu>
+            
+            }
+
+            @if(modelType=='E' && issueDetail?.jOCordinates?.length){
+            <btn [square]="true" mode="outlined" addcls="!bg-transparent text-white hover:!bg-white"
+                matTooltip="Versions" (click)="viewVersions()">
+                <icon class="text-base" name="info" />
+            </btn>
+            }
+            @if (modelType=='E' && cPermission!='E') {
+
+            <btn [square]="true" mode="outlined" [matMenuTriggerFor]="end"
+                addcls="!bg-transparent text-white hover:!bg-white" matTooltip="Delete">
+                <icon class="text-base" name="removefill" />
+            </btn>
+            <mat-menu #end="matMenu" class="!bg-black p-5  rounded-base" xPosition="before">
+                <div>
+                    <h6 class="mb-6 min-w-64 text-white text-xs">Confirm remove ?</h6>
+                    <div class="flex gap-2">
+                        <btn (click)="deleteAnnotation()">Delete</btn>
+                        <btn mode="dark">cancel</btn>
+                    </div>
+                </div>
+            </mat-menu>
+            <btn [square]="true" mode="outlined" (click)="editIssueDetail()"
+                addcls="!bg-transparent text-white hover:!bg-white" matTooltip="Edit">
+                <icon class="text-base" name="edit" />
+            </btn>
+            }
+            <icon name="close" class="ms-3 text-white text-xs cursor-pointer" (click)="close()" />
+        </div>
+    </header>
+    }
+
+
+
+
+    @if(isVersionBox){
+
+    <annot-version class="overflow-auto" [issueDetail]="issueDetail" />
+
+
+
+    }@else {
+
+    @if((current_session)&&!issuedetail){
+    <div class="px-6 my-6  h-fit overflow-auto"
+        [ngClass]="{'!my-0 pt-6': modelType=='E' && cPermission!='E','!p-0 !m-0': isToolbar ,'!mb-0':cPermission!='E'}">
+        <app-issue-list [modelType]="modelType" [selectedIssues]="selectedIssues" [nIDid]="nIDid"
+            [cPermission]="cPermission" [current_session]="current_session" (OnEvent)="issueListEvent($event)"
+            [OnChange]="changingValue" [previousIssues]="previousIssues" [ishilight]="ishilight"
+            [assignedIssuesToHighlight]="assignedIssuesToHighlight" [isToolbar]="isToolbar"></app-issue-list>
+    </div>
+    }
+
+    @if(issuedetail){
+    <div class=" h-fit overflow-auto">
+        <app-issuedetail (OnEvent)="issueDetailEvent($event)" [current_session]="current_session"
+            [issue]="currentdetail"></app-issuedetail>
+    </div>
+    }
+
+
+
+    <div class="px-6" [ngClass]="{'!p-0': modelType=='V'||isToolbar}">
+        @if (modelType=='N' || (modelType=='E' && cPermission=='E')) {
+        @if (!ishilight && !isIssuemdl) {
+        <footer class="flex flex-col justify-end  mb-5 w-full text-xs leading-4 text-neutral-600 max-md:max-w-full">
+            <div class="shrink-0 h-px bg-stone-300 max-md:max-w-full"></div>
+            <!-- <div class="flex gap-2 self-start mt-5 font-semibold">
+                        <mat-checkbox [(ngModel)]="isNote"> <span class="font-semibold"> Add a
+                                note</span></mat-checkbox>
+                    </div> -->
+            @if(isNote){
+            <button
+                class="p-3 bg-white rounded-base border focus-within:shadow-[0px_0px_6px_#0067ff] max-h-[140px] overflow-auto mt-5">
+                <mat-form-field class="p-0 w-full !rounded-none !text-xs !border-0  !border-none !shadow-none">
+                    <textarea [(ngModel)]="cNote" maxlength="150" matInput #textnote
+                        placeholder="Type note here ( Max. 150 words)" cdkTextareaAutosize
+                        #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+                        class=" block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none !text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate "></textarea>
+                </mat-form-field>
+                <!-- @if((issueDetail?.cUNote!='' && cPermission != 'N') || cPermission == 'N'){
+                        <hr class="border-dashed border-tab my-3 opacity-100 ">
+                        <mat-form-field class="p-0 w-full !rounded-none !text-xs  !border-0 !border-none !shadow-none">
+                            <textarea [(ngModel)]="cUNote_editable" maxlength="150" matInput #usernote
+                                (keyup)="goonback($event)" placeholder="Type note here ( Max. 150 words)" cdkTextareaAutosize
+                                #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3"
+                                class=" block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none !text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate "
+                                (ngModelChange)="OnUNoteChange(cUNote_editable)"></textarea>
+                        </mat-form-field>
+                        } -->
+            </button>
+            }
+        </footer>
+        }
+        @if(!isToolbar){
+
+        <div class="flex gap-2 mt-6 mb-2.5">
+            <btn class="flex-1" addcls="w-full" (click)="submitForm()"
+                [disabled]="(ishilight && !selectedIssues?.length) || (!isIssuemdl&&!ishilight && (!annotations?.text || !annotations || !selectedIssues?.length)) || (isIssuemdl && !selectedIssues?.length)"
+                [attr.isdisabled]="(ishilight && !selectedIssues?.length) || (!isIssuemdl&&!ishilight && (!annotations?.text || !annotations || !selectedIssues?.length)) || (isIssuemdl && !selectedIssues?.length) ? true : null ">
+                {{ cPermission == 'N' ? 'Done' : 'Update' }}
+            </btn>
+            <!-- <btn class="flex-1" addcls="w-full" (click)="submitForm()"
+                        [disabled]="!annotations?.text || !annotations || !selectedIssues.length"
+                        [attr.isdisabled]="!annotations?.text || !annotations || !selectedIssues.length">
+                        {{cPermission == 'N' ? 'Done' : 'Update'}}
+                    </btn> -->
+
+        </div>
+        }
+        <div class="p-5  flex items-center gap-3 bg-sred  shadow-[0_4px_4px_#00000020]"
+            *ngIf="showalert&&!selectedIssues?.length">
+            <img src="../../../../../assets/icons/failed.svg" class="brightness-[3]">
+            <span class="text-xs text-white">Must choose at least one issue </span>
+            <icon name="close" class="ms-auto text-xs text-white cursor-pointer" (click)="showalert=false" />
+        </div>
+        }
+
+        @if((modelType=='E' && cPermission=='N')&&!ishilight){
+
+        <!-- // Detail skelaton here when open from icon click  -->
+
+        @if(isLoading){
+        <div class="sticky bottom-0 bg-replay py-2.5 pt-5">
+            <hr class="mb-5 border-gray-300">
+            <div class="max-h-40 min-h-15 overflow-auto p-2  !bg-gray-200 border text-xs rounded-base animate-pulse">
+
+            </div>
+            <div class="flex gap-2.5 justify-end mt-1 pw-1">
+                <span class="h-4 w-8 bg-gray-200 rounded-sm animate-pulse"></span>
+            </div>
+        </div>
+        }
+        @if(!isLoading&&(issueDetail.cNote||issueDetail?.cUNote)){
+        <div class="sticky bottom-0 bg-replay py-2.5 pt-5">
+            <hr class="mb-5 border-gray-300">
+            <div class="max-h-40 min-h-15 overflow-auto p-2  !bg-blue-50 border border-blue-hover text-xs rounded-base"
+                [ngClass]="{'!border-tab !bg-white': modelType=='E'}">
+                {{issueDetail.cNote ? issueDetail.cNote : 'No Note'}}
+
+                <!-- @if(issueDetail?.cUNote){
+                        <br />
+                        <br />
+                        {{issueDetail?.cUNote}}
+                        } -->
+            </div>
+            <!-- <div class="flex gap-2.5 justify-end mt-1 pw-1">
+                        <span class="underline text-xs cursor-pointer hover:text-blue-on"
+                            (click)="editIssueDetail()">Edit</span>
+                    </div> -->
+        </div>
+        }
+        }
+
+    </div>
+    }
+
+
+
+
+</div>

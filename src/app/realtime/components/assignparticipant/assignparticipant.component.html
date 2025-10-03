@@ -1,0 +1,87 @@
+<header class="py-2.5 px-5 flex items-center bg-faint ">
+        <span class="text-lg font-bold">Chosen Server</span>
+</header>
+<div class="p-5">
+        <div class=" flex items-center ">
+                <h6 class="flex flex-col">
+
+                        <span class="text-base font-bold">{{data?.server?.cName}}</span>
+                        <span class="text-sm">Case Name</span>
+                        <span class="text-sm">{{data?.session?.cCaseno}}</span>
+                        <span class="text-sm ">{{data?.server?.cUrl}}</span>
+                        <span class="text-sm">{{data?.server?.nPort}}</span>
+                </h6>
+                <btn mode="white" class="ms-auto" (click)="changeServer()">
+                        Change
+                </btn>
+        </div>
+        <hr class="my-5">
+        <h6 class="text-base flex items-end gap-2 mb-2"> <b> {{isconfirm?'Added participant':'Search participant'}} </b>
+                <btn mode="text" addcls="!p-0">
+                        Clear all</btn>
+                <btn mode="white" class="ms-auto" (click)="isconfirm=false" *ngIf="isconfirm">
+                        Add others</btn>
+        </h6>
+        <!-- <inpt *ngIf="!isconfirm" [isrequired]="true"
+                placeholder="Search case no. \ case name\ or name of individual here" [showlabel]="false"
+                class="block  w-full" value="">
+        </inpt> -->
+        <input *ngIf="!isconfirm" [(ngModel)]="cSearch"
+                class="block w-full px-3 py-2 border rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                placeholder="Search case no. \ case name\ or name of individual here" type="text"
+                (keyup.enter)="seachUser($event)" />
+        <div class="max-h-[40vh] overflow-auto mt-6">
+
+
+                <div class=" flex flex-col gap-3 mb-6" *ngIf="otherUserrs?.length">
+                        <!-- @for (usr of otherUserrs; track usr.nUserid) { -->
+                        <!-- @if (team.userlist.length) { -->
+                        <div>
+                                <span class="text-sm  font-bold mb-2.5 block">Other</span>
+                                <div class="flex gap-2.5 flex-wrap">
+                                        @for (user of otherUserrs; track user.nUserid) {
+                                        <avtr class="cursor-pointer" [detail]="user" size="lg"
+                                                [matTooltip]="user?.cFname+' '+user?.cLname" [active]="user.isSelected"
+                                                (click)="user.isSelected=!user.isSelected">
+                                        </avtr>
+                                        }
+                                </div>
+                        </div>
+                        <!-- } -->
+                        <!-- } -->
+                </div>
+
+                <mat-checkbox  [(ngModel)]="allSelected" (change)="selectAllUsers($event)"  class="mb-3">All team members</mat-checkbox>
+                <div class="flex flex-col gap-3">
+                        @for (team of teams; track team.nTeamid) {
+                        @if (team.userlist.length) {
+                        <div>
+                                <span class="text-sm  font-bold mb-2.5 block">{{team.cTeamname}}</span>
+                                <div class="flex gap-2.5 flex-wrap">
+                                        @for (user of team.userlist; track user.nUserid) {
+                                        <avtr class="cursor-pointer" [detail]="user" size="lg"
+                                                [matTooltip]="user?.cFname+' '+user?.cLname" [active]="user.isSelected"
+                                                (click)="toggleUserSelection(user, $event)">
+                                        </avtr>
+                                        }
+                                </div>
+                        </div>
+                        }
+                        }
+                </div>
+        </div>
+        <div class="flex gap-2 mt-6" *ngIf="isconfirm">
+                <span class="text-xs">
+                        Notify participant
+                </span>
+                <mat-checkbox class="example-margin" [(ngModel)]="isOndate"
+                        (change)="isOndate ?  isSendNow = false: isSendNow = isSendNow">On the date</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="isSendNow"
+                        (change)="isSendNow ?  isOndate = false: isOndate = isOndate">Now</mat-checkbox>
+
+        </div>
+
+        <btn class="mt-6" *ngIf="!isconfirm" (click)="isconfirm=!isconfirm">Confirm participant</btn>
+        <btn class="mt-6" *ngIf="isconfirm" (click)="isconfirm=!isconfirm" (click)="assignUsersToServer()" >Assign Server
+        </btn>
+</div>

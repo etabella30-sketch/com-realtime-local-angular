@@ -1,0 +1,22 @@
+<div
+        class="p-5 group rounded-base border relative border-white w-80 flex-col h-[357px] hover:bg-transparent bg-white hover:text-white text-grey flex justify-center-center">
+
+        <ng-container>
+                <div class="flex justify-end gap-2 mt-auto items-center">
+                        <btn mode="solid" class="me-auto" (click)="goToCase()">Session Setup</btn>
+                        <span class="text-xxs ms-auto">Last uploaded:{{detail.dUpdateDt | date:'dd/MM/yyyy'}}</span>
+                </div>
+        </ng-container>
+
+        <!-- <span class="alert-span absolute top-0 -right-2 rounded-full -translate-y-1/2 p-2 bg-brand"></span> -->
+
+
+       <div class="h-full flex flex-col pt-3">
+               <span class="text-lg font-semibold block h-full">{{detail.cCasename}}</span>
+               <span class="text-xxs">Case No. <span style="user-select: all;">{{detail.cCaseno}}
+                       @if(isAdmin){ <b>({{detail.nCaseid}})</b>}
+                </span></span>
+        </div>
+
+
+</div>

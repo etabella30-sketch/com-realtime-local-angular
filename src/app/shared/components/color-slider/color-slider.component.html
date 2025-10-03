@@ -1,0 +1,7 @@
+<div class="background-wraper">
+  <canvas #canvas class="color-slider rounded-base" width="22" height="280" (mousedown)="onMouseDown($event)"
+    (mousemove)="onMouseMove($event)" style="background: url('../../../../assets/img/abstract.png')">
+  </canvas>
+</div>
+<span class="cust_bar" [ngStyle]="{'top':client_y+ 'px','background':crclr}" (mousedown)="onbarselect()"></span>
+<!-- <div class="overlay"></div> -->

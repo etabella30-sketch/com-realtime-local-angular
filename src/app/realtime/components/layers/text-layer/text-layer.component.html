@@ -1,0 +1,29 @@
+<ng-container *ngFor="let line of lines; let lineIndex = index; trackBy: trackByLine">
+  <app-feed-line class="block" [highlightmode]="highlightmode" (lineSelect)="onLineSelect($event)" [line]="line"
+    [spaceBarOptions]="spaceBarOptions" [lineIndex]="lineIndex + 1" [pageno]="pageno" [showTimestamp]="showTimestamp"
+    [annots]="line?.annots" [nEditid]="nEditid" (onTabEvent)="OnTabEvent($event)" [mode]="mode">
+  </app-feed-line>
+</ng-container>
+
+<div *ngFor="let position of iconsPositions"
+  class="rightfloaticons  pointer-events-none absolute -right-[64px] bg-red h-15" (click)="openDetail(position)"
+  style="width: 84px;margin-left: auto;" [ngStyle]="{'top': position.top + 'px', 'height': position.height + 'px'}">
+  <hr style="height: 100%;">
+  <hr id="verticalHR">
+
+  <!-- <span class="sr-only" *ngFor="let x of  position.attachedIndices">
+    {{x.lineIndex}}
+  </span> -->
+
+  <div class="twobubblewrapper mr-2.5 !pointer-events-auto"
+    [style]="{'box-shadow': fds.currentHdetailId==position.hIds?'rgb(0 103 255 / 50%) 0px 0px 10px':''}">
+    <div id="pdficons" icon-type="F" class="icons">
+      <icon name="Qmark" type="extra" /><b class="num-counts">
+        <!-- <a class="onlynumcounts"
+          style="display: inline;">{{position?.issues?.length}}
+        </a> -->
+        <input type="text" class="onlynumcounts w-3 bg-transparent text-center" [value]="position?.issues?.length">
+      </b>
+    </div>
+  </div>
+</div>

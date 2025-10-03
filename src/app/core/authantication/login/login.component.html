@@ -1,0 +1,58 @@
+<div class="h-screen flex items-center justify-center bg-[#002A7B] overflow-hidden relative">
+    <img class="absolute z-20 mix-blend-multiply w-full h-[185vh] mt-40 object-cover "
+        src="assets/login/background.webp">
+    <div
+        class="bg-gray-50  shadow-[0px_0px_0px_11px_#ffffff38]  absolute z-10 w-[971px] h-[400px] rounded-3xl -translate-y-7 mt-1">
+
+    </div>
+    <div class="h-fit w-fit relative z-30 ">
+        <div class="flex h-[400px] rounded-3xl overflow-hidden">
+            <div class="w-[400px] flex ">
+                <img class="m-auto w-28" src="assets/logo.svg">
+            </div>
+            <form *ngIf="currentprogress<=0" [formGroup]="loginForm" class="w-[571px] h-full bg-white p-24">
+                <h6 class="text-lg font-semibold mb-5">Login</h6>
+                <!-- <h6 class="text-sred text-xs font-bold" *ngIf="logS.isinvalid">Invalid username/password. Try again</h6> -->
+                <inpt type="text" placeholder="Enter Email" [icon]="{name:'userfill','dir':'L'}" class="block mb-5"
+                    [value]="loginForm?.value?.cEmail" (valueChange)="loginForm.controls['cEmail'].setValue($event)">
+                </inpt>
+                <!-- [error]="logS.isinvalid" -->
+                <inpt [icon]="{name:'lock','dir':'L'}" [isoutside]="true" [value]="loginForm?.value?.password"
+                    type="password" placeholder="Enter Password" class="block mb-2.5"
+                    (valueChange)="loginForm.controls['password'].setValue($event)"></inpt>
+
+                <div class="flex items-center w-full">
+                    <mat-checkbox class="example-margin" [(ngModel)]="keepMeLogin"
+                        [ngModelOptions]="{standalone: true}">Keep me signed in</mat-checkbox>
+                </div>
+                <btn mode="solid" (click)="onSubmit()" [attr.isdisable]="isloading||this.loginForm.status=='INVALID'"
+                    [disabled]="isloading||this.loginForm.status=='INVALID'" [isloading]="isloading"
+                    addcls="w-full mt-5">Login
+                </btn>
+            </form>
+            <div *ngIf="currentprogress>0" class="w-[571px] h-full bg-white p-24">
+                <avtr [detail]="userdetail" size="xl"></avtr>
+                <h6 class="text-lg font-semibold mt-5 mb-10">
+                    Welcom back, {{userdetail.cFname}}
+                </h6>
+
+                <div>
+                    <div class="w-100 bg-faint rounded-full h-2.5">
+                        <div [ngStyle]="{'width': currentprogress+'%'}" class="bg-brand rounded-full h-2.5"></div>
+                    </div>
+                    <div class="flex justify-between">
+                        <h6 class="text-xxs text-gray-300 mt-2">Loading...</h6>
+                        <h6 class="text-xxs text-gray-600 mt-2">{{currentprogress}}%</h6>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="flex text-white text-xs w-[971px] mt-9">
+            <span>© {{getYear}} eTabella. All rights reserved. </span>
+            <span class="flex text-end gap-4 ms-auto"><span class="cursor-pointer">Terms of Service</span><span
+                    class="cursor-pointer">Privacy Policy</span> <span class="cursor-pointer">Security</span> </span>
+        </div>
+    </div>
+
+</div>

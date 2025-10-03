@@ -1,0 +1,183 @@
+<div class="w-full h-full overflow-auto">
+        <div class=" bg-white rounded-base overflow-hidden h-[calc(100%_-_130px)] flex flex-col">
+                <header class="p-5 flex items-center bg-faint ">
+                        <span class="text-sm font-bold">Uploaded transcript</span>
+                </header>
+                <div class="tabhead flex text-xs px-2.5 border-b">
+                        <div class="w-1/2 px-3 py-3">Name</div>
+                        <div class="w-2/5 px-3 py-3">Uploded On</div>
+                        <div class="w-[10%] px-3 py-3"></div>
+                </div>
+
+
+                <!-- <ngx-file-drop class="h-[calc(100%_-_100px)] uploadtrans" [multiple]="false"
+                        (onFileDrop)="onFileDrop($event)"> -->
+                        <!-- ngx-file-drop-content-tmp let-openFileSelector="openFileSelector"-->
+                        <!-- <ng-template   class="h-full"> -->
+                                <div class="w-full h-full overflow-auto">
+                                        @for (x of caselist; track x) {
+                                        <!-- *ngFor="let x of transcript" -->
+                                        <!-- <div> -->
+                                        <!-- getTranscriptFiles(x) -->
+                                        <div class="flex rows group px-2.5 text-xs cursor-pointer  sticky top-0 z-50"
+                                                [ngClass]="{'bg-grey text-white': x.isexpand}">
+                                                <div class="w-1/2 px-3 py-3"
+                                                        (click)="getCaseSessions(x);x.isexpand = !x.isexpand">
+                                                        {{x.cCasename}}</div>
+                                                <div (click)="getCaseSessions(x);x.isexpand = !x.isexpand"
+                                                        class="w-2/5 px-3 py-3 gap-3 flex items-center">
+                                                        {{x.dUploadDt | date:'dd/MM/yyyy [HH:MM:SS]' }}
+                                                </div>
+                                                <div class="w-[10%] px-3 py-3 flex items-center gap-4  justify-end">
+                                                        <!-- <icon name="upload" type="adminicn" matTooltip="upload"
+                                                                        class="text-sm cursor-pointer ms-auto"
+                                                                        (click)="updateId(x);openFileSelector()" /> -->
+                                                        <icon class="text-lg cursor-pointer  text-xxs"
+                                                                [ngClass]="{'rotate-180':  !x.isexpand,'rotate-[275deg]':  x.isexpand}"
+                                                                name="chvy" />
+                                                </div>
+                                        </div>
+                                        <div *ngIf="x.isexpand">
+                                                <div
+                                                        class="tabhead flex text-xs px-2.5 border-b bg-white sticky top-10 z-50">
+                                                        <div class="w-1/4 px-3 py-3">Transcript name</div>
+                                                        <div class="w-1/4 px-3 py-3">Last updated</div>
+                                                        <div class="w-1/4 px-3 py-3">Status</div>
+                                                        <div class="w-1/4 px-3 py-3"></div>
+                                                </div>
+
+                                                <div *ngFor="let y of x.files">
+                                                        <div
+                                                                class="flex rows group px-2.5 text-xs hover:bg-blue-deactivate">
+                                                                <div class="w-1/4 px-3 py-3">{{y.cProtocol}} | {{y.cName}}
+                                                                </div>
+                                                                <div class="w-1/4 px-3 py-3 gap-3 flex items-center">
+                                                                        {{y.dStartDt |
+                                                                        date:'dd/MM/yyyy[HH:MM:SS]'}}
+                                                                </div>
+                                                                <div class="w-1/4 px-3 py-3 gap-3 flex items-center">
+                                                                        <!-- {{y.isTranscript?'Published':'Not yet published'}} -->
+                                                                        <div class="w-full gap-3 flex items-center">
+                                                                                @if(y.cUploadstatus=='U'){
+                                                                                <span>Uploading...</span>
+                                                                                <!-- <div
+                                                                                        class="bg-blue-on/75 overflow-hidden flex relative items-center p-1.5 w-12 rounded-lg justify-between realtive">
+                                                                                        <div [ngStyle]="{'width':y.nProgress+'%'}"
+                                                                                                class="divprogress absolute z-10  bg-blue-on left-0 h-full w-1/2 ">
+                                                                                        </div>
+                                                                                        <span
+                                                                                                class="text-white relative z-20">
+                                                                                                {{y.cStatus=='PSD'?'Paused'
+                                                                                                :'uploading...'}}
+                                                                                                <span>
+                                                                                                        {{y.nProgress|number:'1.0-0'}}%
+                                                                                                </span>
+                                                                                        </span>
+                                                                                </div> -->
+                                                                                } @else if (y.cUploadstatus == 'C') {
+                                                                                Not yet published
+                                                                                }
+                                                                                @if(y.isUploaded && y.isTranscript &&
+                                                                                !y.cUploadstatus){
+                                                                                Published
+                                                                                } @else if (y.isUploaded &&
+                                                                                !y.isTranscript && !y.cUploadstatus) {
+                                                                                Not yet published
+                                                                                } @else if(!y.isUploaded &&
+                                                                                !y.isTranscript && !y.cUploadstatus){
+                                                                                Not uploaded
+                                                                                }
+                                                                        </div>
+                                                                </div>
+
+                                                                <div class="w-1/4">
+                                                                        <div
+                                                                                class="w-full px-3 py-3 flex items-center gap-4  justify-end">
+                                                                                @if (y.cUploadstatus=='U') {
+                                                                                <div class="animate-spin inline-block size-3 border-[2px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500"
+                                                                                        role="status"
+                                                                                        aria-label="loading">
+                                                                                </div>
+                                                                                } @else if (y.cUploadstatus == 'C') {
+                                                                                <span
+                                                                                        class="flex gap-2 items-center text-sgreen font-semibold">
+                                                                                        <icon name="check" />
+                                                                                        Uploaded
+                                                                                </span>
+                                                                                }
+
+
+
+                                                                                @if(!y.isUploaded &&!y.isTranscript &&
+                                                                                !y.cUploadstatus){
+                                                                                        <!-- openFileSelector() -->
+                                                                                <icon name="upload" type="adminicn"
+                                                                                        matTooltip="upload"
+                                                                                        class="text-sm cursor-pointer ms-auto"
+                                                                                        (click)="updateIds(x,y);" />
+                                                                                }
+
+
+
+
+                                                                                <span matTooltip="Publish to admin">
+                                                                                        <icon [ngClass]="{'opacity-30 pointer-events-none': !y.isUploaded &&!y.isTranscript &&!y.cUploadstatus}"
+                                                                                                class="text-lg cursor-pointer rotate-180"
+                                                                                                name="setting"
+                                                                                                (click)="publishComplete(y,x)" />
+                                                                                </span>
+
+                                                                                @if(y.isUploaded){
+                                                                                        <!-- openFileSelector() -->
+                                                                                <icon name="replace" type="extra"
+                                                                                        matTooltip="Replace"
+                                                                                        class="text-sm cursor-pointer"
+                                                                                        (click)="updateIds(x,y);" />
+                                                                                }
+
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        </div>
+                                        }
+                                </div>
+
+                        <!-- </ng-template> -->
+
+                <!-- </ngx-file-drop> -->
+
+        </div>
+        <div class="mt-5 h-fit flex flex-col overflow-hidden">
+                <header class="flex gap-3">
+                        <h6 class="text-lg text-blue-deactivate font-semibold">Transcript activity log</h6>
+                        <div class="relative w-64 h-fit">
+                                <div
+                                        class="absolute inset-y-0 start-0 top-1/2 -translate-y-1/2 flex h-fit items-center ps-3 pointer-events-none text-tab">
+                                        <icon name="search"></icon>
+                                </div>
+                                <input type="text" id="default-search"
+                                        class="block w-full py-2 rounded-full ps-9 text-grey pe-1.5 text-xs  placeholder:text-gray-100/50 border border-white/40 bg-transparent focus:border-blue-on focus:border-2 focus:placeholder:text-blue-hover focus:bg-white focus:outline-none "
+                                        placeholder="Search users by name/email /role" />
+                        </div>
+                </header>
+                <hr class="border-blue-deactivate  opacity-50 mt-5">
+                <div class="h-full overflow-auto">
+                        <div class="tablebody py-2 px-5 text-white text-xs my-2.5 flex group hover:border-blue-200 border border-transparent rounded-lg h-fit "
+                                *ngFor="let x of [1,2,3,4]">
+                                <div class="w-3/4"><span>DD/MM/YYYY [00:00:00]</span> <b class="ms-3">Session
+                                                Name
+                                                01</b></div>
+                                <div class="w-1/3 text-blue-hover font-semibold">Session connected
+                                        successfully
+                                </div>
+                                <div class="w-12 flex items-center justify-end opacity-0 group-hover:opacity-100 cursor-pointer"
+                                        matTooltip="Delete">
+                                        <icon name="delete" />
+                                </div>
+                        </div>
+                </div>
+        </div>
+</div>
+
+<input type="file" (change)="onFileSelected($event)" id="UploadData" style="display: none;" />

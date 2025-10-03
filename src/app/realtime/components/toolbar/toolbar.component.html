@@ -1,0 +1,473 @@
+<!-- <div class="toolbar">
+  <p>
+    <button mat-button (click)="onOpenLiveFeedDialog()">Live Feed</button>
+  </p>
+  <label>
+    <input type="checkbox" (change)="onToggleTimestamp()"> Show Time
+  </label>
+  <button mat-button (click)="onOpenLiveFeedDialog()">Live Feed</button>
+
+  <button mat-button (click)="onPerformAnnotation()">Perform Annotation</button>
+
+</div> -->
+
+<!-- @if (realtimeService.fullscreen) { -->
+
+
+<div class="bg-white h-fit relative z-10">
+  <div
+    class="bg-grey py-1 z-50 cursor-pointer flex flex-col  max-h-4 overflow-hidden hover:max-h-[68px] transition-all duration-300 ease-in-out"
+    [ngClass]="{'justify-start': realtimeService.fullscreen ,'justify-end': !realtimeService.fullscreen}">
+    <div class="w-full items-center justify-center flex order-1 -mb-0.5"
+      [ngClass]="{'order-2': realtimeService.fullscreen}">
+      <icon name="chvx" type="comnicn" class="text-xxs text-white w-fit block"
+        [ngClass]="{'rotate-180':!realtimeService.fullscreen}" />
+    </div>
+    <div class="w-full flex items-center justify-center py-2.5 " [ngClass]="{'order-2': realtimeService.fullscreen}">
+      <btn (click)="fllscreen()" mode="outlined" addcls="bg-white/10 text-white hover:bg-white active:bg-white">
+        {{!realtimeService.fullscreen ? 'Enter Full Screen':'Exit Full Screen'}}</btn>
+    </div>
+  </div>
+</div>
+<!-- } -->
+
+@if (!realtimeService.comparetool) {
+<div
+  class="bg-dark-blue px-10 justify-end  py-3 flex items-center gap-2.5 h-fit translate-y-0 transition-all duration-300 ease-in-out z-40"
+  [ngClass]="{'!bg-blue-on': realtimeService.compareMode,'!-translate-y-full':realtimeService.fullscreen}">
+  <!-- <icon name="chvy" (click)="goback()" class="text-white me-2 hover:text-blue-on cursor-pointer" matTooltip="Go back" /> -->
+
+  <!-- <badge type="solid" (click)="onOpenLiveFeedDialog()"
+    [addcls]="current_session?.cStatus!='C'?'bg-teal-500 text-white font-semibold px-6':'bg-gray-400 text-white font-semibold px-6'">
+    {{current_session?.cStatus!='C'
+    ?'Live':'Ended'}}
+  </badge> -->
+
+  <!-- 
+  <mat-form-field class="bg-white w-36">
+    <mat-select placeholder="View transcript" [(ngModel)]="nSesid" (selectionChange)="onSelectionOld(nSesid)">
+      <mat-option *ngFor="let x of previous_session" [value]="x.nSesid" [disabled]="mode=='T' && !x.isTranscript">
+        {{x.cName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field> -->
+
+  <!-- @if(!realtimeService.compareMode && realtimeService.leftMode=='T'){
+  <mat-form-field class="bg-white w-36 ">
+    <mat-select placeholder="View transcript" [(ngModel)]="realtimeService.nSesidL">
+      <mat-option *ngFor="let x of previous_session" [value]="x.nSesid"
+        [ngClass]="{'!hidden': realtimeService.leftMode=='T' && !x.isTranscript}">
+        {{x.cName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  } -->
+
+  <span class="text-sm text-white font-semibold block truncate whitespace-nowrap me-auto flex items-center gap-2"
+    *ngIf="!realtimeService?.compareMode">
+    {{ fds.demoStream ? 'Demo Session' : current_session?.cName }}
+    <!-- && realtimeService.leftMode=='T' -->
+    @if(!realtimeService.compareMode && previous_session?.length){
+    <icon [matMenuTriggerFor]="options" class="text-white cursor-pointer px-0.5" name="menu">
+    </icon>
+    <mat-menu #options="matMenu" class="!rounded-none w-fit !bg-dark-blue">
+      @for (x of previous_session; track $index) {
+      <div [ngClass]="{'!hidden': realtimeService.leftMode=='T' && !x.isTranscript}" mat-menu-item
+        class="!p-3 hover:!bg-white/10" (click)="changeTranscript(x)">
+        <span class="text-xs  text-white">
+          {{x.cName}}
+          @if (realtimeService.nSesidL == x.nSesid) {
+          <icon name="check" class="text-white"></icon>
+          }
+        </span>
+      </div>
+      }
+    </mat-menu>
+    }
+    @if(fds.isRefreshing && !fds.pausedState){
+    <div class="text-white flex items-center font-medium text-xs">
+      Refreshing
+      <span class="loader mx-3"></span>
+    </div>
+    }
+  </span>
+
+
+
+  <!-- 
+  @if(!realtimeService?.compareMode){
+  @if(!fds.demoStream){
+  <btn (click)="StartDemo()">
+    Start Demo
+  </btn>
+  }@else {
+  <btn (click)="stopDemo()">
+    Stop Demo
+  </btn>
+  }
+  } -->
+
+
+  <!-- @if(!realtimeService.compareMode){
+    <mat-form-field class="bg-white w-36 ">
+      <mat-select placeholder="View transcript" [(ngModel)]="realtimeService.nSesidL">
+        <mat-option *ngFor="let x of previous_session" [value]="x.nSesid"
+          [ngClass]="{'!hidden': realtimeService.leftMode=='T' && !x.isTranscript}">
+          {{x.cName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  }
+ -->
+
+  @if(realtimeService.compareMode){
+  @if(tab == 1){
+  <!-- *ngIf="realtimeService.compareMode&&tab==1" 
+    (selectionChange)="onSelection(realtimeService.nSesdataL,1,true)"-->
+  <mat-form-field class="bg-white w-36 ">
+    <mat-select placeholder="View transcript" [(ngModel)]="realtimeService.nSesidL">
+      <mat-option *ngFor="let x of previous_session" [value]="x.nSesid"
+        [ngClass]="{'!hidden': realtimeService.leftMode=='T' && !x.isTranscript}">
+        {{x.cName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  }
+  @else{
+  <!-- *ngIf="realtimeService.compareMode&&tab==2"
+     (selectionChange)="onSelection(realtimeService.nSesdataR,2,true)" -->
+  <mat-form-field class="bg-white w-36 ">
+    <mat-select placeholder="View transcript" [(ngModel)]="realtimeService.nSesidR">
+      <mat-option *ngFor="let x of previous_session" [value]="x.nSesid"
+        [ngClass]="{'!hidden': realtimeService.rightMode=='T' && !x.isTranscript}">
+        {{x.cName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  }
+
+
+  }
+  <svg class="mx-3" *ngIf="realtimeService.compareMode" (click)="openPathInNewTab()" xmlns="http://www.w3.org/2000/svg"
+    width="17" height="17" fill="none" viewBox="0 0 17 17">
+    <path fill="#fff"
+      d="M2.9 1.1A1.7 1.7 0 0 0 1 3v5.3h4.7c1.4 0 2.5 1.1 2.5 2.5v4.7h5.3a1.7 1.7 0 0 0 1.8-1.8V10a.6.6 0 1 1 1.1 0v3.6a2.9 2.9 0 0 1-2.9 2.9H3a2.9 2.9 0 0 1-3-2.9V3a2.9 2.9 0 0 1 2.9-3h3.6a.6.6 0 1 1 0 1.1H2.9ZM9.6.6c0-.3.3-.6.6-.6h5.7c.3 0 .6.3.6.6v5.7a.6.6 0 0 1-1.1 0V2l-4.8 4.7a.6.6 0 0 1-.8-.8l4.7-4.8h-4.3a.6.6 0 0 1-.6-.5Z" />
+  </svg>
+
+  <icon class="mx-3" name="close" matTooltip="close" (click)="clscmpre()" class="text-white me-auto text-xs"
+    *ngIf="realtimeService.compareMode" />
+
+  <!-- LC={{linesData.length}} -->
+  <!-- <span class="text-sm text-white font-semibold" *ngIf="isOldDataFetching">Fetching previous data..</span> -->
+
+  <!-- <span class="relative flex items-center justify-center ms-auto" *ngIf="fds.pausedState">
+    <span class="size-7 absolute z-10 bg-white rounded-full animate-ping"></span>
+    <icon name="play" matTooltip="Play" class="text-white text-lg z-20 relative" type="real_icn"
+      (click)="resumePause()" />
+  </span> -->
+
+  <!-- <icon name="pause" matTooltip="Pause" class="text-white ms-auto text-xl" type="real_icn" *ngIf="!fds.pausedState"
+    (click)="pauseEvent()" />
+  <icon name="export" matTooltip="Export" class="text-white mx-2.5 text-lg" type="real_icn" /> -->
+
+  @if (current_session?.cStatus=='R' || fds.demoStream ) {
+  <!-- &&!realtimeService.compareMode -->
+  <button *ngIf="!fds.pausedState" (click)="pauseEvent()"
+    class="h-8.5 bg-[#4CB864] hover:bg-blue-on group text-white px-3 rounded-base border border-white gap-2.5 flex items-center font-semibold">
+    <icon name="play" class="text-white text-lg z-20 relative group-hover:hidden block" type="real_icn" />
+    <icon name="pause" class="text-white text-lg z-20 relative group-hover:block hidden" type="real_icn" />
+    <span class=" group-hover:hidden block">Live </span>
+    <span class="group-hover:block hidden">Pause</span>
+  </button>
+  <!-- &&!realtimeService.compareMode -->
+  <button *ngIf="fds.pausedState" (click)="resumePause()"
+    class="h-8.5 hover:bg-[#4CB864] bg-blue-on group text-white px-3 rounded-base border border-white gap-2.5 flex items-center font-semibold">
+    <icon name="play" class="text-white text-lg z-20 relative group-hover:block  hidden" type="real_icn" />
+    <icon name="pause" class="text-white text-lg z-20 relative group-hover:hidden block" type="real_icn" />
+    <span class=" group-hover:block hidden">Live </span>
+    <span class="group-hover:hidden block">Paused</span>
+  </button>
+
+  }
+
+  <div class="bg-reply rounded-base flex items-center px-3 h-8.5">
+    <!-- (change)="stampchange($event)" -->
+    <mat-checkbox class="example-margin select-none" (change)="onToggleTimestamp()" spacebardisable (keydown.space)="$event.preventDefault()">
+      <span class="whitespace-nowrap" matTooltip="Time Stamp" class="inline-flex">
+        <icon name="timestamp" class="text-xl font-bold" type="real_icn" />
+      </span>
+    </mat-checkbox>
+  </div>
+
+  @if(true){
+
+
+
+  <!-- {{highlightCheckbox}}/{{annotationCheckbox}} -->
+  @if (!realtimeService.compareMode) {
+  <div class="flex bg-reply rounded-base overflow-hidden items-center h-8.5 ">
+    <div class=" rounded-base flex items-center px-3 h-full gap-2.5">
+      <mat-checkbox #checbox (change)="highlightermode($event,'H')" [(ngModel)]="highlightCheckbox" spacebardisable (keydown.space)="$event.preventDefault()"
+        class="example-margin select-none radiocheckbox">
+      </mat-checkbox>
+      <span class="flex gap-2 items-center" (click)="slctHissue(checbox,'H')" spacebardisable (keydown.space)="$event.preventDefault()">
+        <icon name="Qmark" matTooltip="Quick Mark" class="text-xl" as type="extra" />
+      </span>
+    </div>
+    <div class="h-3.5 w-px bg-tab "></div>
+    <div class=" rounded-base flex items-center px-3 h-full gap-2.5">
+      <mat-checkbox #checbox2 (change)="highlightermode($event,'I')" [(ngModel)]="annotationCheckbox" spacebardisable (keydown.space)="$event.preventDefault()"
+        class="example-margin select-none radiocheckbox">
+      </mat-checkbox>
+      <span class="flex gap-2 items-center" (click)="slctHissue(checbox2,'I')" spacebardisable (keydown.space)="$event.preventDefault()">
+        <icon name="Qfact" matTooltip="Q Facts" class="text-xl" as type="extra" />
+      </span>
+    </div>
+    <!-- &&!highlightCheckbox -->
+    <div [matMenuTriggerFor]="!annotationCheckbox ? null : issues" #i="matMenuTrigger"
+      (menuClosed)="OnIssueClose()" [class.disabled]="!annotationCheckbox&&!highlightCheckbox"
+      class="bg-white h-full px-3 cursor-pointer flex items-center gap-2 text-xs w-56">
+      @if(currentIssueColor && annotationCheckbox){
+      <span class="min-w-1 h-3.5 rounded-lg bg-red-300 block" [ngStyle]="{'background': '#'+currentIssueColor}"></span>
+      }
+      <!-- <span class="rounded-base h-3.5 w-1 bg-red-400" [ngStyle]="{'background': '#'+x.cColor}"></span> -->
+      <span class="whitespace-nowrap truncate"> {{highlightCheckbox ? 'Quick mark selected' : getSelectedIssues()}}</span>
+      @if(annotationCheckbox){
+      <icon class="ms-auto text-xxs" name="chvx" />
+      }
+    </div>
+  </div>
+  <mat-menu #issues="matMenu" class="!rounded-lg mt-1 w-[380px]">
+    <div class="bg-faint" (click)="$event.stopPropagation()">
+      @if(i.menuOpen){
+      @defer (when i.menuOpened) {
+      <div class="h-fit max-h-[400px] overflow-x-hidden overflow-y-auto  pt-2.5 px-2.5">
+        <!-- highlightCheckbox  annotationCheckbox-->
+        <app-issuemodel (dialogEvent)="dialogEvent($event,i)" [current_session]="current_session"
+          [isTrasnscript]="mode == 'T' ? 'Y' : 'N'" [isIssuemdl]="annotationCheckbox" [ishilight]="highlightCheckbox"
+          [isToolbar]="true" />
+        <!-- <app-issue-list class="block h-full" [modelType]="'N'" [selectedIssues]="selectedIssues" [nIDid]="0"
+            [cPermission]="'N'" [current_session]="current_session" [OnChange]="" [previousIssues]="[]" [ismatmenu]="true"
+            [ishilight]="highlightCheckbox" [assignedIssuesToHighlight]="[]"></app-issue-list> -->
+      </div>
+      }
+      }
+    </div>
+  </mat-menu>
+  <btn matTooltip="Issue" spacebardisable (keydown.space)="$event.preventDefault()"
+    [addcls]="realtimeService.issueOpened?'hover:bg-white !text-blue-on !border-blue-on hover:shadow-[inset_0px_0px_0px_4px_#9FCCFF] shadow-[inset_0px_0px_0px_4px_#9FCCFF] rounded-full':'hover:bg-white active:bg-white rounded-full' "
+    mode="white" (click)="openissue()" [square]="true">
+    <icon name="issue" class="text-sm" type="myfileicn" />
+  </btn>
+  }
+  }
+
+
+
+  <!-- <div mode="outlined" class="bg-white p-1 rounded-base ps-2 pe-3 flex items-center gap-2 h-8.5"
+    [matMenuTriggerFor]="Hmode" #t="matMenuTrigger">
+    <span *ngIf="highlightmode" class="flex gap-2 items-center">
+      <icon name="highlighter" matTooltip="Highlighter" class="text-xl" as type="real_icn" />
+      <span [matMenuTriggerFor]="pickcolor" #c="matMenuTrigger" (menuClosed)="menucose()"
+        (click)="$event.stopPropagation()" class="size-5 rounded-full " [style.background]="'#'+cClr"> </span>
+      <icon name="chvy" class="-rotate-90 text-xxs" />
+    </span>
+    <mat-menu #pickcolor="matMenu" xPosition="before" class="p-2 w-fit !min-w-fit !max-w-fit" xPosition="after">
+      @if (opencolor) {
+      <app-colorpicker #colorPicker class="mx-auto !max-w-fit" [(myColor)]="cClr"
+        (click)="$event.stopPropagation()"></app-colorpicker>
+      }
+      <div class="h-6"></div>
+    </mat-menu>
+
+    <span *ngIf="!highlightmode" class="flex gap-2 items-center cursor-pointer">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M13.3431 18.6828C13.2645 18.7214 13.179 18.7439 13.0916 18.7489C13.0042 18.7539 12.9167 18.7414 12.8342 18.7119C12.7517 18.6825 12.6758 18.6368 12.611 18.5776C12.5461 18.5183 12.4936 18.4466 12.4565 18.3666L11.0032 15.1783L9.32996 16.537C9.21663 16.6312 9.07663 16.685 8.91664 16.685C8.73984 16.685 8.57027 16.6141 8.44525 16.488C8.32024 16.3618 8.25 16.1907 8.25 16.0123V5.92265C8.25 5.74425 8.32024 5.57316 8.44525 5.44701C8.57027 5.32087 8.73984 5.25 8.91664 5.25C9.07663 5.25 9.22996 5.31054 9.34329 5.40471L9.34996 5.39798L17.0097 11.8823C17.1063 11.9635 17.1782 12.0705 17.2171 12.1911C17.2561 12.3117 17.2605 12.4409 17.2299 12.5639C17.1992 12.6869 17.1347 12.7987 17.0439 12.8864C16.953 12.974 16.8395 13.034 16.7163 13.0594L14.6098 13.4765L16.0764 16.6581C16.2497 16.9944 16.0897 17.3913 15.7564 17.546L13.3431 18.6828Z"
+          fill="currentColor" />
+        <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" />
+      </svg>
+      <icon name="chvy" class="-rotate-90 text-xxs" />
+    </span>
+  </div> -->
+
+  <!-- <mat-menu #Hmode="matMenu" xPosition="before" class="p-2">
+    <div class="flex gap-2">
+      <span matTooltip="Cursor" (click)="modechange(false)"
+        class="text-xs cursor-pointer  rounded-base p-2 flex items-center  hover:bg-gray-100 hover:text-blue-on">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" [ngClass]="{'text-blue-on': !highlightmode}"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M13.3431 18.6828C13.2645 18.7214 13.179 18.7439 13.0916 18.7489C13.0042 18.7539 12.9167 18.7414 12.8342 18.7119C12.7517 18.6825 12.6758 18.6368 12.611 18.5776C12.5461 18.5183 12.4936 18.4466 12.4565 18.3666L11.0032 15.1783L9.32996 16.537C9.21663 16.6312 9.07663 16.685 8.91664 16.685C8.73984 16.685 8.57027 16.6141 8.44525 16.488C8.32024 16.3618 8.25 16.1907 8.25 16.0123V5.92265C8.25 5.74425 8.32024 5.57316 8.44525 5.44701C8.57027 5.32087 8.73984 5.25 8.91664 5.25C9.07663 5.25 9.22996 5.31054 9.34329 5.40471L9.34996 5.39798L17.0097 11.8823C17.1063 11.9635 17.1782 12.0705 17.2171 12.1911C17.2561 12.3117 17.2605 12.4409 17.2299 12.5639C17.1992 12.6869 17.1347 12.7987 17.0439 12.8864C16.953 12.974 16.8395 13.034 16.7163 13.0594L14.6098 13.4765L16.0764 16.6581C16.2497 16.9944 16.0897 17.3913 15.7564 17.546L13.3431 18.6828Z"
+            fill="currentColor" />
+          <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="2" />
+        </svg>
+      </span>
+      <span matTooltip="Quick mark" (click)="modechange(true)"
+        class="text-xs cursor-pointer  rounded-base p-2 flex items-center  hover:bg-gray-100">
+        <icon name="highlighter" class="text-2xl" type="real_icn" />
+      </span>
+    </div>
+  </mat-menu> -->
+
+  <btn mode="outlined" addcls="hover:bg-white" [matMenuTriggerFor]="fontlist" #t="matMenuTrigger">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 14 14">
+      <path fill="currentColor"
+        d="M3 0 2 1 1 3v1a1 1 0 0 0 1 0V3l1-1h4L6 4 5 6H3a1 1 0 0 0 0 2h2a126 126 0 0 1-2 4H1v2h1l2-1 1-1 1-2 1-2h2V6H7l2-4h5a1 1 0 0 0-1-2H3Z" />
+    </svg>
+    <icon class="text-xxs ms-1" name="chvx" />
+  </btn>
+  <mat-menu #fontlist="matMenu" xPosition="before" class="p-2">
+    <span class="text-xs cursor-pointer  rounded-base p-2 flex items-center  hover:bg-gray-100" (click)="selectfont(x)"
+      *ngFor="let x of fonts">
+      {{x.text}}
+      <icon *ngIf="selectedFont?.name==x?.name" name="check" class="text-sm ms-auto" />
+    </span>
+  </mat-menu>
+
+
+  <app-search-bar [data]="[]" ></app-search-bar>
+
+  <btn mode="white" [square]="true" matTooltip="Grab to scroll" spacebardisable (keydown.space)="$event.preventDefault()"
+    [addcls]="handtool?'hover:bg-white !text-blue-on !border-blue-on shadow-[inset_0px_0px_4px_#0072ff]':'hover:bg-white active:bg-white' "
+    (click)="activehand()">
+    <icon name="hand" class="text-base" type="extra" />
+  </btn>
+
+  <div class="flex ps-2  bg-white rounded-base items-center">
+    <!-- <btn (click)="zoomIn()" mode="outlined" addcls="hover:bg-white border-none" [square]="true" matTooltip="Zoom in"> -->
+    <icon (click)="zoomIn()" name="addcircle" class="text-lg" />
+    <!-- </btn> -->
+    <!-- <btn (click)="zoomOut()" mode="outlined" addcls="hover:bg-white border-none" [square]="true" matTooltip="Zoom out"> -->
+    <icon (click)="zoomOut()" name="removecircle" class="text-lg ms-2" />
+    <!-- </btn> -->
+
+    <mat-form-field class="w-24 !border-none !shadow-none">
+      <mat-select [(ngModel)]="currentzoom" placeholder="Select.." (selectionChange)="zoomlevel($event)">
+        <mat-option *ngFor="let x of zoom" [value]="x.name">
+          {{ x.text }}%
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+  <!-- <btn (click)="fllscreen()" mode="outlined" [square]="true"
+    [addcls]="realtimeService.fullscreen?'hover:bg-white !text-blue-on !border-blue-on shadow-[inset_0px_0px_4px_#0072ff]':'hover:bg-white' "
+    matTooltip="Full screen">
+    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 160 160">
+      <path fill="currentColor"
+        d="M20 13a7 7 0 0 0-7 8v26a7 7 0 1 0 14 0V36l35 35a7 7 0 0 0 9-9L36 27h11a7 7 0 0 0 0-14H20Zm120 0h-27a7 7 0 1 0 0 14h11L89 62a7 7 0 0 0 9 9l35-35v11a7 7 0 1 0 14 0V21a7 7 0 0 0-7-8ZM67 87c-2 0-4 0-5 2l-35 35v-17a7 7 0 0 0-8-7 7 7 0 0 0-6 7v32a7 7 0 0 0 8 8h32a7 7 0 1 0 0-14H36l35-35a7 7 0 0 0-4-11Zm26 0a7 7 0 0 0-4 11l35 35h-17a7 7 0 1 0 0 14h31a7 7 0 0 0 9-9v-31a7 7 0 0 0-8-7 7 7 0 0 0-6 7v17L98 89a7 7 0 0 0-5-2Z" />
+    </svg>
+  </btn> -->
+  <span class="text-white text-xs whitespace-nowrap">Jump to</span>
+  <!-- (keyup.enter)="jumpToPage($event)" -->
+  <div class="relative w-16 justify-center bg-faint rounded-base !h-[34px] flex gap-1.5 ps-3.5  items-center">
+    <span name="search" class="text-xs">P</span>
+    <input type="number" [min]="0" placeholder="###" maxlength="3" (input)="enforceMaxLength($event)"
+      class="p-0 placeholder-shown:bg-white shadow-none !rounded-none  border-none bg-transparent block w-full !border focus:outline-none !text-xs"
+      (keyup.enter)="GoonPage($event)" />
+  </div>
+
+
+  @if(true){
+  @if (!realtimeService.compareMode) {
+  <div class="h-auto my-1.5 mx-2  self-stretch bg-white/40 w-px"></div>
+  <!--  <btn [matMenuTriggerFor]="comparelist" mode="outlined" [square]="true" addcls="hover:bg-white">
+        <icon name="compare" class="text-sm" type="extra" />
+      </btn>
+    
+      <mat-menu #comparelist="matMenu" xPosition="after" class="p-2 mt-2">
+        <span class="text-xs cursor-pointer  rounded-base p-2 flex items-center  hover:bg-gray-100"
+          *ngFor="let x of compare" (click)="onDataClick(x)">
+          {{x.name}}
+          <icon *ngIf="realtimeService.selectedcompare ==x?.value" name="check" class="text-sm ms-auto" />
+        </span>
+      </mat-menu> -->
+
+  <btn matTooltip="Compare" (click)="opencompare() " mode="outlined" [square]="true" addcls="hover:bg-white">
+    <icon name="compare" class="text-sm" type="extra" />
+  </btn>
+
+  <div class="h-auto my-1.5 mx-2  self-stretch bg-white/40 w-px"></div>
+  }
+
+  @if(!fds.demoStream){
+  <icon (click)="onPerformExport()" name="export" matTooltip="Export" class="text-white mx-2.5 text-lg"
+    type="real_icn" />
+  }
+
+  }
+
+
+</div>
+}
+@if (realtimeService.comparetool) {
+<div class="bg-dark-blue px-10   py-3 flex items-center gap-2.5 h-fit">
+  <span class="text-white">Choose comparing files:
+    <!-- {{realtimeService.selectedcompareL}}/{{realtimeService.selectedcompareR}} -->
+  </span>
+  <mat-form-field class="bg-white w-28">
+    <!-- realtimeService.selectedcompareL -->
+    <mat-select [(ngModel)]="realtimeService.selectedleftMode" placeholder="Select.."
+      (selectionChange)="comparechange($event,'L')">
+      @for (x of compareL; track $index) {
+      <mat-option [value]="x.value">
+        {{ x.name }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if(realtimeService.selectedleftMode && realtimeService.selectedleftMode !='L' ){
+  <mat-form-field class="bg-white w-36">
+    <mat-select [placeholder]="'Select '+ (realtimeService.selectedleftMode=='T'?'Transcript':'Draft')+'...'"
+      [(ngModel)]="realtimeService.nSelectedSesidL">
+      <!-- realtimeService.nSesdataL (selectionChange)="onSelection(realtimeService.nSesdataL,1)" -->
+      <mat-option *ngFor="let x of previous_session" [value]="x.nSesid"
+        [ngClass]="{'!hidden': realtimeService.selectedleftMode=='T' && !x.isTranscript}">
+        {{x.cName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  }
+  <!-- *ngIf="realtimeService.selectedcompareL&&realtimeService.selectedcompareL!='L'" -->
+
+  <span class="text-white text-xs">to
+  </span>
+  <mat-form-field class="bg-white w-28">
+    <!-- realtimeService.selectedcompareR -->
+    <mat-select [(ngModel)]="realtimeService.selectedrightMode" placeholder="Select.."
+      (selectionChange)="comparechange($event,'R')">
+      @for (x of compareR; track $index) {
+      <mat-option [value]="x.value">
+        {{ x.name }}
+      </mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+
+  @if(realtimeService.selectedrightMode){
+  <mat-form-field class="bg-white w-36">
+    <mat-select [placeholder]="'Select '+ (realtimeService.selectedrightMode=='T'?'Transcript':'Draft')+'...'"
+      [(ngModel)]="realtimeService.nSelectedSesidR">
+      <!--[(ngModel)]="realtimeService.nSesdataR" (selectionChange)="onSelection(realtimeService.nSesdataR,2)" -->
+      <mat-option *ngFor="let x of previous_session" [value]="x.nSesid"
+        [ngClass]="{'!hidden': realtimeService.selectedrightMode=='T' && !x.isTranscript}">
+        {{x.cName}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  }
+
+
+
+  <btn (click)="startcomapre()" class="ms-auto" mode="outlined" addcls="hover:bg-white bg-white/10 text-white"
+    [attr.isdisable]="!checkAllSelected()" [disabled]="!checkAllSelected()">
+    <icon name="compare" class="text-sm " type="extra" />
+    Compare
+  </btn>
+  <icon class="text-xs text-white ms-3" name="close" (click)="realtimeService.comparetool=false" />
+</div>
+}

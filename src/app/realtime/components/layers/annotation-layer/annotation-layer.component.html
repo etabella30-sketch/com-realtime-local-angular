@@ -1,0 +1,62 @@
+<svg class="annotation-layer overflow-visible" width="100%" height="100%">
+  <g *ngFor="let annotation of annotations" [attr.issuedetailid]="annotation?.nIDid">
+
+    <!-- @if(!nEditid || (nEditid&&nEditid==annotation.nIDid) || annotation.temp){ -->
+
+
+
+
+    @for(rect of annotation.cordinates;track rect.y){
+    <!-- *ngFor="let rect of annotation.cordinates" -->
+    @if(rect.y){
+    <!-- + (fds?.sd?.cProtocol=='C' ?  8 : 0) -->
+    <rect class="opacity-80" [attr.x]="rect.x+timestamp" [attr.y]="rect.y" [attr.width]="rect.width"
+      [attr.height]="rect.height" [ngStyle]="{'fill':annotation.color ? ('#' + annotation.color) : '#7DBAFF'}"
+      fill="#7DBAFF">
+    </rect>
+    }
+    <!-- } -->
+    }
+
+    <!-- !nEditid && -->
+    @if(!annotation.isRefrence){
+        <!-- [attr.y]="updateIcon(annotation.cordinates,annotation.firstrefrence,annotation.highestY).lowest"
+      [attr.height]="updateIcon(annotation.cordinates,annotation.firstrefrence,annotation.highestY).difference + (annotation?.pageCount&&annotation?.pageCount>1 ? (annotation.pageCount - 1)*84 : 0)" -->
+
+
+
+         <!-- [attr.y]="updateIcon(annotation.cordinates).lowest"
+      [attr.height]="updateIcon(annotation.cordinates).difference + (annotation?.pageCount&&annotation?.pageCount>1 ? (annotation.pageCount - 1)* 84 : 0)" -->
+    <foreignObject *ngIf="showhide && !annotation.temp" class="w-[calc(100%_+_64px)]  pointer-events-none peer/icon" init (init)="elementLoad($event,annotation)" [id]="'annot-' + annotation?.nIDid">
+      <span class="sr-only">{{annotation.cordinates.length}}</span>
+      <annotation-icon [issueCount]="annotation.nICount" (click)="openDetail(annotation)"
+        [isActive]="currentIsseuDetailId==annotation.nIDid"></annotation-icon>
+      <!-- <div class="sr-only">
+        {{annotation.highestY }}/
+        {{annotation.firstrefrence}}
+        /{{updateIcon(annotation.cordinates,annotation.firstrefrence,annotation.highestY).difference}} </div> -->
+    </foreignObject>
+    <!-- <foreignObject *ngIf="showhide && !annotation.temp"
+    class="w-[calc(100%_+_64px)] pointer-events-auto hidden peer-hover/icon:block hover:block"
+    [ngClass]="{'!block': notes.menuOpen}"
+    [attr.y]="updateIcon(annotation.cordinates).lowest+((updateIcon(annotation.cordinates).difference)/2 + 24)"
+    [attr.height]="44">
+    <div class="rightfloaticons !justify-center pt-2.5" style="width: 52px;margin-left: auto;height: 100%;">
+      <btn [square]="true" mode="outlined" [matMenuTriggerFor]="note" #notes="matMenuTrigger" class="w-fit"
+        addcls="rounded-full hover:!bg-blue-deactivate" matTooltip="Delete">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 20 19">
+          <path fill="currentColor"
+            d="m15 9 1-1 2-1V6l-6-6H2L0 2v14a2 2 0 0 0 2 2h6v-2H2V2h7v7h6Zm-4-7 6 5h-6V2Zm5 9 2 2-6 6h-2v-2l6-6Zm4 0-1 1-2-2 1-1h1l1 1v1Z" />
+        </svg>
+      </btn>
+      <mat-menu #note="matMenu" class="w-[421px] !bg-transparent !shadow-none !overflow-visible" xPosition="after"
+        yPosition="below">
+        @if(notes.menuOpen){
+          <notes [nIDid]="annotation.nIDid"></notes>
+        }
+      </mat-menu>
+    </div>
+  </foreignObject> -->
+    }
+  </g>
+</svg>

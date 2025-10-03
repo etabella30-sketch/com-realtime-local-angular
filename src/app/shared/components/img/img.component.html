@@ -1,0 +1,61 @@
+@if (images.length > 0) {
+<div class="image-viewer bg-[#cccccc] overflow-hidden h-full">
+  <div class="image-container" cdkDrag>
+    <img #mainImage [src]="images[currentIndex].url" [alt]="images[currentIndex].alt" class="main-image"
+      [style.transform]="getImageTransform()" (dblclick)="OnDoubleClick()">
+  </div>
+  <div class="controls absolute right-2.5 bottom-2 z-40 flex flex-col gap-3">
+    <!-- <button (click)="previousImage()" [disabled]="currentIndex === 0">Previous</button> -->
+    <button matTooltip="" (click)="zoomIn()">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-plus">
+        <path d="M5 12h14" />
+        <path d="M12 5v14" />
+      </svg>
+    </button>
+    <button (click)="zoomOut()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-minus">
+        <path d="M5 12h14" />
+      </svg></button>
+    <button (click)="rotateLeft()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-rotate-ccw">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+        <path d="M3 3v5h5" />
+      </svg>
+      <icon name="rotate" type="tool"></icon>
+    </button>
+
+    <button (click)="rotateRight()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+        class="lucide lucide-rotate-cw">
+        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
+        <path d="M21 3v5h-5" />
+      </svg>
+      <icon name="rotate" type="tool"></icon>
+    </button>
+    <button (click)="resetTransform()"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" class="lucide lucide-repeat">
+        <path d="m17 2 4 4-4 4" />
+        <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+        <path d="m7 22-4-4 4-4" />
+        <path d="M21 13v1a4 4 0 0 1-4 4H3" />
+      </svg></button>
+    <!-- <button (click)="nextImage()" [disabled]="currentIndex === images.length - 1">Next</button> -->
+  </div>
+  <!-- <div class="info">
+    <span>{{ currentIndex + 1 }} / {{ images.length }}</span>
+  </div> -->
+  <!-- <div class="thumbnails">
+    @for (image of images; track image.url; let i = $index) {
+    <img [src]="image.url" [alt]="image.alt" class="thumbnail" [class.active]="i === currentIndex"
+      (click)="setCurrentImage(i)">
+    }
+  </div> -->
+</div>
+} @else {
+<p>No images to display</p>
+}

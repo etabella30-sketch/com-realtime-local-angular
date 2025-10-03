@@ -1,0 +1,12 @@
+<!-- <textarea matInput [cdkTextareaAutosize]="autosize" #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5" class="px-3.5 py-2 rounded-base min-h-8.5" [ngClass]="inputClasses" [disabled]="disabled"
+        [placeholder]="placeholder" (input)="oninput($event)" [value]="value">
+</textarea> -->
+
+<mat-form-field class="px-3.5 py-2 rounded-base min-h-8.5 bg-white w-full text-xs">
+        <textarea [attr.maxlength]="maxlength" matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                [cdkAutosizeMinRows]="minrows"
+                class="!text-xs !tracking-normal hover:!bg-transparent placeholder:!text-gray-400"
+                cdkAutosizeMaxRows="5" [ngClass]="inputClasses" [disabled]="disabled" [placeholder]="placeholder"
+                (input)="oninput($event)" [value]="value" spacebardisable></textarea>
+</mat-form-field>

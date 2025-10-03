@@ -1,0 +1,267 @@
+<div class="flex gap-5 h-full">
+  <div class="w-full h-full flex flex-col">
+    <div class=" bg-white rounded-base overflow-hidden min-h-[320px] flex flex-col">
+      <header class="p-2.5 flex items-center bg-faint ">
+        <span class="text-sm font-bold">Live Session</span>
+        @if(isAdmin){
+        <btn mode="white" class="ms-auto" (click)="newSession()">Add new session</btn>
+        }
+      </header>
+      <div class="tabhead flex text-xs pe-2.5 ps-3">
+        <div class="w-full ps-3 col-span-3 py-3">Name</div>
+        <div class="min-w-[196px] px-3 py-3"> Status</div>
+        <div class="min-w-[162px] px-3 py-3">Connection</div>
+        <div class="min-w-[230px] w-[50%] px-3 py-3"></div>
+      </div>
+      <div class="body  overflow-auto h-[320px]">
+        <!-- @if (sessions.length) { -->
+        <div class="flex group pe-2.5 ps-3 text-xs hover:bg-blue-deactivate relative"
+          [ngClass]="{'bg-blue-deactivate' : x.nSesid==current_session?.nSesid}"
+          *ngFor="let x of sessions;let i = index;trackBy: trackBySessionId">
+          <div (click)="viewFeed(x)" class="w-full ps-3 py-3 flex items-center ">
+            <!-- <span class="absolute text-sm left-1 top-1/2 -translate-y-1/2 text-red-500 group/error">
+              <icon name="info-outline" type="extra"></icon>
+              <div class="bg-red-500 text-white absolute hidden group-hover/error:block py-1 text-xs rounded-md top-1/2 -translate-y-1/2 left-4 whitespace-nowrap px-2 z-[999]">
+                Invalid Case Name
+              </div>
+            </span> -->
+            {{x.cName}}
+          </div>
+
+          <div (click)="viewFeed(x)" class=" px-3 py-3 min-w-[196px]">
+
+            <ng-container *ngIf="x.cStatus=='C'">
+              <badge type="dark" addcls="bg-faint w-16 font-bold border border-white ">
+                Ended
+              </badge>
+            </ng-container>
+            <ng-container *ngIf="x.cStatus!='C'">
+              @if (x.cStatus=='P') {
+              @if (x.isConnected||!x.nRTSid) {
+
+              <badge type="dark" addcls="whitespace-nowrap">
+                Scheduled &#64;
+                {{x.dStartDt|date:'hh:mm dd/MM/YYYY'}}
+              </badge>
+              }
+              @else {
+              <badge type="dark" [addcls]="'w-16 font-bold border border-white bg-sred'">
+                Error
+              </badge>
+              }
+
+              }
+              @else {
+              @if (x.isConnected) {
+              <badge type="dark" [addcls]="'w-16 font-bold border border-white bg-sgreen'">
+                Live
+              </badge>
+              }
+              @else {
+              @if(x.cStatus == 'R'){
+
+              <badge type="dark" [addcls]="'w-16 font-bold border border-white bg-sgreen'">
+                Live
+              </badge>
+              }@else {
+              <badge type="dark" [addcls]="'w-16 font-bold border border-white bg-sred'">
+                Error
+              </badge>
+              }
+              }
+              }
+
+            </ng-container>
+          </div>
+
+          <div (click)="viewFeed(x)" class="min-w-[162px] px-3 py-3 gap-3 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="18" fill="none" viewBox="0 0 26 18"
+              class="min-w-6">
+              <path [attr.fill]="x.cStatus=='R'&&x.isConnected?'#00B89C':''"
+                [attr.stroke]="x.cStatus=='R'&&x.isConnected?'#00B89C':'#aeaeae'"
+                [attr.stroke-width]="x.cStatus=='R'&&x.isConnected?'1.6':'1.8'"
+                d="M13 1C8 1 4 3 2 5l11 11L24 5a16 16 0 0 0-11-4Z" />
+              <g *ngIf="x.cStatus!='C'&&!x.isConnected&&x.nRTSid">
+                <path fill="#F85656" d="M13 0C8 0 4 2 1 5l12 12 5-5V4h6c-3-2-7-4-11-4Zm7 14h2v2h-2v-2Z" />
+                <path fill="#F85656" d="M20 6h2v6h-2V6Z" />
+              </g>
+            </svg>
+            <span *ngIf="x.nRTSid">
+              <span class="whitespace-nowrap font-semibold text-sgreen" *ngIf="x.cStatus=='R' && x.isConnected">
+                Feed established
+              </span>
+              <span class="whitespace-nowrap font-semibold text-sred" *ngIf="x.cStatus!='C' && !x.isConnected">
+                Connection issue
+              </span>
+              <span class="whitespace-nowrap font-semibold text-gray-500"
+                *ngIf="((x.cStatus=='P') && x.isConnected) || x.cStatus=='C'">
+                No Feed
+              </span>
+            </span>
+            <!-- *ngIf="" -->
+            <span *ngIf="!x.nRTSid">
+              @if(isAdmin){
+              <span class="cursor-pointer underline" (click)="assignserver(x)">
+                Assign to a server
+              </span>
+              }@else {
+              No Feed
+              }
+            </span>
+          </div>
+
+          <div
+            class="min-w-[230px] w-[50%] px-3 py-3 opacity-0 group-hover:opacity-100 flex items-center gap-4  justify-end"
+            [ngClass]="{'!opacity-100': t.menuOpen||e.menuOpen}">
+
+            <!-- <icon name="upload" type="adminicn" matTooltip="upload"
+                                                        class="text-sm cursor-pointer ms-auto"
+                                                        (click)="updateId(x);sessionfileinput.click()" /> -->
+
+            <!-- <btn   class="text-sm cursor-pointer ms-auto" addcls=" "
+                                                        (click)="SyncCaseUsers(x)">
+                                                      {{x.isSyscing ?
+                                                        'Syncing...' :'Sync users'}}
+                                                </btn> -->
+
+
+
+            @if(isAdmin){
+
+            <!-- <icon name="sync" matTooltip="Sync" class="text-base cursor-pointer ms-auto origin-center"
+              (click)="SyncCaseUsers(x)" type="real_icn" [ngClass]="{'animate-spin': x.isSyscing}"></icon> -->
+
+            <icon name="edit" matTooltip="Edit" (click)="newSession(x)" class="text-sm cursor-pointer "
+              *ngIf="!x.cStatus ||x.cStatus=='P' ||x.cStatus=='R'" />
+            <icon type="real_icn" matTooltip="Invitation Link" (click)="link(x)" class="text-lg cursor-pointer"
+              name="link" />
+
+
+
+
+            }
+            <icon [matMenuTriggerFor]="delete" #t="matMenuTrigger" matTooltip="Delete" class="text-lg cursor-pointer"
+              [class.hidden]="!isAdmin" name="delete" [hidden]="x.cStatus == 'R'" />
+
+
+            <mat-menu #delete="matMenu" class="!bg-black p-5  rounded-base" xPosition="before">
+              <div>
+                <h6 class="mb-6 min-w-64 text-white text-xs">Confirm
+                  Delete ?</h6>
+                <div class="flex gap-2">
+                  <btn (click)="deleteSession(x,i)">Delete</btn>
+                  <btn mode="dark">cancel</btn>
+                </div>
+              </div>
+            </mat-menu>
+
+          
+
+            <btn [matMenuTriggerFor]="end" #e="matMenuTrigger" class="text-lg cursor-pointer"
+              addcls="rounded-full bg-red-500" [hidden]="x.cStatus != 'R'"  [class.hidden]="!isAdmin">
+              <span class="p-1 rounded-sm bg-white"></span> End Session
+            </btn>
+            <mat-menu #end="matMenu" class="!bg-black p-5  rounded-base" xPosition="before">
+              <div>
+                <h6 class="mb-6 min-w-64 text-white text-xs">Confirm
+                  Ending this session ?</h6>
+                <div class="flex gap-2">
+                  <btn (click)="endSession(x,i)">End</btn>
+                  <btn mode="dark">cancel</btn>
+                </div>
+              </div>
+            </mat-menu>
+
+          
+
+
+          </div>
+        </div>
+        <!-- }@else {
+                                <div class="p-4 h-full">
+                                        <empty head="Session not found" class="block h-full"></empty>
+                                </div>
+                                } -->
+      </div>
+    </div>
+    <div class="mt-5 h-full flex flex-col overflow-hidden">
+      <header class="flex gap-3">
+        <h6 class="text-lg text-blue-deactivate font-semibold">Connectivity Log</h6>
+        <div class="relative w-64 h-fit">
+          <div
+            class="absolute inset-y-0 start-0 top-1/2 -translate-y-1/2 flex h-fit items-center ps-3 pointer-events-none text-tab">
+            <icon name="search"></icon>
+          </div>
+          <input type="text" id="default-search" [(ngModel)]="cSearch"
+            class="block w-full py-2 rounded-full ps-9 text-grey pe-1.5 text-xs  placeholder:text-gray-100/50 border border-white/40 bg-transparent focus:border-blue-on focus:border-2 focus:placeholder:text-blue-hover focus:bg-white focus:outline-none "
+            placeholder="Search" (keyup)="onChenge()" (keyup.enter)="searchData()" />
+        </div>
+        <div class="ms-auto">
+          <mat-form-field class="w-0 h-0 p-0">
+            <input class="w-0 h-0" matInput [matDatepicker]="picker" (dateChange)="onDateChange($event)">
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-datepicker-toggle matIconSuffix class="!text-blue-600 " [for]="picker"></mat-datepicker-toggle>
+        </div>
+      </header>
+      <hr class="border-blue-deactivate  opacity-50 mt-3">
+      <ng-scrollbar [visibility]="'hover'" [appearance]="'compact'" (reachedEnd)="onReachEnd()"
+        (reachedBottom)="onReachEnd()">
+        <div class="h-full overflow-auto">
+          <div
+            class="tablebody py-2 px-5 text-white text-xs my-2.5 flex group hover:border-blue-200 border border-transparent rounded-lg h-fit "
+            *ngFor="let x of con_logs; trackBy: trackByFn">
+            <div class="w-3/4"><span>{{x.dDt | date:'yyyy-MM-dd hh:m:s'}}</span> <b class="ms-3">
+                {{getDateName(x.nId)}}
+              </b></div>
+            <div class="w-1/3 text-blue-hover font-semibold">{{x.cMsg}}
+            </div>
+            @if(isAdmin){
+
+            <div class="w-12 flex items-center justify-end opacity-0 group-hover:opacity-100 cursor-pointer"
+              [ngClass]="{'!opacity-100': dl.menuOpen}" matTooltip="Delete" [matMenuTriggerFor]="deletelog"
+              #dl="matMenuTrigger">
+              <icon name="delete" />
+            </div>
+            <mat-menu #deletelog="matMenu" class="!bg-black p-5  rounded-base" xPosition="before">
+              <div>
+                <h6 class="mb-6 min-w-64 text-white text-xs">Confirm
+                  Delete ?</h6>
+                <div class="flex gap-2">
+                  <btn>Delete</btn>
+                  <btn mode="dark">cancel</btn>
+                </div>
+              </div>
+            </mat-menu>
+            }
+
+
+          </div>
+        </div>
+      </ng-scrollbar>
+    </div>
+  </div>
+  <div class="min-w-[540px] px-5 py-2.5 bg-reply rounded-base flex flex-col h-full overflow-hidden ">
+    <header class="p-2.5 flex items-center ">
+      <span class="text-sm font-bold">{{current_session?.cName}}</span>
+      <!-- && current_session?.cStatus=='R' && current_session?.isConnected -->
+      <btn class="ms-auto" (click)="join()" *ngIf="current_session?.nSesid ">join</btn>
+    </header>
+    <!-- [current_session]="current_session" -->
+    <!-- [data]="dataObservable$ | async" -->
+
+    <!-- <app-livefeed3 [current_session]="current_session"  [data]="dataObservable$ | async"   class="h-full overflow-hidden" [isLivefeed]="true"  *ngIf="current_session?.nSesid"></app-livefeed3> -->
+
+    <!-- <app-realtime></app-realtime> -->
+    @if (current_session?.nSesid) {
+    <app-feed-display class="w-full outline-none h-[calc(100%_-_50px)]"
+      [mode]="current_session.cStatus=='R' ? 'L' : 'D'" [istab]="true" [tab]="1" (OnEvent)="OnData($event,2)"
+      [paramsData]="current_session?.nSesid" [nCaseid]="current_session.nCaseid" [previous_session]="previous_session"
+      (onTabEvent)="onTabEvent($event)" [isSetupscreen]="true"></app-feed-display>
+    }@else{
+    <empty head="No live feed" class="block h-full" *ngIf="!current_session?.nSesid"></empty>
+    }
+  </div>
+</div>
+
+<input #sessionfileinput type="file" class="hidden" (change)="OnFileSelected($event)">

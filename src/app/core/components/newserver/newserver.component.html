@@ -1,0 +1,38 @@
+<header class="py-2.5 px-5 flex items-center bg-faint ">
+        <span class="text-lg font-bold">New Server</span>
+</header>
+<form [formGroup]="frm" class="p-5 flex flex-col gap-6">
+        <div>
+                <div class="mb-3">
+                        <label class="text-sm font-bold mb-2 block">
+                                Name
+                                <span class="text-xxs font-normal text-gray-500 ms-2"></span>
+                        </label>
+                        <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                                placeholder="Enter Name" type="text" formControlName="cName" />
+                </div>
+
+                <div class="mb-3">
+                        <label class="text-sm font-bold mb-2 block">
+                                URL / IP
+                                <span class="text-xxs font-normal text-gray-500 ms-2"></span>
+                        </label>
+                        <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                                placeholder="Enter URL / IP" type="text" formControlName="cUrl" />
+                </div>
+
+                <div class="w-1/4">
+                        <label class="text-sm font-bold mb-2 block">
+                                Port
+                                <span class="text-xxs font-normal text-gray-500 ms-2"></span>
+                        </label>
+                        <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                                placeholder="Port" type="text" formControlName="nPort" />
+                </div>
+        </div>
+
+        <div class="flex gap-2">
+                <btn [disabled]="this.frm.invalid" [attr.isdisabled]="this.frm.invalid" (click)="submit()">Create</btn>
+                <btn mode="white" (click)="close()">Cancel</btn>
+        </div>
+</form>

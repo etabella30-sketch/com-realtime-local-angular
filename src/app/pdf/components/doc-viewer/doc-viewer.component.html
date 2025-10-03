@@ -1,0 +1,167 @@
+<div class="flex h-full flex-col">
+<div 
+  class="pdf-toolbars flex items-center  justify-between bg-white relative z-20 ng-tns-c2287261145-4 !bg-dark-blue px-0 min-h-[59px] h-[59px]">
+  <div 
+    class="pdf-toolbars gap-x-2 flex items-center me-2 ng-tns-c2287261145-4 justify-end !w-1/2 !ml-auto h-full !pl-5 !bg-blue-on !mr-0 ">
+
+    <div  class="flex text-white ms-3 me-5 ng-tns-c2287261145-4 ng-star-inserted">
+      <icon  name="close" mattooltip="Close Preview" (click)="closeRealtimePdf()" class="text-sm block " type="comnicn"></icon>
+    </div>
+  </div>
+</div>
+<div class="w-1/2 ms-auto h-full">
+
+
+  @if(docUrl !='' && docUrl != null && filetype == 'D') {
+  <!-- <ngx-doc-viewer (loaded)="handleLoad($event)" [url]="docUrl" [viewer]="'office'" class="h-full w-full"></ngx-doc-viewer> -->
+  <iframe class="excel-viewer" id="excel-viewer"></iframe>
+  }
+  @else if(docUrl !='' && docUrl != null && filetype == 'I') {
+  <!-- <img [src]="docUrl" alt="" class="object-fit h-full w-full"> -->
+
+  <!-- <div class="image-container">
+  <img [src]="docUrl" [ngStyle]="{
+      transform: 'scale(' + zoomLevel + ') rotate(' + rotateDegree + 'deg)'
+    }" class="image-viewer" alt="Image" />
+
+
+</div>
+
+<div class="controls">
+  <button (click)="zoomIn()">Zoom In</button>
+  <button (click)="zoomOut()">Zoom Out</button>
+  <button (click)="rotate()">Rotate</button>
+  <button (click)="reset()">Reset</button>
+</div> -->
+
+  <image class="h-full block" [images]="[{url:docUrl,alt:''}]" (OnEvent)="OnEventOfImg($event)" />
+  <!-- <angular-image-viewer [src]="images"
+                  [config]="{
+                    customBtns: [
+                      {
+                        name: 'link',
+                        icon: {
+                          classes: 'fas fa-paperclip',
+                          text: 'link'
+                        }
+                      }
+                    ]
+                  }"
+          >
+
+</angular-image-viewer> -->
+
+  <!-- <ngx-image-viewer (buttonBeforeHook)="onButtonClick($event)" [src]="[docUrl]" (customEvent)="onButtonClick($event)"
+(dblclick)="onImageDoubleClick($event)" style="width:100%;height:100%;" class="d-flex"></ngx-image-viewer> -->
+  <!-- <lightgallery [dynamic]="true" [items]="[docUrl]"></lightgallery> -->
+  }
+  @else if(docUrl !='' && docUrl != null && filetype == 'V') {
+  <video [src]="docUrl" controls autoplay class="object-fit h-full w-full"></video>
+  }@else if(docUrl !='' && docUrl != null && filetype == 'E') {
+  <div class="h-full overflow-auto w-full p-3 bg-[#f1f1f1]" (dblclick)="newtab()">
+    <div class="email-container">
+      <div type="cite">
+        <div class="d-flex flex-column gap-2">
+          <div>
+            <b>From: </b>
+            <span>
+              <span class="emailparent">{{ email?.from?.name }}
+                <div class="emailpop">
+                  <div class="avtr">{{email?.from?.email ? (email?.from?.email).charAt(0) : ''}}</div>
+                  <a [href]="'mailto:' + email?.from?.email">{{
+                    email?.from?.email }}</a>
+                </div>
+              </span>
+
+            </span>
+          </div>
+          <div>
+            <!-- <b>Date:</b> {{ email?.date | date: 'short' }} -->
+          </div>
+          <div>
+            <b>To: </b>
+            @for(recipient of email.to;track recipient){
+            <span>
+              <span class="emailparent">{{ recipient.name }}
+                <div class="emailpop">
+                  <div class="avtr">{{recipient?.email && recipient?.email !='' ? recipient?.email?.charAt(0)
+                    : ''}}</div>
+                  <a [href]="'mailto:' + recipient.email">{{
+                    recipient.email }}</a>
+                </div>
+              </span>
+              @if(email.to.length != $index+1){
+              <span>, </span>
+              }
+            </span>
+            }
+          </div>
+          <div>
+            <b>CC:</b>
+            @for(recipient of email.cc; track recipient){
+            <span>
+              <span class="emailparent">
+                {{ recipient.name }}
+                <div class="emailpop">
+                  <div class="avtr">{{recipient?.email && recipient?.email !='' ? recipient?.email?.charAt(0)
+                    : ''}}</div>
+                  <a [href]="'mailto:' + recipient?.email">{{
+                    recipient?.email }}</a>
+                </div>
+              </span>
+              @if(email.cc.length != ($index +1)){
+              <span>, </span>
+              }
+            </span>
+            }
+          </div>
+          <div>
+            <b>Subject:</b>
+            <span class="emailparent"> {{email.subject}}</span>
+          </div>
+        </div>
+
+      </div>
+      <hr class="my-4">
+      @if(email.attachments.length ){
+      <div class="attachments">
+        <h6 class="head mb-2">Attachments: </h6>
+        <ul>
+          @for(attachment of email.attachments;track attachment){
+          <button>
+            <img width="20px" [src]="'assets/img/doctype/'+getFileExtension(attachment?.filename)+'.png'">
+            <a>{{ attachment?.filename }}</a>
+            <icon name="chvx" class="text-xxs"></icon>
+            <div class="options">
+              <div class="option" (click)="downloadAttachment($index, attachment.filename)">
+                <icon name="download" class="text-base" type="extra"></icon>
+                <a>Download </a>
+              </div>
+              @if(!isMyfile){
+              <hr>
+              }
+              @if(!isMyfile && isShowView(attachment.filename)){
+              <div class="option" (click)="newtab(attachment,$index)">
+                <icon name="eye" class="text-base"></icon>
+                <a>View</a>
+              </div>
+              }
+            </div>
+          </button>
+          }
+        </ul>
+      </div>
+      }
+
+
+      @if(email.attachments.length){
+      <hr class="my-4">
+      }
+      <div class="email-body" [innerHTML]="sanitizedBody"></div>
+
+
+    </div>
+  </div>
+  }
+</div>
+</div>

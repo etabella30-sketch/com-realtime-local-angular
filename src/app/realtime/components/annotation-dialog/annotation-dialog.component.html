@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Annotation</h1>
+<div mat-dialog-content>
+  <p>Selected Text: {{ selectedText }}</p>
+  <mat-form-field appearance="fill">
+    <mat-label>Unique ID</mat-label>
+    <input matInput [(ngModel)]="uniqueId">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">Close</button>
+  <button mat-button (click)="addAnnotation()">Add Annotation</button>
+</div>

@@ -1,0 +1,6 @@
+<div
+        class="h-full w-full bg-light-blue border border-dashed border-blue-hover rounded-base flex flex-col items-center justify-center">
+        <icon *ngIf="icon" [name]="icon.name" [type]="icon.type?icon.type:'commonicn'" />
+        <h6 class="text-lg text-blue-hover">{{head}}</h6>
+        <h6 class="text-xxs text-blue-hover" *ngIf="desc">{{desc}}</h6>
+</div>

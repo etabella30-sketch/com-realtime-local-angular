@@ -1,0 +1,85 @@
+<div class="flex flex-col h-full">
+  <!-- {{mode}} {{realtimeService.leftMode}}/{{realtimeService.rightMode}} - {{paramsData}} -->
+  <!-- @if(paramsData){ -->
+  @if (!ispdfactive) {
+  @if(current_session?.nSesid && isOnLiveFeed()){
+  <app-toolbar class="fixed w-full left-0 z-[99]" [hidden]="!istab" [onViewerEvent]="changingValue"
+    [class]="realtimeService.fullscreen?'top-0':'top-[71px]'" [sessionDetails]="current_session"
+    [current_session]="current_session" [itemSize]="itemSize" (toolabarclick)="toolbarclick($event)" [nCaseid]="nCaseid"
+    [nUserid]="nUserid" (performAnnotation)="performAnnotation()" [previous_session]="previous_session"
+    [nSesid]="nSesid" [mode]="mode" [tab]="tab">
+  </app-toolbar>
+  }
+  }
+  <!-- } -->
+
+
+  <div class="flex gap-2  h-full" #myActiveInput>
+    <!-- '--highlightcolor':highlightColor ? ('#'+highlightColor) : '#ffe600', -->
+    <!-- '--contwidth':realtimeService.fullscreen ? scaledScreen.width+'px' : scaledScreen.width+'px', -->
+    <!-- '--font-size':scaledScreen.width/100, -->
+    <div [class.!overflow-hidden]="isSetupscreen" class=" overflow-auto bg-tab w-full vitualwrapper" [ngStyle]="{
+        '--font':selectedFont?.name,
+        '--scale':zoomLevel,
+        '--contheight':realtimeService.fullscreen ? (scaledScreen.height+95 + (realtimeService.compareMode ? 39 :35 ) +'px') : scaledScreen.height+'px',
+        }" (click)="selectedBox = 1">
+      <!-- [style.height.px]="scaledHeight" -->
+      <div class="origin-top-left calcwth " [ngClass]="{'!h-full': isSetupscreen}"
+        [ngStyle]="{'--content-width': originalWidth}" [style.transform]="'scale(' + zoomLevel + ')'"
+        (mouseup)="onAnnotPerform()" (mousedown)="OnSelectionStart($event)" (mousemove)="onMouseMoveSelection($event)">
+        <cdk-virtual-scroll-viewport minBufferPx="3000" maxBufferPx="3000" [itemSize]="itemSize"
+          class="h-full w-full realtimescroll" (scroll)="vitualsrolled($event)" (wheel)="onWheel($event)"
+          (scrolledIndexChange)="handleViewportScroll($event)">
+          <ng-container *cdkVirtualFor="let page of feedData$ | async; let pageIndex = index; trackBy: trackByPage"
+            #itemElement>
+            <app-feed-page class="select-none" [isSetupscreen]="isSetupscreen" [selectedFont]="selectedFont"
+              [maxWidth]="maxWidth" [highlightmode]="highlightmode" [zoomLevel]="zoomLevel" [page]="page"
+              [pageIndex]="pageIndex" [itemSize]="itemSize" [showTimestamp]="showTimestamp" [nEditid]="nEditid"
+              (OnEvent)="onEvent($event,page,pageIndex)" [currentPage]="currentPage" [onReceiveEvent]="sendEvents"
+              [spaceBarOptions]="spaceBarOptions" [currentIsseuDetailId]="fds.currentIsseuDetailId"
+              (onTabEvent)="OnTabEvent($event)" [mode]="mode" [current_session]="current_session" [nUserid]="nUserid">
+            </app-feed-page>
+            <!-- } -->
+          </ng-container>
+        </cdk-virtual-scroll-viewport>
+        <div cdkDragRootElement cdkDrag *ngIf="handtool"
+          class="overlay bg-red-400/0 cursor-grab !translate-y-0 active:cursor-grabbing absolute top-0 left-0 h-full w-full"
+          #overlay (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)" (mouseup)="onMouseUp($event)">
+        </div>
+      </div>
+    </div>
+    <!-- <div class="h-full overflow-auto bg-tab w-1/2  " [ngClass]="{'border-[6px] border-blue-on':selectedBox==2}"
+      [ngStyle]="{'--font':selectedFont?.name,'--highlightcolor':highlightColor ? highlightColor : '#ffe600'}" (click)="selectedBox = 2">
+      <div class="origin-top-left" [style.transform]="'scale(' + zoomLevel + ')'" [style.height.px]="scaledHeight">
+        <cdk-virtual-scroll-viewport [itemSize]="itemSize" class="h-full w-full realtimescroll"
+          (scrolledIndexChange)="handleViewportScroll($event)">
+          <ng-container *cdkVirtualFor="let page of OldData$ | async; let pageIndex = index; trackBy: trackByPage"
+            #itemElement>
+            <app-feed-page [maxWidth]="maxWidth" [highlightmode]="highlightmode" [zoomLevel]="zoomLevel" [page]="page"
+              [pageIndex]="pageIndex" [itemSize]="itemSize" [showTimestamp]="showTimestamp" [nEditid]="nEditid"
+              (OnEvent)="onEvent($event,page,pageIndex)" [currentPage]="currentPage"
+              [currentIsseuDetailId]="fds.currentIsseuDetailId">
+            </app-feed-page>
+          </ng-container>
+        </cdk-virtual-scroll-viewport>
+      </div>
+    </div> -->
+  </div>
+
+  <!-- <div class="fixed right-0 top-40 bg-white rounded-s-base overflow-hidden" *ngIf="!highlightmode">
+    <div class="p-2 flex items-center justify-center cursor-pointer" (click)="openIssueModel('V')">
+      <icon name="issue" type="myfileicn" />
+    </div>
+    @if (!this.current_session.totaIssues) {
+    <div class="p-2 bg-blue-on text-white cursor-pointer" (click)="createissue()">
+      <icon name="addcircle" />
+    </div>
+    }
+    @else {
+    <div class="p-2 bg-blue-on text-white cursor-pointer" (click)="openIssueModel('N')">
+      <icon name="chvy" class="text-xs !rotate-180" />
+    </div>
+    }
+  </div> -->
+
+</div>

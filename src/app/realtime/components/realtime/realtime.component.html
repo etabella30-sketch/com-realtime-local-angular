@@ -1,0 +1,82 @@
+<!-- @if (!realtimeService.fullscreen) {
+<app-realtimeheader></app-realtimeheader>
+} -->
+<div class="flex h-full pt-[74px] transition-all duration-300 ease-in-out"
+        [ngClass]="{'!pt-4': realtimeService.fullscreen}">
+        @if(isLoaded){
+        <div class="w-full h-full relative" [ngClass]="{'z-[9999] !w-1/2': tabBox}" (click)="activeRealtime()">
+                <!-- [ngClass]="{'border-[6px]  border-blue-on':realtimeService.tab==1 && realtimeService.compareMode,'reatimecomparefeed':realtimeService.compareMode,'mt-15':!realtimeService.fullscreen}" -->
+                <app-feed-display class="w-full outline-none displaycomp " (click)="realtimeService.tab = 1"
+                        [ispdfactive]="ispdfactive&&tabBox!=null" [mode]="realtimeService.leftMode"
+                        [istab]="realtimeService.tab==1" [tab]="1" [nCaseid]="nCaseid" (OnEvent)="OnData($event,1)"
+                        [paramsData]="realtimeService.nSesidL" [previous_session]="previous_session"
+                        (onTabEvent)="onTabEvent($event)">
+                </app-feed-display>
+                <div class="selector" *ngIf="realtimeService.tab==1 && realtimeService.compareMode">
+                        <span class=" block absolute w-1.5 h-full bg-blue-on top-0 left-0"></span>
+                        <!-- <span class="block absolute h-1.5 w-full bg-blue-on  top-0"></span> -->
+                        <span class="block absolute  right-0 w-1.5 h-full bg-blue-on top-0"></span>
+                        <span class="block absolute  bottom-0 h-1.5 w-full bg-blue-on"></span>
+                </div>
+                <div class="selector" *ngIf="!ispdfactive&&tabBox">
+                        <span class=" block absolute w-1.5 h-full bg-blue-on top-0 left-0"></span>
+                        <!-- <span class="block absolute h-1.5 w-full bg-blue-on  top-0"></span> -->
+                        <span class="block absolute  right-0 w-1.5 h-full bg-blue-on top-0"></span>
+                        <span class="block absolute  bottom-0 h-1.5 w-full bg-blue-on"></span>
+                </div>
+        </div>
+
+        <!-- @if(true){
+        <div class="absolute top-[70px] w-full right-0 h-[calc(100%_-_70px)] z-[999]">
+                @defer(when viewlist.length){
+                <preview [viewlist]="viewlist" [changeP]="false" [isrealtime]="true" [isLink]="" [nCaseid]="nCaseid"
+                        [selectedDocuments]="" />
+                }@placeholder{
+                <div class="overflow-hidden preview  h-[calc(100%_-_20px)] bg-white animate-pulse">
+                </div>
+                }
+        </div>
+        } -->
+
+        @if(realtimeService.compareMode){
+        <div class="w-full h-full relative">
+                <!-- [ngClass]="{'border-[6px]  border-blue-on':realtimeService.tab==2,'reatimecomparefeed':realtimeService.compareMode,'mt-15':!realtimeService.fullscreen}" -->
+                <app-feed-display class="w-full mt-15 outline-none" (click)="realtimeService.tab = 2"
+                        [mode]="realtimeService.rightMode" [istab]="realtimeService.tab==2" [tab]="2"
+                        (OnEvent)="OnData($event,2)" [paramsData]="realtimeService.nSesidR" [nCaseid]="nCaseid"
+                        [previous_session]="previous_session" (onTabEvent)="onTabEvent($event)"></app-feed-display>
+                <div class="selector" *ngIf="realtimeService.tab==2 && realtimeService.compareMode">
+                        <span class=" block absolute w-1.5 h-full bg-blue-on top-0 left-0"></span>
+                        <!-- <span class="block absolute h-1.5 w-full bg-blue-on  top-0"></span> -->
+                        <span class="block absolute  right-0 w-1.5 h-full bg-blue-on top-0"></span>
+                        <span class="block absolute  bottom-0 h-1.5 w-full bg-blue-on"></span>
+                </div>
+        </div>
+        }
+        }
+</div>
+
+
+<!-- @if(tabBox){ -->
+<div class="absolute top-[70px] group w-full right-0 h-[calc(100%_-_70px)] z-[999]"  [hidden]="!tabBox">
+        @if (!ispdfactive) {
+        <div class="div absolute w-full h-full bg-red-500 opacity-0 z-10" (click)="ispdfactive=true">
+        </div>
+        }
+        <div class="selector" *ngIf="ispdfactive">
+                <span class=" block absolute w-1.5 h-full bg-blue-on top-[53px] left-1/2 z-10"></span>
+                <!-- <span class="block absolute h-1.5 w-full bg-blue-on  top-0"></span> -->
+                <span class="block absolute  right-0 w-1.5 h-full bg-blue-on top-[53px] z-10"></span>
+                <span class="block absolute  bottom-0 h-1.5 w-full bg-blue-on z-10"></span>
+        </div>
+        <preview [viewlist]="viewlist" [changeP]="false" [tabBox]="tabBox" [isLink]="" [nCaseid]="nCaseid"
+        [selectedDocuments]="" [isRealtime]="true" (OnEvent)="OnEvent($event)" />
+        <!-- @defer(when viewlist.length){
+        <preview [viewlist]="viewlist" [changeP]="false" [tabBox]="tabBox" [isLink]="" [nCaseid]="nCaseid"
+                [selectedDocuments]="" [isRealtime]="true" (OnEvent)="OnEvent($event)" />
+        }@placeholder{
+        <div class="overflow-hidden preview  h-[calc(100%_-_20px)] bg-white animate-pulse">
+        </div>
+        } -->
+</div>
+<!-- } -->

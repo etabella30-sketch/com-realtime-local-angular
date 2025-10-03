@@ -1,0 +1,41 @@
+<div class="color-wrapper w-fit">
+  <div draggable="false" (mouseup)="onMouseUp($event)" (mousedown)="onMouseDown($event)"
+    (mousemove)="onMouseMove($event)" class="flex items-center gradient box  w-[300px] h-[300px] flex-wrap relative"
+    [ngStyle]="{'--hue': currentcolor,'--cursor':isDragging?'none':'default'}">
+    @for (x of colors; track x) {
+    <span #colorItem class="size-[30px]  item opacity-0"
+      [ngStyle]="{'background':'hsl('+ this.currentcolor +', 100%,' + x +'%)'}" [id]="$index" [attr.huecode]="x"></span>
+    }
+    <div class="size-4 border border-white rounded-full absolute " *ngIf="colorloded"  [style.left.px]="movableItem.x"
+      [style.top.px]="movableItem.y">
+      <span
+        class="bg-black text-xs text-white absolute custtooltip top-full mt-3 left-1/2 -translate-x-1/2">#{{myColor}}</span>
+    </div>
+  </div>
+  <div class="relative w-fit h-fit flex">
+    <div
+      class="flex items-center flex-col huegrad     shadow-[-1px_0px_7px_#0000002e]  saturate-150  relative ms-6 w-[22px] border-2 border-white overflow-hidden rounded-full">
+      @for (x of hueArray; track x) {
+      <span class="h-[15px] w-full opacity-0" [ngStyle]="{'background':'hsl(' + x + ', 100%, 50%)'}"></span>
+      }
+    </div>
+
+    <mat-slider [max]="19" step="1"
+      class="!absolute rotate-90 !w-[300px]  color-slider left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 !ms-3"
+      [ngStyle]="{
+      '--mdc-slider-handle-color': 'hsl('+currentcolor+', 100%, 50%)',
+      '--mdc-slider-focus-handle-color': 'hsl('+currentcolor+', 100%, 50%)',
+      '--mdc-slider-hover-handle-color': 'hsl('+currentcolor+', 100%, 50%)',
+    }">
+      <input matSliderThumb #slider [(ngModel)]="currenthueVal" (ngModelChange)="colorchange()">
+    </mat-slider>
+  </div>
+  <!-- *ngIf="colorslist&&colorslist.length" -->
+  <div class="flex items-center flex-col gap-2.5 ml-14" *ngIf="colorslist&&colorslist.length">
+    <span class="size-5  border-2 border-white" [ngStyle]="{'background':'#ff0000'}"></span>
+    @for (x of colorslist; track x) {
+    @if ($index <= 9) { <span class="size-5  border-2 border-white" [ngStyle]="{'background':'#'+x.cClr}"></span>
+      }
+      }
+  </div>
+</div>

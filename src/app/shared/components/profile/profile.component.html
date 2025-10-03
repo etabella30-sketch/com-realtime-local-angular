@@ -1,0 +1,12 @@
+<div class="flex gap-2 items-center cursor-pointer" [matMenuTriggerFor]="profile" #t="matMenuTrigger">
+        <avtr [matTooltip]="detail?.cFname+' '+detail?.cLname" [detail]="detail" [size]="size"></avtr>
+        <ng-container *ngIf="icon">
+                <icon name="chvx" class="text-xs"></icon>
+        </ng-container>
+</div>
+<mat-menu #profile="matMenu" xPosition="before" [class]="isdark ? '!rounded-none w-fit !bg-dark-blue' :'p-2'">
+        <span class="text-xs cursor-pointer block rounded-base"
+                [class]="isdark?'text-white p-3':' px-2  hover:bg-gray-100 p-1 '" (click)="logOut()">
+                Logout
+        </span>
+</mat-menu>

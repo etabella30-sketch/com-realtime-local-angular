@@ -1,0 +1,12 @@
+<div class="p-10">
+        <h6 class="text-lg text-sgreen font-bold mb-2.5">
+                Invitation Link
+        </h6>
+        <div class="flex gap-2 items-end">
+                <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                        placeholder="Enter Session Name" type="text" [(ngModel)]="link" />
+                <!-- <inpt [isrequired]="true" [value]="link" placeholder="Enter Team Name" [showlabel]="true" class="block  w-full"> Team
+                        Name </inpt> -->
+                <btn mode="white" (click)="copyLink()">Copy link</btn>
+        </div>
+</div>

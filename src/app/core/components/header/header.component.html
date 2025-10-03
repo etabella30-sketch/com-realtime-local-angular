@@ -1,0 +1,50 @@
+<div class="px-10 py-5 flex gap-2.5 items-center">
+        <img class="cursor-pointer" src="../../../../assets/colorlogo.svg" (click)="gotohome()">
+        <img src="../../../../assets/realtimelogo.svg" *ngIf="isDash()">
+
+        <h6 class="text-sm" *ngIf="isLivefeed()">{{sessionService?.casename}} |
+                {{sessionService?.cCaseno}}</h6>
+
+
+
+        <div class="flex items-center gap-3 ms-auto">
+                @if(url?.version){
+                <span class="text-xs text-gray-500">V{{url?.version}}</span>
+                }
+
+                @if(url.transferServiceStatus == 'offline' && false){
+                        <!-- [addcls]="url.transferServiceStatus =='online' ? 'w-18 font-bold   bg-sgreen' : 'w-18 font-bold  bg-sred'" -->
+                <badge type="dark" addcls="w-18 font-bold  bg-sred">
+                        Transfer Service
+                </badge>
+
+                }
+
+                <badge type="dark"
+                        [addcls]="socket.tcpConnectionStatus ? 'w-18 font-bold   bg-sgreen' : 'w-18 font-bold  bg-sred'">
+                        {{socket.tcpConnectionStatus ? 'RT Connected' : 'RT Not Connected'}}
+                </badge>
+
+                <span>welcome back, {{userdetail['cFname']}}</span>
+                @if(userdetail['nUserid']){
+                <!-- <avtr [matMenuTriggerFor]="menu" [detail]="userdetail" size="sm"></avtr> -->
+                <profile [icon]="false" [detail]="userdetail" size="sm"></profile>
+                }
+
+                @if(userdetail['isAdmin'] && this.isDashBord()){
+                <icon class="text-lg cursor-pointer hover:text-blue-on" [ngClass]="{'text-blue-on': t.menuOpen}"
+                        [matMenuTriggerFor]="setting" #t="matMenuTrigger" name="setting" type="real_icn" />
+                <mat-menu #setting="matMenu" xPosition="before" class="p-2">
+                        <span class="text-xs text-center cursor-pointer block rounded-base p-2  hover:bg-gray-100"
+                                (click)="servers()">
+                                Connected Servers
+                        </span>
+                        <span class="text-xs text-center cursor-pointer block rounded-base  hover:bg-gray-100 p-2"
+                                (click)="settings()">
+                                Realtime Transmitter
+                        </span>
+                </mat-menu>
+                }
+        </div>
+
+</div>

@@ -1,0 +1,92 @@
+<!-- <div class="flex">
+
+  <input [(ngModel)]="cSearch" type="text" placeholder="Search here..." (keyup.enter)="find()" />
+
+
+  @if(isSearching){
+  Searching...
+  }
+  <mat-checkbox [(ngModel)]="matchCase" (change)="find()">Match case</mat-checkbox>
+  <mat-checkbox [(ngModel)]="wholeWords" (change)="find()">Whole words</mat-checkbox>
+
+  <btn (click)="findPrevious()">
+    Previous
+  </btn>
+
+  <btn (click)="findNext()">
+    Next
+  </btn>
+  @if(totalSearch){
+  {{currentSearch}} of {{totalSearch}}
+  }
+</div> -->
+
+
+
+
+<div (keydown.escape)="$event.stopPropagation()" class=" flex bg-blue-deactivate p-2.5 " [ngClass]="{'flex-wrap  w-full items-center gap-2.5': !isfullmode}">
+  <div class="flex gap-2.5 w-full" (keydown.escape)="$event.stopPropagation()">
+    <div class="relative w-40">
+      <icon [hidden]="!cSearch || cSearch ===''" name="close" (click)="cSearch='';find();close();isSearching = false;"
+        class="absolute top-1/2 -translate-y-1/2 right-3 text-xxs" />
+      <input [(ngModel)]="cSearch" type="text" placeholder="Search here..." (keyup.enter)="find()"
+        (keyup)="cSearch ==='' ? find() : null;isSearching = false;" (keyup)="OnKeyUp($event)"
+        class="px-3.5 py-2 pe-9 rounded-base placeholder-shown:bg-white bg-faint block w-full focus:shadow-[0px_0px_6px_#0066FF] border shadow-sm focus:outline-none text-xs" />
+    </div>
+    <!-- <div class="rounded-base flex items-center px-3 h-8.5 rounded-s-none"> -->
+    <!-- <mat-checkbox [disabled]="!searchTerm" [(ngModel)]="wholeWord" class="ms-2 my-auto" (change)="onSearch()">
+     <span class="whitespace-nowrap">
+       Whole Word
+     </span>
+   </mat-checkbox> -->
+    <mat-checkbox class="ms-2 my-auto" [(ngModel)]="matchCase" (change)="searching_value = null;find()"> <span class="whitespace-nowrap">
+        Match case
+      </span></mat-checkbox>
+    <mat-checkbox class="ms-2 my-auto" [(ngModel)]="wholeWords" (change)="searching_value = null;find()"> <span class="whitespace-nowrap">
+        Whole word
+      </span></mat-checkbox>
+    <!-- </div> -->
+  </div>
+  @if (cSearch) {
+  <div class="px-3 ms-auto flex items-center" (keydown.escape)="$event.stopPropagation()">
+    <div class="flex items-center  gap-2.5">
+      @if(isSearching){
+      <div class="flex gap-2 items-center">
+        <svg style="height: 20px;width: 20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+          xml:space="preserve">
+          <path fill="#000"
+            d="M73 50c0-12.7-10.3-23-23-23S27 37.3 27 50m3.9 0c0-10.5 8.5-19.1 19.1-19.1S69.1 39.5 69.1 50">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 50 50"
+              to="360 50 50" repeatCount="indefinite" />
+          </path>
+        </svg>
+        <!-- <span class="text-xs ">Searching...</span> -->
+      </div>
+      }
+
+      @if(totalSearch){
+      <h6 class="text-xs whitespace-nowrap">{{ currentSearch }} of
+        {{
+        totalSearch }} Matches</h6>
+      }
+      @else{
+      <h6 class="text-xs whitespace-nowrap">No Matches</h6>
+      }
+      <btn mode="outlined" class="ms-auto" [square]="true" (click)="findPrevious()">
+        <icon name="chvy" />
+      </btn>
+      <btn mode="outlined" [square]="true" (click)="findNext()">
+        <icon name="chvy" class="rotate-180" />
+      </btn>
+      <!-- <div class="bg-white rounded-base flex items-center px-3 h-8.5">
+                           <mat-checkbox class="example-margin" [(ngModel)]="matchCase">Match
+                                   Case</mat-checkbox>
+                   </div> -->
+    </div>
+    <!-- <span class="text-xs" (click)="$event.stopPropagation()"
+                   *ngIf="searchResults.length > 0">
+                   Page: {{ getCurrentPageNumber() }}
+                   Line: {{ getCurrentLineNumber() }}
+           </span> -->
+  </div> }
+</div>

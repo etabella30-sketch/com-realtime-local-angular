@@ -1,0 +1,87 @@
+<!-- src/app/components/search-bar/search-bar.component.html -->
+<!-- <div class="search-bar">
+  <input [(ngModel)]="searchTerm" (keyup.enter)="onSearch()" placeholder="Search..." />
+  <button (click)="onSearch()">Search</button>
+  <button (click)="onPrevious()">Previous</button>
+  <button (click)="onNext()">Next</button>
+  <div class="search-stats">
+    Matches: {{ currentMatch }} / {{ totalMatches }}
+    <br />
+    Current Page: {{ currentPage }}
+  </div>
+</div>
+ -->
+
+
+
+
+<btn mode="white" [square]="true" (click)="toggleSearch(); focusinput(srchinpt)" matTooltip="Search"
+  [addcls]="menushow?'hover:bg-white !text-blue-on !border-blue-on shadow-[inset_0px_0px_4px_#0072ff]':'hover:bg-white active:bg-white'">
+  <icon name="search" class="text-sm" />
+</btn>
+
+<div [ngClass]="{'!hidden': !menushow}"
+  class="mt-3 flex  shadow-[0px_0px_7px_#0000004d] absolute bg-blue-deactivate p-2.5 -ml-11">
+  <div class="flex gap-0">
+    <div class="relative w-40">
+      <icon *ngIf="searchTerm" name="close" (click)="searchTerm='';onSearch();closeMenu();srchinpt.focus()"
+        class="absolute top-1/2 -translate-y-1/2 right-3 text-xxs" />
+      <input #srchinpt (focusout)="blurinput()" placeholder="Search word..." [(ngModel)]="searchTerm"
+        (keyup.enter)="searchTerm ? openMenu():''; onSearch()"
+        (keyup)="!searchTerm ? closeMenu():''; !searchTerm ? onSearch() : ''"
+        class="px-3.5 py-2 pe-9 rounded-base placeholder-shown:bg-white bg-faint block w-full focus:shadow-[0px_0px_6px_#0066FF] border shadow-sm focus:outline-none text-xs" />
+    </div>
+    <!-- <div class="rounded-base flex items-center px-3 h-8.5 rounded-s-none"> -->
+    <mat-checkbox [disabled]="!searchTerm" [(ngModel)]="wholeWord" class="ms-2 my-auto" (change)="onSearch()">
+      <span class="whitespace-nowrap">
+        Whole Word
+      </span>
+    </mat-checkbox>
+
+
+    <mat-checkbox [disabled]="!searchTerm" [(ngModel)]="matchCase" class="ms-2 my-auto" (change)="onSearch()">
+      <span class="whitespace-nowrap">
+        Match Case
+      </span>
+    </mat-checkbox>
+
+    <!-- </div> -->
+  </div>
+  <div class="px-3" *ngIf="menustate=='O'" (click)="$event.stopPropagation()">
+    <div class="flex items-center  gap-2.5" (click)="$event.stopPropagation()">
+      <div *ngIf="isSearching" class="flex gap-2 items-center">
+        <svg style="height: 20px;width: 20px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"
+          xml:space="preserve">
+          <path fill="#000"
+            d="M73 50c0-12.7-10.3-23-23-23S27 37.3 27 50m3.9 0c0-10.5 8.5-19.1 19.1-19.1S69.1 39.5 69.1 50">
+            <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 50 50"
+              to="360 50 50" repeatCount="indefinite" />
+          </path>
+        </svg>
+        <span class="text-xs ">Searching...</span>
+      </div>
+      <h6 *ngIf="totalMatches&&!isSearching" class="text-xs whitespace-nowrap">{{ currentMatch }} of
+        {{
+        totalMatches }} Matches</h6>
+      <h6 class="text-xs whitespace-nowrap" *ngIf="!totalMatches&&!isSearching">No Matches</h6>
+      <btn mode="outlined" class="ms-auto" [square]="true" [disabled]="currentMatch <= 1"
+        [attr.isdisable]="currentMatch <= 1" (click)="$event.stopPropagation();onPrevious()">
+        <icon name="chvy" />
+      </btn>
+      <btn mode="outlined" [square]="true" (click)="$event.stopPropagation();onNext()"
+        [disabled]="currentMatch == totalMatches || totalMatches == 0"
+        [attr.isdisable]="currentMatch == totalMatches || totalMatches == 0">
+        <icon name="chvy" class="rotate-180" />
+      </btn>
+      <!-- <div class="bg-white rounded-base flex items-center px-3 h-8.5">
+                           <mat-checkbox class="example-margin" [(ngModel)]="matchCase">Match
+                                   Case</mat-checkbox>
+                   </div> -->
+    </div>
+    <!-- <span class="text-xs" (click)="$event.stopPropagation()"
+                   *ngIf="searchResults.length > 0">
+                   Page: {{ getCurrentPageNumber() }}
+                   Line: {{ getCurrentLineNumber() }}
+           </span> -->
+  </div>
+</div>

@@ -1,0 +1,128 @@
+.rightfloaticons {
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: 0px;
+  user-select: none;
+  max-height: 100%;
+
+  hr {
+    margin: 0;
+
+    &:first-child {
+      height: 66px;
+      width: 1px;
+      border-right: 1px dashed #4f4f4f;
+      border-left: none;
+      transform: scaleY(1.05) scaleX(0.7);
+    }
+
+    &:nth-child(2) {
+      min-width: 23px;
+      height: 1px;
+      border-top: 1px dashed #4f4f4f;
+      transform: scaleY(0.8);
+    }
+  }
+
+  ion-icon.addnew {
+    top: -40px;
+  }
+
+  &.weditdlt {
+    transform: none !important;
+    padding-right: 30px;
+
+    .tools {
+      left: 14px !important;
+      transform: scale(0.7) !important;
+    }
+  }
+
+  &.whenselect {
+    margin-right: 30px !important;
+    transform: none !important;
+
+    .tools {
+      transform: none !important;
+    }
+  }
+
+  .tools {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+    z-index: 9;
+    position: absolute;
+    left: -14px;
+    transform: scale(0.7);
+
+    ion-icon {
+      color: #4f4f4f;
+      cursor: pointer;
+      background: white;
+      font-size: 17px;
+      padding: 7px;
+      box-shadow: 0px 0px 9px #00000038;
+      border-radius: 50%;
+
+      &:hover {
+        color: #0066ff;
+      }
+
+      &.active {
+        box-shadow: 0px 0px 6px #0066ff, inset 0px 0px 0px 5px #9fccff;
+      }
+    }
+  }
+
+  .icons {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-width: 30px;
+    height: 60px;
+    background: #ffffff;
+    // transform: scale(0.8);
+    // box-shadow: 0px 3px 10px rgba(148, 148, 148, 0.25);
+
+    // border-radius: 10px;
+    ion-icon {
+      color: #4f4f4f;
+    }
+  }
+
+  .twobubblewrapper {
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .num-counts {
+    display: grid;
+    place-items: center;
+    width: 14px;
+    height: 15px;
+    font-size: 10px;
+    background: #4f4f4f;
+    color: white;
+    border-radius: 50%;
+
+    a {
+      font-size: 7px;
+      line-height: 16px;
+    }
+  }
+}
+
+.icon-container {
+  position: absolute;
+  right: -40px;
+  width: 20px;
+}

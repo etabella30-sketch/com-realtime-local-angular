@@ -1,0 +1,4 @@
+.text-w {
+    --textwodth: 0px;
+    width: calc(100% - var(--textwodth));
+}

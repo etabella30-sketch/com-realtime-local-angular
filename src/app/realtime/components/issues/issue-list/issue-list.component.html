@@ -1,0 +1,230 @@
+@if (isLoading) {
+@for (x of [1,2,3,4,5,6,7]; track $index) {
+<div class="flex gap-2.5 group items-center px-2.5 py-1.5 bg-gray-100 rounded-xl  mt-2.5 animate-pulse">
+    <span class="size-4 bg-gray-300 rounded-sm"></span>
+    <span class="w-1 h-4 rounded-sm bg-gray-300"></span>
+    <span class="w-28 h-3 rounded-sm bg-gray-300"></span>
+</div>
+}
+}
+<!-- {{modelType}} / {{cPermission}} / {{ishilight}} / {{selectedIssues?.length}} -->
+@for (x of issueList; track x.nIid) {
+<!-- {{selectedIssues?.length}}
+    {{(modelType == 'E'  && cPermission=='N' &&  checkIssueId(x) && !ishilight)}}
+    {{ishilight && cPermission=='N' && modelType == 'E'  &&   checkIfExistsInAssigns(x) }}
+    {{(!ishilight && x.nUserid==0)}}
+    <br/> -->
+<div class="flex gap-2.5 group items-center bg-transparent border p-3 hover:bg-white border-white py- rounded-xl  mt-2.5 max-md:flex-wrap hover:shadow-[0px_4px_4px_#00000025]"
+    [ngClass]="{'bg-white':  x.isExpanded,'!hidden':((modelType == 'E'  && cPermission=='N' &&  checkIssueId(x) && !ishilight) || (ishilight && cPermission=='N' && modelType == 'E'  &&   checkIfExistsInAssigns(x)  ) ||  (!ishilight && !x.nUserid && modelType != 'V' )),'!px-2.5 !py-1 !bg-white':modelType == 'N' || (modelType == 'E' && cPermission=='E')}">
+
+
+
+    @if(modelType == 'N' || (modelType == 'E' && cPermission=='E')){
+    <mat-checkbox [(ngModel)]="x.isChecked" (change)="OnSelected(x)"></mat-checkbox>
+    }
+    <div class="flex gap-1 items-center my-auto text-xs font-extrabold leading-4"
+        style="width: -webkit-fill-available;">
+        <span class="rounded-base h-3.5 min-w-1 bg-red-400" [ngStyle]="{'background': '#'+x.cColor}"></span>
+        <div class="justify-center max-h-[16px] overflow-hidden w-full relative break-all">
+            {{x.cIName}}
+            <!-- {{x.nUserid}} -->
+            @if(x.nUserid){
+            <span>({{x.cCategory}})</span>
+            }
+            <div class="absolute right-0 w-7 -top-1 bg-gradient-to-r from-transparent to-white h-6">
+            </div>
+        </div>
+
+    </div>
+
+    @if (modelType == 'V') {
+
+    @if(x.nUserid){
+
+    <btn mode="outlined" class="opacity-0 group-hover:opacity-100 ms-auto cursor-pointer" [square]="true"
+        (click)="edit(x)">
+        <icon name="edit" />
+    </btn>
+
+    <btn mode="outlined" [matMenuTriggerFor]="end" [square]="true" class="opacity-0 group-hover:opacity-100">
+        <icon name="delete" />
+    </btn>
+
+    <mat-menu #end="matMenu" class="!bg-black p-5  rounded-base" xPosition="before">
+        <div>
+            <h6 class="mb-6 min-w-64 text-white text-xs">Any change made to this issue will
+                apply to files that assigned to</h6>
+            <div class="flex gap-2">
+                <btn (click)="deleteIssue(x,$index)">Delete</btn>
+                <btn mode="dark">cancel</btn>
+            </div>
+        </div>
+    </mat-menu>
+    }
+    <span (click)="detail(x)" class="p-2"
+        [ngClass]="{'opacity-50 pointer-events-none': !(x.nTotalID>0)&&!(x.nTotalHID>0),'ms-auto':!x.nUserid}">
+        <icon name="chvy" class="rotate-180  block text-xs opacity-0 group-hover:opacity-100" />
+    </span>
+    <!-- <span [ngClass]="{'bg-white !text-grey': x.isExpanded}"
+        class="text-xs bg-grey rounded-base ms-auto h-5 min-w-5 w-fit text-white flex items-center justify-center px-1">{{x.nTotalID
+        ? x.nTotalID : 0}}</span> -->
+    <!-- <a class="my-auto text-xs items-center  cursor-pointer h-5 rounded-full bg-white w-10 justify-center text-center leading-relaxed"
+        (click)="fetchDetail(x)"
+        [ngClass]="{'text-grey ': x.isExpanded,'underline':!x.isExpanded,'isdisabled':!x.nTotalID || x.nTotalID==0}">
+        {{x.isExpanded ? 'Hide':'More'}}
+    </a> -->
+    }
+    @else{
+    <div class="flex items-center ms-auto w-fit">
+        @defer () {
+        <div class="flex gap-2 items-center me-2.5" *ngIf="relevences||imapcts">
+            <img *ngIf="x.nImpactid" [src]="'assets/icons/impact/'+x.nImpactid+'.png'">
+            <span *ngIf="relevences&&x.nRelid" [ngClass]="{'class': true}"
+                class="flex items-center gap-2.5 text-xxs bg-reply font-bold px-2 h-6 rounded-base ms-auto">{{getCKey(x.nRelid,'R')}}
+            </span>
+        </div>
+        }
+        @if(modelType == 'N' || (modelType == 'E' && cPermission=='E')){
+        @if (!ishilight) {
+        @if (isToolbar) {
+        <icon name="menu" class="cursor-pointer" (click)="advance()" />
+        }
+        @else{
+        <span class="flex items-center gap-2.5 text-xs bg-gray-100 px-2 py-1.5 rounded-base ms-auto cursor-pointer"
+            [ngClass]="{'bg-gray-100': x.isExpanded,'underline': !x.isExpanded}" (click)="advanceissue(x)">Advance
+            <icon *ngIf="x.isExpanded" name="chvx" />
+        </span>}
+        }
+        }
+    </div>
+    }
+
+</div>
+
+@if ((modelType == 'N' || (modelType == 'E' && cPermission=='E'))&& x.isExpanded) {
+<div class="bg-white p-2.5 rounded-base flex items-center gap-2.5 my-2.5">
+    <div class="w-full">
+        <h6 class="text-xs font-semibold mb-2.5">Relevance</h6>
+        <mat-form-field class="w-full">
+            <mat-select placeholder="Select.." [(value)]="x.nRelid" (selectionChange)="OnSelected(x)">
+                <!-- <mat-select-trigger> {{x.nRelid?.cKey}}</mat-select-trigger> -->
+                <mat-select-trigger> {{ getCKey(x.nRelid,'R') }} </mat-select-trigger>
+                <mat-option>Select...</mat-option>
+                <mat-option *ngFor="let item of relevences" [value]="item.nRelid">{{ item.cKey }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div class="w-full">
+        <h6 class="text-xs font-semibold mb-2.5">Impact</h6>
+        <mat-form-field class="w-full">
+            <mat-select placeholder="Select..." [(value)]="x.nImpactid" (selectionChange)="OnSelected(x)">
+                <mat-select-trigger>
+                    <div class="flex gap-2.5 items-center">
+                        <img [src]="'assets/icons/impact/'+ x.nImpactid +'.png'">
+                        {{getCKey(x.nImpactid,'I')}}
+                    </div>
+                </mat-select-trigger>
+                <mat-option>Select...</mat-option>
+                <mat-option *ngFor="let item of imapcts" [value]="item.nImpactid">
+                    <div class="flex items-center gap-2.5">
+                        <img [src]="'assets/icons/impact/'+ item.nImpactid +'.png'">
+                        {{ item.cKey }}
+                    </div>
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+</div>
+}
+
+
+@if(modelType == 'V' && x.isExpanded){
+
+<div class="flex gap-2.5 mt-6">
+    <div class="w-1/2 gap-2.5 flex items-center border border-blue-on text-blue-on rounded-full px-3 py-1"
+        [ngClass]="{'bg-gradient-to-b from-blue-on to-blue-on/50 border border-white !text-white': true}">
+        <icon name="Qfact" type="extra" class="text-xl" />
+        <span class="text-base font-bold">Q Fact</span>
+        <span [ngClass]="{'bg-white !text-blue-on': true}"
+            class="text-xs bg-blue-on rounded-base ms-auto h-5 min-w-5 w-fit text-white flex items-center justify-center px-1">{{x.nTotalID
+            ? x.nTotalID : 0}}
+        </span>
+    </div>
+    <div class="w-1/2  flex items-center border border-blue-on text-blue-on rounded-full px-3 py-1 gap-2.5">
+        <icon name="highlighter" type="real_icn" class="text-xl" />
+        <span class="text-base font-bold">Quick Mark</span>
+        <span [ngClass]="{'bg-white !text-blue-on': false}"
+            class="text-xs bg-blue-on rounded-base ms-auto h-5 min-w-5 w-fit text-white flex items-center justify-center px-1">{{x.nTotalID
+            ? x.nTotalID : 0}}
+        </span>
+    </div>
+</div>
+
+@for (y of x.sublist; track $index) {
+<div class="p-2.5 bg-white mt-2.5 rounded-base cursor-pointer"
+    [ngClass]="y.isCheck ? '!bg-blue-50 border border-blue-hover' : ''" (click)="selectIssueDetail(x,y)">
+    <h6 class="text-xs truncate2">
+        {{y.cONote}}
+    </h6>
+    <span class="underline text-xs cursor-pointer hover:text-blue-on" (click)="OnPage(y)">jump to
+        {{y.cPageno}}
+    </span>
+</div>
+}
+
+<div class="sticky bottom-0 bg-reply py-2.5 pt-5">
+    <hr class="mb-5 border-gray-300">
+    <div class="flex items-center mb-2.5">
+        <span class="text-xs">
+            Note:
+        </span>
+        <div class="flex gap-2.5 items-center me-2.5 ms-auto">
+            <span class="flex items-center gap-2.5 text-xxs bg-white font-bold px-2 py-1 rounded-base ms-auto">critical
+            </span>
+            <img *ngIf="x.nImpactid" [src]="'assets/icons/impact/'+19+'.png'">
+        </div>
+    </div>
+    <div class="max-h-40 min-h-15 overflow-auto p-2  !bg-blue-50 border border-blue-hover text-xs rounded-base">
+        {{x.currentNote}}
+    </div>
+    <div class="flex gap-2.5 justify-end mt-1 pw-1">
+        <span class="underline text-xs cursor-pointer hover:text-blue-on" (click)="editIssueDetail(x)">Edit</span>
+    </div>
+</div>
+}
+
+}
+
+
+@if (modelType!='E' || cPermission=='E') {
+
+<div class="pb-3 pt-3 sticky bottom-0 " [class]="isToolbar?'bg-faint':'bg-reply'">
+
+    <button mode="white"
+        class="!text-blue-on hover:bg-white px-2.5 flex items-center gap-2 shadow-none text-start active:bg-white w-full text-xs bg-white h-8.5 rounded-base border border-blue-deactivate"
+        (click)="isseuForm()">
+
+        <icon name="addcircle" class="text-sm" />
+
+        New issue
+
+    </button>
+
+</div>
+
+}
+
+
+<!-- 
+@if (!issueList?.length) {
+<div class="text-center border-blue border-dashed border rounded-base  flex flex-col justify-center bg-white h-[50vh]"
+    [ngClass]="{'h-[calc(100vh_-_280px)]': modelType == 'V'}">
+    <h6 class="text-base text-blue-hover">
+        Issue list is empty
+    </h6>
+    <h6 class="text-xxs text-blue-hover">
+        Create issue from new issue button
+    </h6>
+</div>
+} -->

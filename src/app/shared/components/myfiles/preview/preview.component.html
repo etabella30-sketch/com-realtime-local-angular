@@ -1,0 +1,117 @@
+<div class="h-screen rounded-base relative bg-white flex flex-col">
+ 
+        @if(previewMode){
+        <div class="absolute top-1/4 flex rounded-e-base items-center justify-end bg-blue-on h-[46px] px-3 text-white"
+                (click)="ClsoePreview()">
+                <icon name="chvy" class="text-xs block rotate-180" />
+        </div>
+        }
+        @if(isLoaded){
+        @if(cPath){
+        <iframe #embeddedIframe id="embedded" [src]="cPath" style="height: 100%; width: 100%"></iframe>
+        <!-- <pdf [path]="activeFile?.cPath"></pdf> -->
+        }@else {
+        <div class="flex items-center justify-end bg-dark-blue h-[78px] px-10 text-white">
+                <icon name="close" (click)="closeRealtimePdf()" class="text-lg block " type="comnicn" />
+        </div>
+        <div class="h-full  bg-white grid place-items-center transition-all  ms-auto w-[50%]">
+                <div class="flex items-center justify-center flex-col">
+                        <img width="25px" class="mb-2.5" src="../../../../assets/icons/failed.svg">
+                        <h6 class="text-sred text-base font-semibold opacity-50 mb-0.5">File not found</h6>
+                        <h6 class="text-sred  opacity-50 text-xs">please close this pdf & load again</h6>
+                </div>
+        </div>
+        }
+        }@else {
+        <div></div>
+        }
+        <!-- @if(viewSelection){
+        @defer(when viewSelection){
+        <div class="absolute top-0 h-full w-full p-10 grid place-items-center overflow-hidden">
+                <div class="backdrop absolute top-0 left-0 w-full h-full z-10 bg-black/35">
+                </div>
+                <div class="relative z-20 h-full overflow-hidden w-full">
+                        <selected-docs [viewlist]="viewlist" (close)="viewSelection = false" [isLink]="isLink"
+                                (OnSave)="OnSelected($event)" />
+                </div>
+        </div>
+        }@placeholder {
+        loading...
+        }
+        } -->
+        @if(selectedDocuments.length>0){
+        <div class="flex absolute bottom-0 gap-1 w-full h-[70px] items-center bg-black text-white px-5 text-xs">
+                @if(!confirmcancel){
+                <span
+                        class="flex ms-2 me-2 items-center size-4 text-grey text-xxs rounded-full bg-white justify-center">
+                        {{selectedDocuments?.length}}
+                </span>
+                <span class="text-base font-semibold">
+                        {{selectedDocuments.length>1?'Links':'Link'}} Created
+                </span>
+
+                @if (selectedDocuments.length>1) {
+                <btn (click)="viewChoosen = true" class="text-blue ms-auto">Review links</btn>
+                }
+                @else{
+                <btn (click)="directlink()" class="text-blue ms-auto">Link To {{isLink=='F'?'Fact':'Doc'}}</btn>
+                }
+                <icon (click)="selectedDocuments.length>1 ? (confirmcancel=true) : (selectedDocuments = []) "
+                        name="close" class="text-xs cursor-pointer ms-4" />
+                }@else {
+                <span class="text-sm font-semibold">
+                        Are you sure? <br>
+                        Exit will remove all links created.
+                </span>
+                <btn (click)="selectedDocuments = [];confirmcancel=false" class="text-blue ms-auto">Yes</btn>
+                <btn mode="darkwhite" (click)="confirmcancel = false" class="text-blue ms-2">Cancel</btn>
+                }
+        </div>
+        }
+
+        <!-- @if(!isActiveFileSupported()&&this.activeFile?.cFiletype!='PDF'&&!hidemsg && isLoaded&&this.activeFile){
+        <div class="flex absolute top-[47px] gap-3 w-full h-[70px] items-center bg-sred text-white px-5 text-xs">
+                <span class="text-sm font-semibold">
+                        Please convert this file to PDF format to access other features in eTabella
+                </span>
+                <icon (click)="hidemsg=true" name="close" class="text-xxs cursor-pointer" />
+        </div>
+        } -->
+
+        <!-- @if(isActiveFileSupported()&&this.activeFile?.cFiletype!='PDF'&&!hidemsg && isLoaded){
+        <div class="flex absolute top-[47px] gap-3 w-full items-start bg-blue-on text-white px-5 text-xs py-5">
+                <icon name="info" class="text-white text-lg" />
+                <div>
+                        <span class="text-sm font-semibold">
+                                Download the file in native formate or open in new tab
+                        </span>
+                        <div class="text-white text-xs mt-2">
+                                <span class="underline text-xs  text-white cursor-pointer"
+                                        (click)="downloadFile(activeFile?.cPath,currentFiletype.cName ? currentFiletype.cName :currentFiletype.cFilename )">Download</span>&nbsp;/&nbsp;<span
+                                        (click)="openInOfficeViewer(activeFile?.cPath)"
+                                        class="underline titleN text-white cursor-pointer">Open in new
+                                        browser tab</span>
+                        </div>
+
+                </div>
+                <icon (click)="hidemsg=true" name="close" class="text-xxs cursor-pointer" />
+        </div>
+        } -->
+
+        <!-- @if(viewChoosen){
+        @defer(when viewChoosen){
+        <div class="fixed top-0 left-0 h-full w-full p-10 grid place-items-center overflow-hidden">
+                <div class="backdrop absolute top-0 left-0 w-full  h-full z-10 bg-black/40">
+                </div>
+                <div
+                        class="relative z-20 max-w-[420px] min-w-[420px] flex items-center justify-center m-auto h-full overflow-hidden w-[420px]">
+                        <selected-docs class="w-full" [viewlist]="selectedDocuments" (close)="viewChoosen = false"
+                                [isLink]="isLink" (OnSave)="OnSelected($event)" />
+                </div>
+        </div>
+        }@placeholder {
+        <div></div>
+        }
+        } -->
+
+</div>

@@ -1,0 +1,14 @@
+@if(isSyncing){
+<p>Data Syncing...</p>
+}@else {
+
+
+@if(isSuccess){
+<p>Data Sync successfully</p>
+<button (click)="GoToHome()">Home</button>
+}@else {
+
+<p>Data Sync Failed</p>
+}
+
+}

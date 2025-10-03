@@ -1,0 +1,107 @@
+// .line-text {
+//     flex-grow: 1;
+// }
+// .line {
+//     display: flex;
+//     align-items: center;
+//     margin-bottom: 5px;
+// }
+
+// .line-number {
+//     width: 50px;
+//     text-align: right;
+//     margin-right: 10px;
+//     color: #555;
+// }
+
+// .timestamp {
+//     margin-right: 10px;
+//     color: #999;
+// }
+
+.line-number,
+.timestamp {
+  user-select: none;
+}
+
+.line {
+  pre,
+  span,
+  button {
+    font-family: var(--font), sans-serif !important;
+  }
+  input {
+    border-radius: 0 !important;
+    border: none !important;
+    font-size: 15px !important;
+    height: 24px !important;
+  }
+  height: 24px;
+
+}
+
+.ishighlight {
+  .lefttxt {
+    &::after {
+      z-index: 99;
+    }
+  }
+
+  .lefttxt:after {
+    // width: calc(100% + 12px) !important;
+    // height: calc(100% + 2px) !important;
+    // top: -2px !important;
+  }
+
+  .lefttxt,
+  .line-text {
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 1px);
+      background: var(--highlightcolor) !important;
+      opacity: 0.8;
+      mix-blend-mode: multiply;
+      z-index: 1;
+    }
+  }
+
+
+
+}
+
+.lefttxt input::selection {
+  background: transparent;
+}
+
+.highlightermode {
+  cursor: url("../../../../assets/icons/QMarkC.svg") 30 10, auto;
+}
+
+.isbold {
+  font-weight: 700 !important;
+}
+
+
+input,
+button {
+  &:focus {
+    outline: none !important;
+    outline: none !important;
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+  }
+}
+
+input::-moz-focus-inner {
+  border: 0;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}

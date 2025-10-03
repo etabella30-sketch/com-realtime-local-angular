@@ -1,0 +1,43 @@
+.custtimepicker {
+        border-radius: 10px;
+        border: 1px solid #c2c2c2;
+        display: flex;
+        max-width: fit-content;
+        padding: 0 10px;
+        margin-bottom: 0 !important;
+
+        mat-radio-group {
+                align-items: center;
+                display: flex;
+        }
+
+        input[type="time"] {
+                width: 53px;
+                padding: 0;
+                padding-left: 0px;
+                border: none;
+                letter-spacing: 1.5px;
+
+                &:focus {
+                        box-shadow: none;
+                }
+
+                &::-webkit-datetime-edit-ampm-field {
+                        display: none;
+                }
+
+                &::-webkit-clear-button {
+                        -webkit-appearance: none;
+                        -moz-appearance: none;
+                        -o-appearance: none;
+                        -ms-appearance: none;
+                        appearance: none;
+                        margin: -10px;
+                }
+
+                &::-webkit-calendar-picker-indicator {
+                        background: none;
+                        display: none;
+                }
+        }
+}

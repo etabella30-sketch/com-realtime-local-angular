@@ -1,0 +1,80 @@
+<section class="flex flex-col p-5 bg-white rounded-xl max-w-[519px]">
+        <form [formGroup]="issue_frm">
+                <h1 class="flex items-center  text-lg font-bold  py-2.5 mb-6">
+                        Create New Issue
+                        <!-- {{previousIssue}} / {{cClr}} -->
+                        <icon name="close" class="text-xs ms-auto cursor-pointer hover:text-blue-on"
+                                (click)="close()" />
+                </h1>
+                <div>
+                        <label class="text-xs font-bold mb-2 block">
+                                Issue Name
+                                <span class="text-xs font-normal text-red-500 ">*</span>
+                        </label>
+                        <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                                placeholder="Enter Issue" type="text" formControlName="cIName" />
+                </div>
+                <div class="flex flex-col p-2.5 mt-6 rounded-xl bg-neutral-50">
+                        @if(!isLoaded){
+                        <div class="rounded-3">
+                                <app-colorpicker #colorPicker class="mx-auto" [(myColor)]="cClr"
+                                        [colorslist]="colorslist"></app-colorpicker>
+                        </div>
+                        }
+                </div>
+                <label for="assignClaim"
+                        class="mt-6 block mb-2.5 text-xs font-bold leading-4 text-neutral-600">Assign/Create a
+                        claim
+                </label>
+                <div>
+                        <mat-form-field class="w-full h-8.5 flex items-center">
+                                <mat-chip-grid #chipGrid aria-label="Fruit selection" class="!hidden">
+                                </mat-chip-grid>
+                                <div class="flex gap-1 items-center px-2.5">
+                                        <input maxlength="50" formControlName="nICid" class="!text-xs !py-2"
+                                                placeholder="Select..." #fruitInput [(value)]="selecteditem"
+                                                [matChipInputFor]="chipGrid" [matAutocomplete]="auto"
+                                                (matChipInputTokenEnd)="add($event)"
+                                                (input)="tempadd($event);filterOptions($event)" />
+                                        <icon name="chvx" class="text-xs" />
+                                </div>
+                                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                        @if (!checktemp()) {
+                                        <mat-option [value]="tempitem" [ngClass]="{'!hidden': !tempitem}">
+                                                <div class="flex items-center gap-2">
+                                                        <icon name="addcircle" /> {{tempitem}}
+                                                </div>
+                                        </mat-option>
+                                        }
+                                        @for (x of tempCat ; track x) {
+                                        @if(x.cICtype != 'U') {
+                                        <mat-option [value]="x">{{x.cCategory}}</mat-option>
+                                        }
+                                        }@empty {
+                                        <mat-option disabled="true">Category not found</mat-option>
+                                        }
+                                </mat-autocomplete>
+                        </mat-form-field>
+                </div>
+
+                <div class="flex gap-2 mt-6">
+                        <btn class="block  flex-1" addcls="w-full" (click)="submitForm()" [disabled]="issue_frm.invalid"
+                                [attr.isdisabled]="issue_frm.invalid">
+                                {{issue_frm.value.permission=='N'?'Done':'Update'}}</btn>
+                        @if (issue_frm.value.permission == 'E') {
+                        <btn class="matmenu flex-1" addcls="w-full" [matMenuTriggerFor]="end" mode="outlined">Delete
+                        </btn>
+                        }
+                        <mat-menu #end="matMenu" class="!bg-black p-5  rounded-base" xPosition="before">
+                                <div>
+                                        <h6 class="mb-6 min-w-64 text-white text-xs">Any change made to this issue will
+                                                apply to files that assigned to</h6>
+                                        <div class="flex gap-2">
+                                                <btn (click)="deleteIssue()">Delete</btn>
+                                                <btn mode="dark">cancel</btn>
+                                        </div>
+                                </div>
+                        </mat-menu>
+                </div>
+        </form>
+</section>

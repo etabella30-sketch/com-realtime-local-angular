@@ -1,0 +1,25 @@
+<!-- && !nEditid -->
+<div class="block line relative text-[15px]" #linediv [ngClass]="{'ishighlight': (line.isHilighted)}"
+  [ngStyle]="{'--highlightcolor':'#'+line.cColor }" [attr.timestamp]="line.time" [attr.lno]="lineIndex"
+  [attr.pno]="pageno" [attr.oPage]="line.oPage"  [attr.identity]="line.unicid" [attr.oLine]="line.oLine" [attr.ishighlight]="line.isHilighted">
+  <div
+    class="inline-flex justify-end h-full  text-[15px]  me-3 line-number  text-end !font-normal select-none lefttxt  relative z-20"
+    (click)="hilightLine(linediv)" [ngClass]="{'highlightermode': highlightmode == 'H'}">
+    <input [value]="lineIndex==1||showTimestamp ? pageno+'.'+lineIndex :  lineIndex" readonly [class]="showTimestamp?'w-20':'w-14'"
+      class="bg-reply px-2 w-14 line-number inline text-end justify-end   !select-none !pointer-events-none">
+    <input [value]="line.time | timestamp" readonly
+      class="timestamp whitespace-nowrap bg-reply px-2 w-[82px] overflow-hidden  select-none focus:outline-none pointer-events-none inline"
+      *ngIf="showTimestamp">
+  </div>
+  <!-- appBoldFormatting [textContent]="line.lines.join(' ')" [currentIndex]="lineIndex" -->
+  <!-- [class.isbold]="line.isBold" -->
+  <button
+    [ngClass]="{'w-[calc(100%_-_68px)]': !showTimestamp,'w-[calc(100%_-_148px),]': showTimestamp,'parenthetical': line.formate == 'PRNTH'}"
+    class="line-text text-start inline  pointer-events-auto   whitespace-nowrap text-[15px] !select-text !cursor-text  "
+    [class.isbold]="line.formate == 'QES' || line.formate == 'QES-CONTINUE' || line.isBold">
+    <!-- {{highlightmode}} -->
+    <pre class="relative z-10 inline" (click)="clickOnTabs($event)"
+      [innerHTML]="line.lines.join(' ') | highlight: searchService.searchTerm: searchService.getCurrentMatchPosition(): searchService.isCurrentMatch(lineIndex, pageno):searchService.iswholeWord:line.links">
+    </pre>
+  </button>
+</div>

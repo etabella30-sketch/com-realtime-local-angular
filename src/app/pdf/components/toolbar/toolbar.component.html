@@ -1,0 +1,391 @@
+@if (!fullMode) {
+<div class="w-full bg-grey text-white flex justify-center  py-1 rounded-b-md cursor-pointer"
+  [ngClass]="{'!rounded-b-none pointer-events-none': docInfo?.isRealtime}" (click)="showhidetoolbar=!showhidetoolbar">
+  <icon name="chvx" class="text-xxs" [ngClass]="{'rotate-180': showhidetoolbar}" />
+</div>
+}
+@if (showhidetoolbar) {
+<div class="relative overflow-visible" [ngClass]="{'z-[99]': docInfo?.isRealtime}">
+  <!-- 'overflow-auto':!fullMode,'overflow-visible':fullMode -->
+  <div class="pdf-toolbars  flex items-center  justify-between bg-white relative z-20  "
+    [ngClass]="{'!bg-dark-blue px-0 h-[59px]': docInfo?.isRealtime,'h-[50px] px-2.5': !docInfo?.isRealtime  }">
+    <div class="pdf-toolbars gap-x-2 flex items-center me-2"
+      [ngClass]="{'justify-end !w-1/2 !ml-auto h-full !pl-5 !bg-blue-on !mr-0': docInfo?.isRealtime,'w-full':!fullMode}">
+      <!-- width: 50%;
+      margin-left: auto;
+      height: 100%;
+      padding-left: 20px;
+      background: #0066ff;
+      margin-right: 0; -->
+      <!-- [ngClass]="{'w-full justify-end ': docInfo?.isRealtime}" -->
+      <div class="flex items-center bg-reply px-2 h-8.5 rounded-base w-full justify-between"
+        [ngClass]="{'me-auto !w-fit': docInfo?.isRealtime}">
+        @if (compareMode) {
+        <svg width="24px" (click)="OnPdfNavEvent('firstpage')" height="24px" class="rotate-180" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M5.59,7.41L10.18,12L5.59,16.59L7,18L13,12L7,6L5.59,7.41M16,6H18V18H16V6Z"></path>
+        </svg>
+        <svg width="24px" (click)="OnPdfNavEvent('previouspage')" height="24px" class="rotate-180" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
+        </svg>
+        <!-- <icon name="first" type="indicn" class="text-xs mx-2" (click)="OnPdfNavEvent('firstpage')" />
+        <icon name="chvy" type="comnicn" class="text-xs me-1" (click)="OnPdfNavEvent('previouspage')" /> -->
+        }
+        @else {
+        <pdf-first-page class="flex" (click)="OnPdfNavEvent('firstpage')" />
+        <pdf-previous-page class="flex" (click)="OnPdfNavEvent('previouspage')" />
+        }
+
+
+        <!-- <pdf-page-number class="flex mx-2 mb-1" [showPagingButtons]="false" /> -->
+        @if(pagginationRenge?.length){
+
+        <!-- <mat-form-field appearance="fill" class="!border-none !outline-none w-24 !shadow-none bg-white h-7 "> -->
+        <!-- <mat-select [(ngModel)]="pageSelected" #pagination class="!border-none nopadding" panelClass="!min-w-28"
+            (selectionChange)="onPageChange()" (openedChange)="pagination.panelOpen ? pginput.focus() :pginput.blur()">
+            <mat-select-trigger>
+              <input class="!border-none !shadow-none p-0 !w-24  placeholder:text-grey" #pginput
+                [placeholder]="pageSelected?.output" type="text" (keyup)="seachPages($event)">
+            </mat-select-trigger>
+            @for(x of rangeList; track x.page){
+            <mat-option [value]="x">
+              {{ x.output }}
+            </mat-option>
+            }
+            <mat-option value="0">
+              No result found..
+            </mat-option>
+          </mat-select> -->
+
+
+
+        <ng-select [disabled]="!rangeList?.length" [items]="rangeList" bindLabel="output" [(ngModel)]="currentPage"
+          bindValue="page" placeholder="Select..." (change)="OnPageSelected()"
+          class="pagerefslct bg-white mx-2 !px-0 h-6 !rounded-base"
+          [class]="isLink ? 'min-w-[70px] max-w-[70px]':'min-w-[93px] max-w-[93px]'" [hidden]="!rangeList?.length">
+          <!-- <ng-template ng-label-tmp let-item="item">
+                      <b>{{item.cTab}} teset name</b>
+                  </ng-template> -->
+          <ng-template ng-option-tmp let-item="item" let-index="index">
+            <b class="font-normal text-xs">{{item.output}}</b>
+          </ng-template>
+        </ng-select>
+
+
+        <!-- <button [matMenuTriggerFor]="menu" #p="matMenuTrigger" class="bg-white flex items-center rounded-md"
+          (menuOpened)="openment(pginput)">
+          <input (keydown)="onKeyDown($event)" class="!border-none !shadow-none p-0 !w-14  placeholder:text-grey"
+            #pginput [(ngModel)]="searchValue" [placeholder]="pageSelected?.output" type="text"
+            (keyup)="seachPages($event)" (keyup.enter)="OnPageEnter($event);p.closeMenu()">
+          <icon name="chvx" type="comnicn" class="text-xxs me-1.5" />
+        </button>
+
+        <mat-menu #menu="matMenu" class="!max-h-[50vh] !min-w-fit !max-w-fit mt-2 !p-2">
+          @for(x of rangeList; track x.page){
+          <div (keydown.enter)="clickFocusedItem($event)" mat-menu-item #listItem (click)="OnRangeSelect(x)"
+            class="!py-1.5 !px-1 cursor-pointer w-fit  hover:!bg-blue-hover/20 focus:!bg-blue-hover/20  !rounded-base">
+            <span class="text-xs  p-1 gap-2 rounded-base  flex items-center">
+              {{ x.output }}
+              @if (pageSelected?.output == x.output) {
+              <icon name="check" class="ms-auto block" />
+              }
+            </span>
+          </div>
+          }
+          @empty {
+          <div (click)="$event.stopPropagation()"
+            class="!py-1.5 !px-1 cursor-pointer w-fit  hover:!bg-blue-hover/20 focus:!bg-blue-hover/20  !rounded-base">
+            <span class="text-xs  p-1 gap-2 rounded-base  flex items-center">
+              No result found..
+            </span>
+          </div>
+          }
+        </mat-menu> -->
+
+        }
+        @else{
+        <input [(ngModel)]="currentPage" type="number" (keyup.enter)="OnPage()" (keyup)="checkForMax($event)" />
+        }
+
+        @if (compareMode) {
+        <svg (click)="OnPdfNavEvent('nextpage')" width="24px" height="24px" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z"></path>
+        </svg>
+        <svg (click)="OnPdfNavEvent('lastpage')" width="24px" height="24px" viewBox="0 0 24 24">
+          <path fill="currentColor" d="M5.59,7.41L10.18,12L5.59,16.59L7,18L13,12L7,6L5.59,7.41M16,6H18V18H16V6Z"></path>
+        </svg>
+        }
+
+        @else {
+        <pdf-next-page class="flex" (click)="OnPdfNavEvent('nextpage')" />
+        <pdf-last-page class="flex" (click)="OnPdfNavEvent('lastpage')" />
+        }
+      </div>
+
+
+      <div
+        class="flex p-2  items-center  rounded-base bg-reply gap-2 hover:text-blue-on min-w-8.5 justify-center hover:bg-blue-deactivate':'hover:text-blue-on min-w-8.5 justify-center bg-white">
+
+        <icon (click)="openInIndividual()" name="factOut" type="indicn" class="-scale-x-100" matTooltip="individual"
+          aria-label="Button that displays a tooltip when focused or hovered over" />
+      </div>
+
+      <div [class.bg-white]="!isLink" class="flex h-8.5 p-2 gap-2.5 items-center  rounded-base ">
+        @if (!isLink) {
+        <icon name="rotate" (click)="rotate(false)" type="toolicn" matTooltip="Left"
+          aria-label="Button that displays a tooltip when focused or hovered over" />
+        }
+        <icon (click)="rotate(true)" name="rotate" type="toolicn" class="-scale-x-100" matTooltip="Right"
+          aria-label="Button that displays a tooltip when focused or hovered over" />
+        @if(fullMode){
+        <mat-checkbox matTooltip="Keep change" [(ngModel)]="isCheckedRotation" (change)="onRotationUpdate($event)"
+          aria-label="Button that displays a tooltip when focused or hovered over"></mat-checkbox>
+        }
+      </div>
+      @if(fullMode){
+      <div class="flex rounded-base border items-center gap-2.5 px-2.5 h-[34px]"
+        [ngClass]="{'bg-white': docInfo?.isRealtime}">
+        @if (compareMode) {
+        <span class="flex items-center size-[18px] rounded-full border border-grey" (click)="OnPdfNavEvent('zoomin')">
+          <svg width="24px" height="24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"></path>
+          </svg>
+        </span>
+        <span class="flex items-center size-[18px] rounded-full border border-grey" (click)="OnPdfNavEvent('zoomout')">
+          <svg width="24px" height="24px" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19,13H5V11H19V13Z"></path>
+          </svg>
+        </span>
+        }
+        @else {
+        <pdf-zoom-in (click)="OnPdfNavEvent('zoomin')" />
+        <pdf-zoom-out (click)="OnPdfNavEvent('zoomout')" />
+        }
+
+        <!-- @if(fullMode){ -->
+        <hr class="h-[18px] self-stretch w-px bg-gray-300 m-auto">
+        <mat-form-field appearance="fill" class="!border-none !outline-none w-28 !shadow-none">
+          <mat-select [(ngModel)]="zoomValue" (selectionChange)="zoomChange($event)" class="!border-none">
+            <mat-select-trigger>
+              <div>
+                {{getZoomValue()}}
+                <!-- {{((typeof zoom) == 'string') ? zoom : (zoom | number:'1.0-0')}} -->
+              </div>
+            </mat-select-trigger>
+            @for(x of zoomlevels; track x.value){
+            <mat-option [value]="x.value">
+              {{ x.key }}
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        <!-- } -->
+      </div>
+      }@else {
+      <btn mode="outlined" [square]="true" [active]="z.menuOpen" matTooltip="Zoom"
+        addcls="hover:bg-white active:bg-white" [matMenuTriggerFor]="menu" #z="matMenuTrigger">
+        <icon name="fullview" type="extra" />
+      </btn>
+      <mat-menu #menu="matMenu" class="h-52 !shadow-none !bg-transparent -ml-10 ">
+        <div class="px-2">
+          <div class="flex flex-col  items-center bg-transparent rounded-e-full px-2.5 py-1">
+            <div class="h-[110px] realtive w-[24px] flex items-center justify-center bg-grey pt-5 pb-5 rounded-t-full">
+              <mat-slider
+                class="vertical-slider -rotate-90 absolute  bg-grey px-2.5 rounded-e-full !h-6 !flex !items-center !min-w-[90px]"
+                (click)="$event.stopPropagation()" min="50" max="300" step="1" [displayWith]="formatLabel" discrete>
+                <input matSliderThumb [(ngModel)]="slidervalue" (ngModelChange)="sliderzoom($event)">
+              </mat-slider>
+            </div>
+            <div class="bg-grey pb-2.5 pt-2.5 text-xs rounded-b-full text-white w-6 flex justify-center  items-center">
+              <icon name="undo" type="extra" (click)="resetzoom()" />
+            </div>
+          </div>
+        </div>
+      </mat-menu>
+      }
+      @if(fullMode){
+      <div class="flex h-8.5 p-2 px-[14px] gap-2.5 items-center rounded-base"
+        [class]="!showAll?'bg-blue-deactivate text-blue-on':'bg-reply'" (click)="OnShowAllChange()">
+        <!-- <mat-slide-toggle [(ngModel)]="showAll" (change)="OnShowAllChange($event)">All pages</mat-slide-toggle> -->
+        <span
+          class="flex items-center justify-center !w-6 !h-6 !max-w-6 !max-h-6 !min-w-6 !min-h-6 rounded-md border border-tab"
+          [class]="!showAll?'bg-white text-blue-on !border-blue-on':''">
+          <icon name="lock" *ngIf="!showAll" type="toolicn" />
+          <icon name="unlock" *ngIf="showAll" type="toolicn" />
+        </span>
+        <span class="text-xs whitespace-nowrap"> Full page</span>
+      </div>
+      }
+
+      <!-- <btn mode="outlined" [square]="true" aria-label="Button that displays a tooltip when focused or hovered over"
+        (click)="showzoom = !showzoom"
+        [addcls]="handTool?'hover:bg-white !text-blue-on !border-blue-on hover:shadow-[inset_0px_0px_6px_1px_#9FCCFF] shadow-[inset_0px_0px_6px_1px_#9FCCFF]':'hover:bg-white active:bg-white ' ">
+        <icon name="retry" class="text-base" type="extra" />
+      </btn> -->
+
+      <!-- <div class="zoomslidewraper" [hidden]="!showzoom">
+        [vertical]="true" (input)="zoomchange($event)" (change)="onzoomleave();"
+        <mat-slider class="zomingslider" step="5" [min]="35" thumbLabel [max]="300" aria-label="units"
+          [(ngModel)]="zoom_ratio">
+        </mat-slider>
+        (click)="reset_zoom()"
+        <icon name="retry" class="text-base" type="extra" />
+      </div> -->
+
+      <btn mode="outlined " addcls="!bg-white  !border-blue-on" [square]="true" (click)="hand()"
+        matTooltip="Drag to scroll" [active]="handTool">
+        <icon name="hand" class="text-base" type="extra" />
+      </btn>
+
+      @if(fullMode && !linkExplorerMode){
+      <btn mode="outlined" [square]="true" matTooltip="Compare" [active]="compareMode" (click)="changeCompareMode()">
+        <icon name="compare" class="text-base" type="extra" />
+      </btn>
+      }
+      <!-- [addcls]="showsearch ?'hover:bg-white !text-blue-on !border-blue-on hover:shadow-[inset_0px_0px_6px_1px_#9FCCFF] shadow-[inset_0px_0px_6px_1px_#9FCCFF]':'' " -->
+
+      <div class="relative">
+        <btn mode="outlined" addcls="hover:bg-white  !border-blue-on" [square]="true" mat-icon-button
+          (click)="showsearch= !showsearch;isAnnotTool=false" matTooltip="Word Search" [active]="showsearch"
+          aria-label="Example icon-button with a menu" (click)="changeSearchBox()">
+          <icon name="search" />
+        </btn>
+        @if(showsearch){
+        <div
+          class="  mt-3 flex !p-0  shadow-[0px_0px_7px_#0000004d] noshadow !rounded-none bg-blue-deactivate searchmenu absolute z-50"
+          [class]="fullMode?'!min-w-fit !max-w-[527px]': ''"
+          [ngClass]="{'-right-[15px]': linkExplorerMode,'right-0 !left-auto':docInfo?.isRealtime,'!min-w-[420px] !max-w-[420px] -right-[15px]':!fullMode}"
+          hasBackdrop="false">
+          <!-- [ngClass]="isSearching ? '!me-[100px]' : '!me-[80px]'" -->
+          <div class="w-full" (click)="$event.stopPropagation()">
+            @if(searchBox){
+            @defer(when searchBox){
+            <pdfsearch [totalSearch]="totalSearch" [currentSearch]="currentSearch" [isSearching]="isSearching"
+              [cSearch]="cSearch" [matchCase]="matchCase" [wholeWords]="wholeWords" [isfullmode]="fullMode"
+              (searchEvents)="onSeach($event)" (ValueUpdate)="OnValueUpdate($event)" />
+            }@placeholder {
+            <div class="w-[588px] bg-blue-deactivate p-2.5 flex gap-3 items-center">
+              <div class="h-8.5 w-40 bg-white animate-pulse"></div>
+              <span class="size-2 bg-white animate-pulse"></span>
+              <span class="h-3 w-24 bg-white animate-pulse"></span>
+              <span class="size-2 bg-white animate-pulse"></span>
+              <span class="h-3 w-24 bg-white animate-pulse"></span>
+              <span class="h-3 w-24 bg-white animate-pulse"></span>
+              <div class="h-8.5 w-8.5 bg-white animate-pulse"></div>
+              <div class="h-8.5 w-8.5 bg-white animate-pulse"></div>
+            </div>
+            }
+            }
+          </div>
+        </div> }
+      </div>
+
+      @if(docInfo?.isRealtime){
+      <div class="flex text-white ms-3 me-5">
+        <!-- <span>
+            {{docInfo?.cFilename}}
+          </span> -->
+        <icon name="close" matTooltip="Close Preview" (click)="closeRealtimePdf()" class="text-sm block "
+          type="comnicn" />
+      </div>
+      <!-- <btn (click)="closeRealtimePdf()">Close Realtime</btn> -->
+      }
+    </div>
+
+
+    @if(!compareMode){
+    <div class="pdf-toolbars flex items-center gap-x-2">
+      @if(fullMode && !linkExplorerMode){
+      <div class="flex h-8.5 p-2 gap-2.5 items-center bg-reply  rounded-base">
+        <span matTooltip="Add tab" aria-label="Button that displays a tooltip when focused or hovered over"
+          class="size-4  border border-grey rounded-full" [ngClass]="{'!border-brand border-4':newTab}"
+          (click)="onNewTabChange()"></span>
+        <icon name="chvy" class="text-xs" (click)="changeDoc('P')" />
+        <icon name="nextfile" type="toolicn" matTooltip="Instant file"
+          aria-label="Button that displays a tooltip when focused or hovered over" />
+        <icon name="chvy" class="text-xs rotate-180 block" (click)="changeDoc('N')" />
+      </div>
+      }
+
+
+      @if(pdfLoaded && (isLink || fullMode)){
+      <!-- @if(!linkExplorerMode){
+      @defer(when (pdfLoaded && (isLink || fullMode))){
+      <link-options [pagesCount]="pagesCount" [fullMode]="fullMode" [highlightMode]="highlightMode"
+        [isConverttopagelevel]="isConverttopagelevel" (linkEvent)="OnLinkEvents($event)"
+        class="flex items-center gap-x-2" />
+      }@placeholder {
+      }
+      } -->
+
+
+      @if(fullMode){
+      <btn class=" z-20 group-focus-within:opacity-0 " mode="outlined" [active]="isIssue" [square]="true"
+        (click)="issuelist();isAnnotTool=false" matTooltip="Issues"
+        addcls="rounded-full hover:bg-white hover:!border-blue-on">
+        <icon name="issue" class="text-base " type="myfileicn" />
+      </btn>
+      @if(!linkExplorerMode){
+      <btn class=" z-20 group-focus-within:opacity-0 " mode="outlined" [active]="isProperties"
+        (click)="isAnnotTool=false" [square]="true" [matMenuTriggerFor]="Iproperties" matTooltip="Properties"
+        #pm="matMenuTrigger" addcls="rounded-full hover:bg-white hover:!border-blue-on">
+        <icon name="properties" class="text-lg" type="extra" />
+      </btn> <mat-menu #Iproperties="matMenu" class="mt-2 p-2">
+        <div class=" px-3 py-2  text-xs rounded-lg hover:bg-reply cursor-pointer" (click)="properties('V')">View</div>
+        <div class="px-3 py-2 text-xs rounded-lg hover:bg-reply cursor-pointer" (click)="properties('B')"> Assign
+        </div>
+      </mat-menu>
+      }
+      }
+      }
+
+      @if(fullMode){
+      @if(!linkExplorerMode){
+      <btn mode="outlined" (click)="isAnnotTool = !isAnnotTool" [active]="isAnnotTool"
+        [attr.isdisabled]="isProperties||isIssue||isnavigate||showsearch"
+        addcls="hover:bg-white active:bg-white py-0 h-8.5  hover:!border hover:!border-blue-on">
+        <icon [type]="annoticontype=='F' ? 'real_icn' : 'toolicn'" [name]="annoticontype === 'F' ? 'highlighter' :
+        annoticontype === 'DR' ? 'pencil' :
+        annoticontype === 'R' ? 'shape' :
+        annoticontype === 'D' ? 'doctool' :
+        annoticontype === 'W' ? 'webtool' : ''" type="real_icn" class="text-lg" />
+        Annotate
+        <icon name="chvy" class="text-xxs -rotate-90" />
+      </btn>
+      @if(isHavehighlights){
+      <div class="flex h-full gap-2 ">
+        <btn [disabled]="isDisabledNavigate" [attr.disabled]="isDisabledNavigate" mode="white"
+          addcls="bg-white py-0 h-8.5" (click)="isAnnotTool=false;navigate()" [active]="isnavigate">
+          Navigate
+        </btn>
+      </div>
+      }
+      <btn mode="outlined" (click)="isAnnotTool=false" addcls="hover:bg-white active:bg-white py-0 h-8.5 "
+        [matMenuTriggerFor]="menu">
+        <!-- <icon name="highlighter" type="real_icn" class="text-2xl" /> -->
+        Tools
+        <icon name="chvy" class="text-xs -rotate-90" />
+      </btn>
+      }
+      <mat-menu #menu="matMenu" class="mt-2 p-2">
+        <div class="px-3 py-2  text-xs rounded-lg hover:bg-reply cursor-pointer" (click)="export()">Export</div>
+        <div class=" px-3 py-2  text-xs rounded-lg hover:bg-reply cursor-pointer" (click)="locationshare()"> Location
+          Share</div>
+        <div class="px-3 py-2 text-xs rounded-lg hover:bg-reply cursor-pointer" (click)="linkExplorer()"> Link Explorer
+        </div>
+      </mat-menu>
+      }
+    </div>
+    }
+
+    <!-- <mat-slide-toggle [(ngModel)]="newTab" (change)="onNewTabChange()">new tab</mat-slide-toggle> -->
+
+  </div>
+  @if(isAnnotTool){
+  @defer (when isAnnotTool) {
+  <annot-tools class="h-11 block w-full  opacity-100 z-10 " [@inOutAnimation] [annotToolMode]="annotToolMode"
+    (OnClose)="OnAnnotToolClose($event)" (OnModeChange)="modeChange($event)" />
+  }@placeholder {
+  <div></div>
+  }
+  }
+</div>}

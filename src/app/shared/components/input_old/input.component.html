@@ -1,0 +1,23 @@
+<div class="relative w-full">
+        <ng-container *ngIf="showlabel">
+                <label class="text-xs font-semibold mb-2 block" [ngClass]="labelclas">
+                        <ng-content></ng-content>
+                        <span *ngIf="isrequired" class="text-red-500">*</span>
+                        <span *ngIf="hint" class="text-xxs font-normal text-gray-500 ms-2">{{hint}}</span>
+                </label>
+        </ng-container>
+        <div class="relative w-full">
+                <ng-container *ngIf="icon">
+                        <icon class="absolute top-1/2 -translate-y-1/2" [name]="icon?.name"
+                                [ngClass]="{'left-4': icon?.dir=='L','right-4': icon?.dir=='R'}" />
+                </ng-container>
+                <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                        [placeholder]="placeholder" type="text" />
+                <ng-container *ngIf="type=='password'">
+                        <icon class="absolute opacity-60 top-1/2 right-4 -translate-y-1/2 cursor-pointer"
+                                (click)="showhide=!showhide" *ngIf="showhide" name="eye" />
+                        <icon class="absolute opacity-60 top-1/2 right-4 -translate-y-1/2 cursor-pointer"
+                                (click)="showhide=!showhide" *ngIf="!showhide" name="eyeoff" />
+                </ng-container>
+        </div>
+</div>

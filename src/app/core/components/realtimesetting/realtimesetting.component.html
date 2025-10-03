@@ -1,0 +1,60 @@
+<header class="py-2.5 px-5 flex items-center bg-faint ">
+        <span class="text-lg font-bold">Realtime Transmitter Setting</span>
+</header>
+<form [formGroup]="frm" class="p-5 flex flex-col gap-6">
+        <div>
+                <h6 class="text-base font-bold mb-2">Mode</h6>
+                <mat-form-field class="w-full">
+                        <mat-select placeholder="Select.." formControlName="mode">
+                                <mat-option *ngFor="let x of modes" [value]="x.type">
+                                        {{ x.name }}
+                                </mat-option>
+                        </mat-select>
+                </mat-form-field>
+        </div>
+        <div class="flex gap-2">
+
+
+                <div class="mb-2 w-1/2">
+                        <label class="text-sm font-bold mb-2 block">
+                                LOCAL IP
+                                <span class="text-xxs font-normal text-gray-500 ms-2"></span>
+                        </label>
+                        <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                                placeholder="Enter  LOCAL IP" type="text" formControlName="ip" />
+                </div>
+
+
+                <div class="mb-2 w-1/2">
+                        <label class="text-sm font-bold mb-2 block">
+                                TCP/IP PORT
+                                <span class="text-xxs font-normal text-gray-500 ms-2"></span>
+                        </label>
+                        <input class="block w-full px-3 py-2 border  rounded-base shadow-sm focus:outline-none text-xs border-tab text-gray focus:shadow-[0px_0px_6px_#0066FF] focus:border-blue-deactivate"
+                                placeholder="Enter TCP/IP PORT" type="text" formControlName="port" />
+                </div>
+
+
+
+
+        </div>
+        <!-- <div>
+                <h6 class="text-base font-bold mb-2">Protocol</h6>
+                <mat-form-field class="w-full">
+                        <mat-select placeholder="Select.." formControlName="protocol">
+                                <mat-option *ngFor="let x of protocols" [value]="x.value">
+                                        {{ x.name }}
+                                </mat-option>
+                        </mat-select>
+                </mat-form-field>
+        </div> -->
+        <!-- 
+        <div>
+                <h6 class="text-base font-bold mb-2">Realtime Protocol:</h6>
+                <h6 class="text-sm ">CaseView Protocol</h6>
+        </div> -->
+        <div class="flex gap-2">
+                <btn [attr.isdisabled]="this.frm.invalid" (click)="submit()">Ok</btn>
+                <btn [attr.isdisabled]="this.frm.invalid" (click)="retry()"  mode="outlined" [isloading]="isReconnecting" >Reconnect</btn>
+        </div>
+</form>

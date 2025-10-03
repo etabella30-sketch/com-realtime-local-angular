@@ -1,0 +1,11 @@
+<span [ngClass]="{'size-[25px] text-[9px]': size=='sm','size-[35px] text-[13px]': size=='lg','size-[60px] text-[18px]': size=='xl','border-brand border-[3px]':active}"
+        [class]="initials.bg"
+        class="inline-flex overflow-hidden size- items-center justify-center  rounded-full font-semibold text-white leading-none  border border-[#DAE2EA]">
+        <ng-container *ngIf="detail?.cProfile">
+                <img class="object-cover w-full h-full" src="../../../../assets/colorlogo.svg">
+        </ng-container>
+        <ng-container *ngIf="!detail?.cProfile">
+                <span class="select-none">{{initials.Fn}}{{initials.Ln}}</span>
+                <!-- <span class="sr-only">{{detail.nUserid}} / {{detail.cFname}}</span> -->
+        </ng-container>
+</span>

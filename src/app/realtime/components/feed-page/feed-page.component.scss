@@ -1,0 +1,19 @@
+.annotation-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  /* Prevents interfering with text selection */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  z-index: 1;
+}
+
+
+.pagetitle {
+  &::selection {
+    background-color: #737373;
+    color: #ffffff;
+  }
+}

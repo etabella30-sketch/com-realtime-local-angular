@@ -1,0 +1,14 @@
+<div class="color-wrapper">
+  <color-palette [hue]="hue" (color)="onclr($event)"></color-palette>
+  <color-slider class="relative ml-4" (color)="hue=$event" ></color-slider>
+
+  <div class="flex items-center flex-col gap-2.5 ml-14"  *ngIf="colorslist&&colorslist.length">
+    @for (x of colorslist; track x) {
+      @if ($index <= 9) {
+        <span class="size-5  border-2 border-white" [ngStyle]="{'background':'#'+x.cClr}" (click)="selectColor(x.cClr)"></span>
+      }
+    }
+  </div>
+
+
+</div>
