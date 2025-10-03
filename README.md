@@ -66,19 +66,14 @@ ng build --configuration production
 ### 2. Deploy Build Files
 After the build completes successfully:
 
-1. Navigate to the build output directory:
+1. Locate the build output directory at:
    ```
    dist/realtime/browser
    ```
 
-2. Copy all contents from this directory to your destination server/hosting directory:
-   ```bash
-   cp -r dist/realtime/browser/* /path/to/destination/
+2. Copy all contents to:
    ```
-
-   **Windows:**
-   ```cmd
-   xcopy dist\realtime\browser\* \path\to\destination\ /E /I /Y
+   com-realtime-local/production/public/
    ```
 
 3. Ensure your web server is configured to:
